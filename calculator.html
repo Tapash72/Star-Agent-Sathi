@@ -15,16 +15,16 @@
 <section class="panel hidden" id="typePanel"><h2><span class="step">3</span>Cover Type</h2><label for="policyType">Select Cover Type</label><select id="policyType"><option value="">Choose cover type</option></select></section>
 <section class="panel hidden" id="memberPanel"><h2><span class="step">4</span>Insured Members &amp; Age</h2><div class="choices"><label><input type="radio" name="ageMode" value="age" checked> Manual Age</label><label><input type="radio" name="ageMode" value="dob"> Date of Birth</label></div><p class="hint">For Family Floater, tick members to include. Choose the number of children and parents to display their age/DOB fields.</p><div id="members"></div><div class="family-size" id="familySize">Family Size: Not selected</div></section>
 <section class="panel hidden" id="sumPanel"><h2><span class="step">5</span>Sum Insured</h2><label for="sumInsured">Select Sum Insured</label><select id="sumInsured"><option value="">Choose sum insured</option></select></section>
-<section class="panel hidden" id="zonePanel"><h2><span class="step">6</span>Premium Zone</h2><div class="choices"><label><input type="radio" name="zoneMode" value="manual" checked> Select Zone</label><label><input type="radio" name="zoneMode" value="pin"> Enter PIN Code</label></div><div id="manualZone"><label for="zone">Zone</label><select id="zone"><option value="">Choose Zone</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div><div id="pinZone" class="hidden"><label for="pin">6-digit PIN Code</label><input id="pin" type="text" inputmode="numeric" maxlength="6" placeholder="e.g. 700001"><p class="hint">PIN-based detection is pending verified mapping. Use manual zone selection for now.</p></div></section>
+<section class="panel hidden" id="zonePanel"><h2><span class="step">6</span>Premium Zone</h2><div class="choices"><label><input type="radio" name="zoneMode" value="manual" checked> Select Zone</label><label><input type="radio" name="zoneMode" value="pin"> Enter PIN Code</label></div><div id="manualZone"><label for="zone">Zone</label><select id="zone"><option value="">Choose Zone</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div><div id="pinZone" class="hidden"><label for="pin">6-digit PIN Code</label><input id="pin" type="text" inputmode="numeric" maxlength="6" placeholder="e.g. 700001"><p class="hint">PIN 700034 is verified as Zone D. Other PIN codes require manual zone selection until verified.</p></div></section>
 <section class="panel hidden" id="deductiblePanel"><h2><span class="step">7</span>Deductible</h2><label for="deductible">Select Annual Aggregate Deductible</label><select id="deductible"><option value="0">No Deductible</option><option value="50000">₹50,000</option><option value="100000">₹1,00,000</option></select><p class="hint" id="deductibleHint">Optional deductible premium discount depends on Sum Insured.</p></section>
 <section class="panel hidden" id="actionPanel"><button id="calculate" type="button">Calculate Premium</button><div class="error" id="error" role="alert"></div></section>
 <section class="panel hidden" id="resultPanel" aria-live="polite"><h2>Premium Quotation</h2><div class="summary" id="summary"></div><div id="premiumRows"></div><div class="discount-info" id="discountInfo"></div><p class="hint" id="resultNote"></p></section>
-<section class="panel"><div class="notice"><strong>Rate status:</strong> Assure uses the uploaded annual premium chart for indicative 1, 2 and 3-year premiums. Fresh-policy early entry and optional deductible discounts are applied based on prospectus rules. Super Star rates and PIN mapping are not connected. Verify insurer quotation, eligibility and discount combination before use.</div><p class="hint">Independent agent toolkit. Not an official Star Health application.</p></section>
+<section class="panel"><div class="notice"><strong>Rate status:</strong> Assure uses the uploaded annual premium chart for indicative 1, 2 and 3-year premiums. Fresh-policy early entry and optional deductible discounts are applied based on prospectus rules. Super Star rates and full PIN mapping are not connected. Verify insurer quotation, eligibility and discount combination before use.</div><p class="hint">Independent agent toolkit. Not an official Star Health application.</p></section>
 </main>
 <script>
 'use strict';
 const POLICIES={assure:{label:'Star Health Assure',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,7500000,10000000,20000000],terms:[1,2,3],ratesVerified:true},superstar:{label:'Star Health Super Star',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,10000000,'Unlimited'],terms:[1,2,3,4,5],ratesVerified:false}};
-const PIN_TO_ZONE={};
+const PIN_TO_ZONE={'700034':'D'}; // Verified against insurer quotation; other PINs require manual zone
 const $=id=>document.getElementById(id),policyEl=$('policy');
 const currency=n=>'₹'+Number(n).toLocaleString('en-IN',{maximumFractionDigits:2});
 let currentPolicy=null,assureData=null;
@@ -38,7 +38,13 @@ function makeAgeField(name,holder){
  const input=document.createElement('input');input.dataset.member=name;input.id='member-'+name.replace(/[^a-z0-9]/gi,'-');label.htmlFor=input.id;
  if(ageMode()==='age'){input.type='number';input.min='0';input.max='120';input.step='1';input.placeholder='Age in years'}
  else{input.type='date';const now=new Date();input.max=[now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-')}
- input.addEventListener('input',()=>{clearResult();updateFamilySize()});row.append(label,input);holder.appendChild(row)
+ const fieldWrap=document.createElement('div');fieldWrap.appendChild(input);
+ if(ageMode()==='dob'){
+  const ageDisplay=document.createElement('div');ageDisplay.className='hint';ageDisplay.setAttribute('aria-live','polite');ageDisplay.textContent='Select DOB to see age';
+  const showAge=()=>{const age=input.value?ageFromDOB(input.value):null;ageDisplay.textContent=age===null?'Select a valid DOB':'Age: '+age+' years'};
+  input.addEventListener('input',showAge);input.addEventListener('change',showAge);fieldWrap.appendChild(ageDisplay)
+ }
+ input.addEventListener('input',()=>{clearResult();updateFamilySize()});row.append(label,fieldWrap);holder.appendChild(row)
 }
 function makeFloaterChoice(holder,title,names){
  const group=document.createElement('div'),choice=document.createElement('label');choice.className='member-select';
