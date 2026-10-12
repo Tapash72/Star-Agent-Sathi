@@ -19,7 +19,7 @@
 <section class="panel hidden" id="zonePanel"><h2><span class="step">5</span>Premium Zone</h2><div class="choices"><label><input type="radio" name="zoneMode" value="manual" checked> Select Zone</label><label><input type="radio" name="zoneMode" value="pin"> Enter PIN Code</label></div><div id="manualZone"><label for="zone">Zone</label><select id="zone"><option value="">Choose Zone</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div><div id="pinZone" class="hidden"><label for="pin">6-digit PIN Code</label><input id="pin" type="text" inputmode="numeric" maxlength="6" placeholder="e.g. 700001"><p class="hint">PIN-based detection is pending verified mapping. Use manual zone selection for now.</p></div></section>
 <section class="panel hidden" id="actionPanel"><button id="calculate" type="button">Calculate Premium</button><div class="error" id="error" role="alert"></div></section>
 <section class="panel hidden" id="resultPanel" aria-live="polite"><h2>Premium Quotation</h2><div class="summary" id="summary"></div><div id="premiumRows"></div><p class="hint" id="resultNote"></p></section>
-<section class="panel"><div class="notice"><strong>Setup status:</strong> The interface is ready for testing. Verified premium-rate data and policy eligibility rules have not yet been connected. No premium amount will be displayed until they are configured and validated.</div><p class="hint">Independent agent toolkit. Not an official Star Health application.</p></section>
+<section class="panel"><div class="notice"><strong>Rate status:</strong> Assure uses the uploaded one-year premium chart to calculate indicative 1, 2 and 3-year premiums. Super Star rates and PIN mapping are not connected. Verify insurer quotation and eligibility before use.</div><p class="hint">Independent agent toolkit. Not an official Star Health application.</p></section>
 </main>
 <script>
 'use strict';
@@ -30,7 +30,7 @@ const POLICIES = {
     members: ['Self','Spouse','Child 1','Child 2','Child 3','Parent 1','Parent 2','Parent 3','Parent 4'],
     sumInsured: [500000,750000,1000000,1500000,2000000,2500000,5000000,7500000,10000000,20000000],
     terms: [1,2,3],
-    ratesVerified: false
+    ratesVerified: true
   },
   superstar: {
     label: 'Star Health Super Star',
@@ -45,6 +45,11 @@ const $ = id => document.getElementById(id);
 const policyEl = $('policy');
 const currency = n => '₹' + Number(n).toLocaleString('en-IN',{maximumFractionDigits:2});
 let currentPolicy = null;
+let assureData = null;
+fetch('assure_rates.json', {cache:'no-store'})
+  .then(response => {if(!response.ok)throw Error('Premium rate file not found');return response.json()})
+  .then(data => {if(!data.zones || !data.zones.D || !data.sumInsured)throw Error('Invalid rate file');assureData=data;})
+  .catch(error => {console.error(error);assureData=null;});
 function ageMode(){return document.querySelector('input[name="ageMode"]:checked').value}
 function zoneMode(){return document.querySelector('input[name="zoneMode"]:checked').value}
 function clearResult(){$('resultPanel').classList.add('hidden');$('error').textContent=''}
@@ -110,6 +115,7 @@ function changePolicy(){
     typeSelect.add(new Option('Family Floater','floater'));
     if(currentPolicy!==POLICIES.assure)typeSelect.add(new Option('Multi-Individual','multi'));
   }
+  $('memberPanel').classList.add('hidden');
   renderMembers();
   const sum=$('sumInsured');sum.replaceChildren();sum.add(new Option('Choose sum insured',''));
   if(currentPolicy)currentPolicy.sumInsured.forEach(n=>sum.add(new Option(n==='Unlimited'?'Unlimited':currency(n),String(n))));
@@ -147,11 +153,60 @@ function getZone(){
   if(!Object.prototype.hasOwnProperty.call(PIN_TO_ZONE,pin))throw Error('PIN-to-zone mapping is not configured. Please select Manual Zone.');
   return PIN_TO_ZONE[pin];
 }
-function lookupVerifiedPremium(policy,members,sumInsured,zone,term){
-  // To be implemented using verified one-year rate tables and yearly age progression.
-  // Never use placeholder amounts for customer quotations.
-  return null;
+function ageBand(age){
+  if(age<0||age>120)throw Error('Invalid age.');
+  if(age<18)return '91days-17yrs';
+  if(age<=35)return '18-35';
+  if(age<=45)return '36-45';
+  if(age<=50)return '46-50';
+  if(age<=55)return '51-55';
+  if(age<=59)return '56-59';
+  if(age===60)return '60';
+  if(age<=65)return '61-65';
+  if(age<=70)return '66-70';
+  if(age<=75)return '71-75';
+  if(age<=80)return '76-80';
+  return 'Above80';
 }
+function baseRate(zone,composition,age,sumInsured){
+  const rate=assureData?.zones?.[zone]?.[composition]?.[ageBand(age)]?.[String(sumInsured)];
+  if(!Number.isFinite(rate))throw Error('Rate unavailable for '+composition+', age '+age+', Zone '+zone+'.');
+  return rate;
+}
+function assureAnnualPremium(members,sumInsured,zone,yearOffset,type){
+  const ageOf=m=>m.age+yearOffset;
+  if(type==='individual'){
+    return baseRate(zone,'Individual',ageOf(members[0]),sumInsured);
+  }
+  const core=members.filter(m=>m.member==='Self'||m.member==='Spouse');
+  const children=members.filter(m=>m.member.startsWith('Child'));
+  const parents=members.filter(m=>m.member.startsWith('Parent'));
+  if(core.length===0)throw Error('Select Self or Spouse for the base floater.');
+  if(core.some(m=>ageOf(m)<18))throw Error('Self and Spouse must be adults.');
+  // Chart floater child slots cover children under 18. Adult dependent children
+  // use an individual rate at the verified 40% floater discount.
+  const minorChildren=children.filter(m=>ageOf(m)<18);
+  const adultChildren=children.filter(m=>ageOf(m)>=18);
+  if(adultChildren.some(m=>ageOf(m)>25))throw Error('Dependent child above age 25: confirm continued eligibility before quoting.');
+  const composition=core.length+'A'+(minorChildren.length?'+'+minorChildren.length+'C':'');
+  const eldest=Math.max(...core.map(ageOf));
+  let total=baseRate(zone,composition,eldest,sumInsured);
+  for(const child of adultChildren)total+=baseRate(zone,'Individual',ageOf(child),sumInsured)*0.60;
+  for(const parent of parents)total+=baseRate(zone,'Individual',ageOf(parent),sumInsured)*0.90;
+  return total;
+}
+function lookupVerifiedPremium(policy,members,sumInsured,zone,term,type){
+  if(policy!==POLICIES.assure)return null;
+  if(!assureData)throw Error('Premium rate file is not loaded. Refresh the page and confirm assure_rates.json is uploaded.');
+  if(!assureData.sumInsured.includes(sumInsured))throw Error('Sum insured is not in the rate chart.');
+  let total=0;
+  for(let y=0;y<term;y++){
+    const annual=assureAnnualPremium(members,sumInsured,zone,y,type);
+    total+=annual*(y===0?1:0.90);
+  }
+  return Math.floor(total); // Provisional rounding: insurer rounding can differ by ₹1 or more.
+}
+
 function calculate(){
   clearResult();
   try{
@@ -165,7 +220,7 @@ function calculate(){
     if(!currentPolicy.ratesVerified)throw Error('Verified premium rates and eligibility rules are not yet connected for '+currentPolicy.label+'. Calculator setup is in progress.');
     const rows=[];
     for(const term of currentPolicy.terms){
-      const amount=lookupVerifiedPremium(currentPolicy,members,sumInsured,zone,term);
+      const amount=lookupVerifiedPremium(currentPolicy,members,sumInsured,zone,term,type);
       if(Number.isFinite(amount)&&amount>=0)rows.push({term,amount});
     }
     if(!rows.length)throw Error('No verified quotation is available for this combination.');
@@ -177,13 +232,13 @@ function calculate(){
       const price=document.createElement('strong');price.textContent=currency(amount)+'/-';
       row.append(label,price);$('premiumRows').appendChild(row);
     });
-    $('resultNote').textContent='Verify applicable tax and policy terms before sharing a quotation.';
+    $('resultNote').textContent='Indicative calculation from uploaded annual premium chart (excluding GST). Age progresses each year; 10% discount applied to years 2 and 3. Verify eligibility, optional covers and final insurer quotation before sharing. Insurer rounding may differ.';
     $('resultPanel').classList.remove('hidden');
   }catch(err){$('error').textContent=err.message}
 }
 Object.entries(POLICIES).forEach(([id,config])=>policyEl.add(new Option(config.label,id)));
 policyEl.addEventListener('change',changePolicy);
-$('policyType').addEventListener('change',()=>{renderMembers();clearResult()});
+$('policyType').addEventListener('change',()=>{$('memberPanel').classList.toggle('hidden',!$('policyType').value);renderMembers();clearResult()});
 document.querySelectorAll('input[name="ageMode"]').forEach(el=>el.addEventListener('change',()=>{renderMembers();clearResult()}));
 document.querySelectorAll('input[name="zoneMode"]').forEach(el=>el.addEventListener('change',()=>{
   $('manualZone').classList.toggle('hidden',zoneMode()!=='manual');
