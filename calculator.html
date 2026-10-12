@@ -177,7 +177,7 @@ function lookupVerifiedPremium(policy,members,sumInsured,zone,term,type,status,d
   }
   total+=yearPremium
  }
- return {amount:Math.floor(total),earlyDiscount,deductibleRate:dedRate}
+ return {amount:Math.round(total),earlyDiscount,deductibleRate:dedRate}
 }
 function calculate(){
  clearResult();try{
