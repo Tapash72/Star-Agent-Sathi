@@ -14,7 +14,7 @@
 <main>
 <section class="panel"><h2><span class="step">1</span>Select Policy</h2><label for="policy">Health Insurance Policy</label><select id="policy"><option value="">Choose a policy</option></select><p class="hint">Choose a policy to configure your quotation.</p></section>
 <section class="panel hidden" id="typePanel"><h2><span class="step">2</span>Policy Type</h2><label for="policyType">Select Cover Type</label><select id="policyType"><option value="">Choose policy type</option><option value="individual">Individual</option><option value="floater">Family Floater</option><option value="multi">Multi-Individual</option></select></section>
-<section class="panel hidden" id="memberPanel"><h2><span class="step">3</span>Insured Members &amp; Age</h2><div class="choices"><label><input type="radio" name="ageMode" value="age" checked> Manual Age</label><label><input type="radio" name="ageMode" value="dob"> Date of Birth</label></div><p class="hint">Leave unused member fields blank. DOB calculates completed age as of today. Family eligibility will be verified before live quotation release.</p><div id="members"></div></section>
+<section class="panel hidden" id="memberPanel"><h2><span class="step">3</span>Insured Members &amp; Age</h2><div class="choices"><label><input type="radio" name="ageMode" value="age" checked> Manual Age</label><label><input type="radio" name="ageMode" value="dob"> Date of Birth</label></div><p class="hint">For Family Floater, tick only the members to include. Select the number of children or parents to show their age/DOB fields. Policy eligibility will be checked before live quotations.</p><div id="members"></div></section>
 <section class="panel hidden" id="sumPanel"><h2><span class="step">4</span>Sum Insured</h2><label for="sumInsured">Select Sum Insured</label><select id="sumInsured"><option value="">Choose sum insured</option></select></section>
 <section class="panel hidden" id="zonePanel"><h2><span class="step">5</span>Premium Zone</h2><div class="choices"><label><input type="radio" name="zoneMode" value="manual" checked> Select Zone</label><label><input type="radio" name="zoneMode" value="pin"> Enter PIN Code</label></div><div id="manualZone"><label for="zone">Zone</label><select id="zone"><option value="">Choose Zone</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div><div id="pinZone" class="hidden"><label for="pin">6-digit PIN Code</label><input id="pin" type="text" inputmode="numeric" maxlength="6" placeholder="e.g. 700001"><p class="hint">PIN-based detection is pending verified mapping. Use manual zone selection for now.</p></div></section>
 <section class="panel hidden" id="actionPanel"><button id="calculate" type="button">Calculate Premium</button><div class="error" id="error" role="alert"></div></section>
@@ -28,7 +28,7 @@ const POLICIES = {
   assure: {
     label: 'Star Health Assure',
     members: ['Self','Spouse','Child 1','Child 2','Child 3','Parent 1','Parent 2','Parent 3','Parent 4'],
-    sumInsured: [500000,750000,1000000,1500000,2000000,2500000],
+    sumInsured: [500000,750000,1000000,1500000,2000000,2500000,5000000,7500000,10000000,20000000],
     terms: [1,2,3],
     ratesVerified: false
   },
@@ -102,7 +102,15 @@ function renderMembers(){
 function changePolicy(){
   currentPolicy=POLICIES[policyEl.value]||null;
   ['typePanel','memberPanel','sumPanel','zonePanel','actionPanel'].forEach(id=>$(id).classList.toggle('hidden',!currentPolicy));
-  clearResult();$('policyType').value='';renderMembers();
+  clearResult();
+  const typeSelect=$('policyType');
+  typeSelect.replaceChildren(new Option('Choose policy type',''));
+  if(currentPolicy){
+    typeSelect.add(new Option('Individual','individual'));
+    typeSelect.add(new Option('Family Floater','floater'));
+    if(currentPolicy!==POLICIES.assure)typeSelect.add(new Option('Multi-Individual','multi'));
+  }
+  renderMembers();
   const sum=$('sumInsured');sum.replaceChildren();sum.add(new Option('Choose sum insured',''));
   if(currentPolicy)currentPolicy.sumInsured.forEach(n=>sum.add(new Option(n==='Unlimited'?'Unlimited':currency(n),String(n))));
   $('zone').value='';$('pin').value='';
