@@ -3,174 +3,144 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#09539d">
 <title>Premium Calculator | Star Agent Sathi</title>
 <style>
-:root{font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:#18314a;background:#f3f7fc}*{box-sizing:border-box}body{margin:0}header{background:linear-gradient(120deg,#09539d,#0876b9);color:#fff;padding:20px 16px}header .wrap{max-width:760px;margin:auto}header a{color:white;text-decoration:none;font-size:14px}h1{margin:10px 0 4px;font-size:25px}header p{margin:0;opacity:.9;font-size:14px}main{max-width:760px;margin:18px auto;padding:0 12px 32px}.panel{background:#fff;border:1px solid #e2eaf2;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 3px 14px #164d7d0b}h2{font-size:17px;margin:0 0 14px;color:#124e86}.step{display:inline-flex;align-items:center;justify-content:center;background:#e7f3ff;color:#1266a5;border-radius:50%;width:27px;height:27px;margin-right:8px}label{font-weight:650;display:block;font-size:14px;margin:10px 0 6px}select,input{width:100%;padding:12px;border:1px solid #cbd9e6;border-radius:9px;font:inherit;background:white;color:#18314a}input:focus,select:focus{outline:2px solid #91c8fa;outline-offset:1px}.choices{display:flex;gap:12px;flex-wrap:wrap;margin:9px 0}.choices label{font-weight:500;margin:0;display:flex;gap:6px;align-items:center}.choices input{width:auto}.member{display:grid;grid-template-columns:minmax(90px,1fr) minmax(0,1.3fr);gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #edf1f6}.member:last-child{border:0}.member label{margin:0}.hint{font-size:12px;color:#60768a;line-height:1.5;margin:8px 0 0}.notice{border-radius:10px;background:#fff7e6;color:#76520e;padding:12px;font-size:13px;line-height:1.55;margin:10px 0}.hidden{display:none!important}button{background:#0875bb;color:#fff;border:0;border-radius:10px;padding:14px 18px;width:100%;font-size:16px;font-weight:700;cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}.result-row{display:flex;justify-content:space-between;align-items:center;border:1px solid #dce8f4;border-radius:10px;padding:14px;margin:9px 0}.result-row strong{font-size:19px}.muted{color:#60768a}.error{color:#b42318;font-size:13px;margin:10px 0;white-space:pre-line}.summary{background:#f3f8ff;padding:12px;border-radius:10px;font-size:14px;line-height:1.7}@media(max-width:370px){.panel{padding:14px}.member{grid-template-columns:95px 1fr}}
+:root{font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:#18314a;background:#f3f7fc}*{box-sizing:border-box}body{margin:0}header{background:linear-gradient(120deg,#09539d,#0876b9);color:#fff;padding:20px 16px}header .wrap{max-width:760px;margin:auto}header a{color:#fff;text-decoration:none;font-size:14px}h1{margin:10px 0 4px;font-size:25px}header p{margin:0;opacity:.9;font-size:14px}main{max-width:760px;margin:18px auto;padding:0 12px 32px}.panel{background:#fff;border:1px solid #e2eaf2;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 3px 14px #164d7d0b}h2{font-size:17px;margin:0 0 14px;color:#124e86}.step{display:inline-flex;align-items:center;justify-content:center;background:#e7f3ff;color:#1266a5;border-radius:50%;width:27px;height:27px;margin-right:8px}label{font-weight:650;display:block;font-size:14px;margin:10px 0 6px}select,input{width:100%;padding:12px;border:1px solid #cbd9e6;border-radius:9px;font:inherit;background:#fff;color:#18314a}input:focus,select:focus{outline:2px solid #91c8fa;outline-offset:1px}.choices{display:flex;gap:12px;flex-wrap:wrap;margin:9px 0}.choices label{font-weight:500;margin:0;display:flex;gap:6px;align-items:center}.choices input{width:auto}.member{display:grid;grid-template-columns:minmax(100px,1fr) minmax(0,1.3fr);gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #edf1f6}.member:last-child{border:0}.member label{margin:0}.hint{font-size:12px;color:#60768a;line-height:1.5;margin:8px 0 0}.notice{border-radius:10px;background:#fff7e6;color:#76520e;padding:12px;font-size:13px;line-height:1.55;margin:10px 0}.hidden{display:none!important}button{background:#0875bb;color:#fff;border:0;border-radius:10px;padding:14px 18px;width:100%;font-size:16px;font-weight:700;cursor:pointer}.result-row{display:flex;justify-content:space-between;align-items:center;border:1px solid #dce8f4;border-radius:10px;padding:14px;margin:9px 0}.result-row strong{font-size:19px}.error{color:#b42318;font-size:13px;margin:10px 0;white-space:pre-line}.summary{background:#f3f8ff;padding:12px;border-radius:10px;font-size:14px;line-height:1.7}@media(max-width:370px){.panel{padding:14px}.member{grid-template-columns:95px 1fr}}
 </style>
 </head>
 <body>
 <header><div class="wrap"><a href="index.html">← Back to Dashboard</a><h1>⭐ Premium Calculator</h1><p>Star Agent Sathi • Policy-based quotation</p></div></header>
 <main>
-<section class="panel"><h2><span class="step">1</span>Select Policy</h2><label for="policy">Health Insurance Policy</label><select id="policy"><option value="">Choose a policy</option></select><p class="hint">Only configured policies appear here. More policies will be added later.</p></section>
-<section class="panel hidden" id="typePanel"><h2><span class="step">2</span>Policy Type</h2><label for="policyType">Select Cover Type</label><select id="policyType"><option value="">Choose policy type</option><option value="individual">Individual</option><option value="floater">Family Floater</option><option value="multi">Multi-Individual</option></select><p class="hint">Member fields change based on the selected policy type.</p></section>
-<section class="panel hidden" id="memberPanel"><h2><span class="step">3</span>Insured Members & Age</h2><div class="choices"><label><input type="radio" name="ageMode" value="age" checked> Manual Age</label><label><input type="radio" name="ageMode" value="dob"> Date of Birth</label></div><p class="hint">Fill only the members you want to include. Blank means not selected. DOB calculates completed age as of today.</p><div id="members"></div><div id="memberError" class="error" role="alert"></div></section>
+<section class="panel"><h2><span class="step">1</span>Select Policy</h2><label for="policy">Health Insurance Policy</label><select id="policy"><option value="">Choose a policy</option></select><p class="hint">Choose a policy to configure your quotation.</p></section>
+<section class="panel hidden" id="typePanel"><h2><span class="step">2</span>Policy Type</h2><label for="policyType">Select Cover Type</label><select id="policyType"><option value="">Choose policy type</option><option value="individual">Individual</option><option value="floater">Family Floater</option><option value="multi">Multi-Individual</option></select></section>
+<section class="panel hidden" id="memberPanel"><h2><span class="step">3</span>Insured Members &amp; Age</h2><div class="choices"><label><input type="radio" name="ageMode" value="age" checked> Manual Age</label><label><input type="radio" name="ageMode" value="dob"> Date of Birth</label></div><p class="hint">Leave unused member fields blank. DOB calculates completed age as of today. Family eligibility will be verified before live quotation release.</p><div id="members"></div></section>
 <section class="panel hidden" id="sumPanel"><h2><span class="step">4</span>Sum Insured</h2><label for="sumInsured">Select Sum Insured</label><select id="sumInsured"><option value="">Choose sum insured</option></select></section>
-<section class="panel hidden" id="zonePanel"><h2><span class="step">5</span>Premium Zone</h2><div class="choices"><label><input type="radio" name="zoneMode" value="manual" checked> Select Zone</label><label><input type="radio" name="zoneMode" value="pin"> Enter PIN Code</label></div><div id="manualZone"><label for="zone">Zone</label><select id="zone"><option value="">Choose Zone</option><option>A</option><option>B</option><option>C</option></select></div><div id="pinZone" class="hidden"><label for="pin">6-digit PIN Code</label><input id="pin" type="text" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" placeholder="e.g. 700001"><p class="hint" id="pinMessage">Automatic zone detection will work once the official PIN-to-zone mapping is configured.</p></div></section>
+<section class="panel hidden" id="zonePanel"><h2><span class="step">5</span>Premium Zone</h2><div class="choices"><label><input type="radio" name="zoneMode" value="manual" checked> Select Zone</label><label><input type="radio" name="zoneMode" value="pin"> Enter PIN Code</label></div><div id="manualZone"><label for="zone">Zone</label><select id="zone"><option value="">Choose Zone</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div><div id="pinZone" class="hidden"><label for="pin">6-digit PIN Code</label><input id="pin" type="text" inputmode="numeric" maxlength="6" placeholder="e.g. 700001"><p class="hint">PIN-based detection is pending verified mapping. Use manual zone selection for now.</p></div></section>
 <section class="panel hidden" id="actionPanel"><button id="calculate" type="button">Calculate Premium</button><div class="error" id="error" role="alert"></div></section>
 <section class="panel hidden" id="resultPanel" aria-live="polite"><h2>Premium Quotation</h2><div class="summary" id="summary"></div><div id="premiumRows"></div><p class="hint" id="resultNote"></p></section>
-<section class="panel"><div class="notice"><strong>Setup status:</strong> This calculator does not contain verified premium rates or PIN-to-zone data yet. It will never display sample amounts as real premiums. Premium results activate only after verified policy data is added.</div><p class="hint">Independent agent tool. Not an official Star Health application.</p></section>
+<section class="panel"><div class="notice"><strong>Setup status:</strong> The interface is ready for testing. Verified premium-rate data and policy eligibility rules have not yet been connected. No premium amount will be displayed until they are configured and validated.</div><p class="hint">Independent agent toolkit. Not an official Star Health application.</p></section>
 </main>
 <script>
 'use strict';
-/*
-  POLICY CONFIGURATION
-  These are interface defaults, NOT verified eligibility or premium data.
-  Before enabling quotations, verify member eligibility, sum insured, zone,
-  policy terms, and premium amounts against the applicable official documents.
-*/
+// UI configurations only. Do not treat these values as verified policy eligibility.
 const POLICIES = {
+  assure: {
+    label: 'Star Health Assure',
+    members: ['Self','Spouse','Child 1','Child 2','Child 3','Child 4','Parent 1','Parent 2'],
+    sumInsured: [500000,750000,1000000,1500000,2000000,2500000],
+    terms: [1,2,3],
+    ratesVerified: false
+  },
   superstar: {
     label: 'Star Health Super Star',
     members: ['Self','Spouse','Child 1','Child 2','Child 3','Child 4'],
-    // Illustrative choices for building the interface only; verify before release.
     sumInsured: [500000,750000,1000000,1500000,2000000,2500000,5000000,10000000,'Unlimited'],
     terms: [1,2,3,4,5],
-    minAge: null,
-    maxAge: null,
-    eligibilityVerified: false,
-    sumInsuredVerified: false,
-    termsVerified: false,
-    premiumRates: {} // Verified rates must be added here, keyed by policy-specific combination.
+    ratesVerified: false
   }
 };
-const PIN_TO_ZONE = {}; // Populate only from a verified official mapping.
+const PIN_TO_ZONE = {};
 const $ = id => document.getElementById(id);
-const policyEl=$('policy'), membersEl=$('members'), sumEl=$('sumInsured');
-const currency = n => '₹'+Number(n).toLocaleString('en-IN', {maximumFractionDigits:2});
-let currentPolicy=null;
-const savedValues={};
-function selectedAgeMode(){return document.querySelector('input[name="ageMode"]:checked').value}
-function selectedZoneMode(){return document.querySelector('input[name="zoneMode"]:checked').value}
-function clearResult(){ $('resultPanel').classList.add('hidden'); $('error').textContent=''; $('memberError').textContent=''; }
-function showPanels(show){['typePanel','memberPanel','sumPanel','zonePanel','actionPanel'].forEach(id=>$(id).classList.toggle('hidden',!show));clearResult()}
-function formatINR(n){return currency(n)}
+const policyEl = $('policy');
+const currency = n => '₹' + Number(n).toLocaleString('en-IN',{maximumFractionDigits:2});
+let currentPolicy = null;
+function ageMode(){return document.querySelector('input[name="ageMode"]:checked').value}
+function zoneMode(){return document.querySelector('input[name="zoneMode"]:checked').value}
+function clearResult(){$('resultPanel').classList.add('hidden');$('error').textContent=''}
 function renderMembers(){
-  membersEl.replaceChildren();
+  const holder=$('members');holder.replaceChildren();
   if(!currentPolicy)return;
-  const mode=selectedAgeMode();
   const type=$('policyType').value;
-  const list=type==='individual'?['Insured Person']:type==='floater'?currentPolicy.members:type==='multi'?['Person 1','Person 2','Person 3','Person 4','Person 5','Person 6']:[];
-  list.forEach((member,index)=>{
+  const names=type==='individual'?['Insured Person']:type==='floater'?currentPolicy.members:type==='multi'?Array.from({length:8},(_,i)=>'Person '+(i+1)):[];
+  names.forEach((name,i)=>{
     const row=document.createElement('div');row.className='member';
-    const label=document.createElement('label');label.textContent=member;label.htmlFor='member-'+index;
-    const input=document.createElement('input');input.id='member-'+index;input.dataset.member=member;
-    if(mode==='age'){input.type='number';input.min='0';input.max='120';input.step='1';input.placeholder='Age in years'}
-    else {input.type='date';input.max=new Date().toLocaleDateString('en-CA');input.setAttribute('aria-label',member+' date of birth')}
-    input.addEventListener('input',clearResult);
-    row.append(label,input);membersEl.appendChild(row);
+    const label=document.createElement('label');label.htmlFor='member-'+i;label.textContent=name;
+    const input=document.createElement('input');input.id='member-'+i;input.dataset.member=name;
+    if(ageMode()==='age'){
+      input.type='number';input.min='0';input.max='120';input.step='1';input.placeholder='Age in years';
+    }else{
+      input.type='date';const now=new Date();const y=now.getFullYear();const m=String(now.getMonth()+1).padStart(2,'0');const d=String(now.getDate()).padStart(2,'0');input.max=`${y}-${m}-${d}`;
+    }
+    input.addEventListener('input',clearResult);row.append(label,input);holder.appendChild(row);
   });
 }
 function changePolicy(){
   currentPolicy=POLICIES[policyEl.value]||null;
-  showPanels(!!currentPolicy);
-  if(!currentPolicy)return;
-  document.querySelector('input[name="ageMode"][value="age"]').checked=true;
-  $('policyType').value='';
-  renderMembers();
-  sumEl.replaceChildren();
-  sumEl.add(new Option('Choose sum insured',''));
-  currentPolicy.sumInsured.forEach(n=>sumEl.add(new Option(n==='Unlimited'?'Unlimited':formatINR(n),String(n))));
+  ['typePanel','memberPanel','sumPanel','zonePanel','actionPanel'].forEach(id=>$(id).classList.toggle('hidden',!currentPolicy));
+  clearResult();$('policyType').value='';renderMembers();
+  const sum=$('sumInsured');sum.replaceChildren();sum.add(new Option('Choose sum insured',''));
+  if(currentPolicy)currentPolicy.sumInsured.forEach(n=>sum.add(new Option(n==='Unlimited'?'Unlimited':currency(n),String(n))));
   $('zone').value='';$('pin').value='';
 }
-function getAgeFromDOB(value){
-  const parts=value.split('-').map(Number);
-  if(parts.length!==3)return null;
-  const [y,m,d]=parts;
-  const birth=new Date(y,m-1,d);
-  if(birth.getFullYear()!==y||birth.getMonth()!==m-1||birth.getDate()!==d)return null;
-  const now=new Date();
-  if(birth>now)return null;
-  let age=now.getFullYear()-y;
-  if(now.getMonth()+1<m||(now.getMonth()+1===m&&now.getDate()<d))age--;
-  return age;
+function ageFromDOB(value){
+  const parts=value.split('-').map(Number);if(parts.length!==3)return null;
+  const [y,m,d]=parts;const birth=new Date(y,m-1,d);const now=new Date();
+  if(birth.getFullYear()!==y||birth.getMonth()!==m-1||birth.getDate()!==d||birth>now)return null;
+  let age=now.getFullYear()-y;if(now.getMonth()+1<m||(now.getMonth()+1===m&&now.getDate()<d))age--;return age;
 }
 function getMembers(){
-  const mode=selectedAgeMode(), selected=[];
-  for(const input of membersEl.querySelectorAll('input')){
+  const result=[];
+  for(const input of $('members').querySelectorAll('input')){
     const value=input.value.trim();if(!value)continue;
-    let age;
-    if(mode==='dob'){age=getAgeFromDOB(value)}
-    else {age=Number(value);if(!/^\d+$/.test(value))age=null}
-    if(age===null||!Number.isInteger(age)||age<0||age>120)throw Error('Enter a valid '+(mode==='dob'?'date of birth':'age')+' for '+input.dataset.member+'.');
-    selected.push({member:input.dataset.member,age});
+    const age=ageMode()==='dob'?ageFromDOB(value):/^\d+$/.test(value)?Number(value):null;
+    if(age===null||!Number.isInteger(age)||age<0||age>120)throw Error('Enter a valid age or DOB for '+input.dataset.member+'.');
+    result.push({member:input.dataset.member,age});
   }
-  if(!selected.length)throw Error('Enter age or DOB for at least one insured member.');
-  return selected;
+  if(!result.length)throw Error('Enter at least one insured member.');
+  return result;
 }
 function getZone(){
-  if(selectedZoneMode()==='manual'){
+  if(zoneMode()==='manual'){
     if(!$('zone').value)throw Error('Select a premium zone.');
     return $('zone').value;
   }
   const pin=$('pin').value.trim();
   if(!/^\d{6}$/.test(pin))throw Error('Enter a valid 6-digit PIN code.');
-  if(!Object.prototype.hasOwnProperty.call(PIN_TO_ZONE,pin))throw Error('Zone mapping is not configured for this PIN code. Select Manual Zone instead.');
+  if(!Object.prototype.hasOwnProperty.call(PIN_TO_ZONE,pin))throw Error('PIN-to-zone mapping is not configured. Please select Manual Zone.');
   return PIN_TO_ZONE[pin];
 }
 function lookupVerifiedPremium(policy,members,sumInsured,zone,term){
-  // No assumptions about rate structure. Define official lookup when chart is supplied.
-  // A future policy-specific function must validate combination and return its official rate.
+  // To be implemented using verified one-year rate tables and yearly age progression.
+  // Never use placeholder amounts for customer quotations.
   return null;
 }
 function calculate(){
   clearResult();
   try{
     if(!currentPolicy)throw Error('Select a policy.');
-    const type=$('policyType').value;
-    if(!type)throw Error('Select a policy type.');
+    const type=$('policyType').value;if(!type)throw Error('Select a policy type.');
     const members=getMembers();
-    if(type==='individual'&&members.length!==1)throw Error('Select one insured person.');
-    if(type==='floater'){
-      const adults=members.filter(m=>!m.member.startsWith('Child'));
-      const children=members.filter(m=>m.member.startsWith('Child'));
-      if(!adults.length)throw Error('Family Floater requires at least one adult.');
-      if(adults.some(m=>m.age<18))throw Error('Adult members must be at least 18 years old.');
-      if(children.some(m=>m.age>25))throw Error('Dependent children must be no older than 25.');
-      if(children.some(m=>m.age===0))throw Error('For children under one year, eligibility starts at 91 days. Enter DOB to verify eligibility.');
-    }
-    if(type==='individual'&&members[0].age<18)throw Error('Individual adult entry must be at least 18 years old.');
-    if(type==='multi'&&members.some(m=>m.age<18))throw Error('Multi-Individual eligibility for minors needs separate verification; enter adults only for now.');
-    const sumInsured=sumEl.value==='Unlimited'?'Unlimited':Number(sumEl.value);
-    if(!sumInsured)throw Error('Select a sum insured amount.');
+    if(type==='individual'&&members.length!==1)throw Error('Individual requires one insured person.');
+    const sumValue=$('sumInsured').value;if(!sumValue)throw Error('Select a sum insured.');
+    const sumInsured=sumValue==='Unlimited'?'Unlimited':Number(sumValue);
     const zone=getZone();
-    if(!currentPolicy.eligibilityVerified||!currentPolicy.sumInsuredVerified||!currentPolicy.termsVerified){
-      throw Error('This policy\'s eligibility, sum insured and available terms are awaiting verification. Official premium calculation is not active yet.');
-    }
+    if(!currentPolicy.ratesVerified)throw Error('Verified premium rates and eligibility rules are not yet connected for '+currentPolicy.label+'. Calculator setup is in progress.');
     const rows=[];
     for(const term of currentPolicy.terms){
       const amount=lookupVerifiedPremium(currentPolicy,members,sumInsured,zone,term);
-      if(amount!==null&&Number.isFinite(amount)&&amount>=0)rows.push({term,amount});
+      if(Number.isFinite(amount)&&amount>=0)rows.push({term,amount});
     }
-    if(!rows.length)throw Error('Verified premium rates are not available for this combination yet. No quotation has been generated.');
+    if(!rows.length)throw Error('No verified quotation is available for this combination.');
     $('summary').textContent=currentPolicy.label+' | '+members.map(m=>m.member+' ('+m.age+')').join(', ')+' | '+(sumInsured==='Unlimited'?'Unlimited':currency(sumInsured))+' | Zone '+zone;
-    const holder=$('premiumRows');holder.replaceChildren();
+    $('premiumRows').replaceChildren();
     rows.forEach(({term,amount})=>{
       const row=document.createElement('div');row.className='result-row';
       const label=document.createElement('span');label.textContent=term+' '+(term===1?'Year':'Years');
       const price=document.createElement('strong');price.textContent=currency(amount)+'/-';
-      row.append(label,price);holder.appendChild(row);
+      row.append(label,price);$('premiumRows').appendChild(row);
     });
-    $('resultNote').textContent='Premium basis and tax treatment must match the verified source rate chart.';
+    $('resultNote').textContent='Verify applicable tax and policy terms before sharing a quotation.';
     $('resultPanel').classList.remove('hidden');
-  }catch(e){$('error').textContent=e.message}
+  }catch(err){$('error').textContent=err.message}
 }
 Object.entries(POLICIES).forEach(([id,config])=>policyEl.add(new Option(config.label,id)));
 policyEl.addEventListener('change',changePolicy);
 $('policyType').addEventListener('change',()=>{renderMembers();clearResult()});
 document.querySelectorAll('input[name="ageMode"]').forEach(el=>el.addEventListener('change',()=>{renderMembers();clearResult()}));
 document.querySelectorAll('input[name="zoneMode"]').forEach(el=>el.addEventListener('change',()=>{
-  $('manualZone').classList.toggle('hidden',selectedZoneMode()!=='manual');
-  $('pinZone').classList.toggle('hidden',selectedZoneMode()!=='pin');clearResult();
+  $('manualZone').classList.toggle('hidden',zoneMode()!=='manual');
+  $('pinZone').classList.toggle('hidden',zoneMode()!=='pin');clearResult();
 }));
 ['sumInsured','zone','pin'].forEach(id=>$(id).addEventListener('input',clearResult));
 $('calculate').addEventListener('click',calculate);
