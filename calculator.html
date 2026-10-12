@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#09539d">
 <title>Premium Calculator | Star Agent Sathi</title>
 <style>
-:root{font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:#18314a;background:#f3f7fc}*{box-sizing:border-box}body{margin:0}header{background:linear-gradient(120deg,#09539d,#0876b9);color:#fff;padding:20px 16px}header .wrap{max-width:760px;margin:auto}header a{color:#fff;text-decoration:none;font-size:14px}h1{margin:10px 0 4px;font-size:25px}header p{margin:0;opacity:.9;font-size:14px}main{max-width:760px;margin:18px auto;padding:0 12px 32px}.panel{background:#fff;border:1px solid #e2eaf2;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 3px 14px #164d7d0b}h2{font-size:17px;margin:0 0 14px;color:#124e86}.step{display:inline-flex;align-items:center;justify-content:center;background:#e7f3ff;color:#1266a5;border-radius:50%;width:27px;height:27px;margin-right:8px}label{font-weight:650;display:block;font-size:14px;margin:10px 0 6px}select,input{width:100%;padding:12px;border:1px solid #cbd9e6;border-radius:9px;font:inherit;background:#fff;color:#18314a}input:focus,select:focus{outline:2px solid #91c8fa;outline-offset:1px}.choices{display:flex;gap:12px;flex-wrap:wrap;margin:9px 0}.choices label{font-weight:500;margin:0;display:flex;gap:6px;align-items:center}.choices input{width:auto}.member{display:grid;grid-template-columns:minmax(100px,1fr) minmax(0,1.3fr);gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #edf1f6}.member:last-child{border:0}.member label{margin:0}.hint{font-size:12px;color:#60768a;line-height:1.5;margin:8px 0 0}.notice{border-radius:10px;background:#fff7e6;color:#76520e;padding:12px;font-size:13px;line-height:1.55;margin:10px 0}.hidden{display:none!important}button{background:#0875bb;color:#fff;border:0;border-radius:10px;padding:14px 18px;width:100%;font-size:16px;font-weight:700;cursor:pointer}.result-row{display:flex;justify-content:space-between;align-items:center;border:1px solid #dce8f4;border-radius:10px;padding:14px;margin:9px 0}.result-row strong{font-size:19px}.error{color:#b42318;font-size:13px;margin:10px 0;white-space:pre-line}.summary{background:#f3f8ff;padding:12px;border-radius:10px;font-size:14px;line-height:1.7}@media(max-width:370px){.panel{padding:14px}.member{grid-template-columns:95px 1fr}}
+:root{font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:#18314a;background:#f3f7fc}*{box-sizing:border-box}body{margin:0}header{background:linear-gradient(120deg,#09539d,#0876b9);color:#fff;padding:20px 16px}header .wrap{max-width:760px;margin:auto}header a{color:#fff;text-decoration:none;font-size:14px}h1{margin:10px 0 4px;font-size:25px}header p{margin:0;opacity:.9;font-size:14px}main{max-width:760px;margin:18px auto;padding:0 12px 32px}.panel{background:#fff;border:1px solid #e2eaf2;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 3px 14px #164d7d0b}h2{font-size:17px;margin:0 0 14px;color:#124e86}.step{display:inline-flex;align-items:center;justify-content:center;background:#e7f3ff;color:#1266a5;border-radius:50%;width:27px;height:27px;margin-right:8px}label{font-weight:650;display:block;font-size:14px;margin:10px 0 6px}select,input{width:100%;padding:12px;border:1px solid #cbd9e6;border-radius:9px;font:inherit;background:#fff;color:#18314a}input:focus,select:focus{outline:2px solid #91c8fa;outline-offset:1px}.choices{display:flex;gap:12px;flex-wrap:wrap;margin:9px 0}.choices label{font-weight:500;margin:0;display:flex;gap:6px;align-items:center}.choices input{width:auto}.member{display:grid;grid-template-columns:minmax(100px,1fr) minmax(0,1.3fr);gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #edf1f6}.member:last-child{border:0}.member-select{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #edf1f6;font-weight:650}.member-select input{width:19px;height:19px;accent-color:#0875bb}.member-group{padding:8px 0 12px 28px}.member-group select{max-width:210px}.member-group .member{padding:8px 0}.member-group .member label{font-weight:500}.member label{margin:0}.hint{font-size:12px;color:#60768a;line-height:1.5;margin:8px 0 0}.notice{border-radius:10px;background:#fff7e6;color:#76520e;padding:12px;font-size:13px;line-height:1.55;margin:10px 0}.hidden{display:none!important}button{background:#0875bb;color:#fff;border:0;border-radius:10px;padding:14px 18px;width:100%;font-size:16px;font-weight:700;cursor:pointer}.result-row{display:flex;justify-content:space-between;align-items:center;border:1px solid #dce8f4;border-radius:10px;padding:14px;margin:9px 0}.result-row strong{font-size:19px}.error{color:#b42318;font-size:13px;margin:10px 0;white-space:pre-line}.summary{background:#f3f8ff;padding:12px;border-radius:10px;font-size:14px;line-height:1.7}@media(max-width:370px){.panel{padding:14px}.member{grid-template-columns:95px 1fr}}
 </style>
 </head>
 <body>
@@ -27,7 +27,7 @@
 const POLICIES = {
   assure: {
     label: 'Star Health Assure',
-    members: ['Self','Spouse','Child 1','Child 2','Child 3','Child 4','Parent 1','Parent 2'],
+    members: ['Self','Spouse','Child 1','Child 2','Child 3','Parent 1','Parent 2','Parent 3','Parent 4'],
     sumInsured: [500000,750000,1000000,1500000,2000000,2500000],
     terms: [1,2,3],
     ratesVerified: false
@@ -48,22 +48,56 @@ let currentPolicy = null;
 function ageMode(){return document.querySelector('input[name="ageMode"]:checked').value}
 function zoneMode(){return document.querySelector('input[name="zoneMode"]:checked').value}
 function clearResult(){$('resultPanel').classList.add('hidden');$('error').textContent=''}
+function makeAgeField(name,holder){
+  const row=document.createElement('div');row.className='member';
+  const label=document.createElement('label');label.textContent=name;
+  const input=document.createElement('input');input.dataset.member=name;
+  input.id='member-'+name.replace(/[^a-z0-9]/gi,'-');label.htmlFor=input.id;
+  if(ageMode()==='age'){
+    input.type='number';input.min='0';input.max='120';input.step='1';input.placeholder='Age in years';
+  }else{
+    input.type='date';const now=new Date();
+    input.max=[now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');
+  }
+  input.addEventListener('input',clearResult);
+  row.append(label,input);holder.appendChild(row);
+}
+function makeFloaterChoice(holder,title,names){
+  const group=document.createElement('div');
+  const choice=document.createElement('label');choice.className='member-select';
+  const check=document.createElement('input');check.type='checkbox';check.value=title;
+  const labelText=document.createElement('span');labelText.textContent=title;
+  choice.append(check,labelText);group.appendChild(choice);
+  const detail=document.createElement('div');detail.className='member-group hidden';group.appendChild(detail);
+  const render=()=>{
+    detail.replaceChildren();detail.classList.toggle('hidden',!check.checked);
+    if(!check.checked){clearResult();return}
+    if(names.length===1){makeAgeField(names[0],detail)}
+    else{
+      const countLabel=document.createElement('label');countLabel.textContent='Number of '+title.toLowerCase();
+      const count=document.createElement('select');count.setAttribute('aria-label',countLabel.textContent);
+      for(let n=1;n<=names.length;n++)count.add(new Option(String(n),String(n)));
+      detail.append(countLabel,count);
+      const fields=document.createElement('div');detail.appendChild(fields);
+      const drawFields=()=>{fields.replaceChildren();for(let i=0;i<Number(count.value);i++)makeAgeField(names[i],fields);clearResult()};
+      count.addEventListener('change',drawFields);drawFields();
+    }
+    clearResult();
+  };
+  check.addEventListener('change',render);
+  holder.appendChild(group);
+}
 function renderMembers(){
   const holder=$('members');holder.replaceChildren();
   if(!currentPolicy)return;
   const type=$('policyType').value;
-  const names=type==='individual'?['Insured Person']:type==='floater'?currentPolicy.members:type==='multi'?Array.from({length:8},(_,i)=>'Person '+(i+1)):[];
-  names.forEach((name,i)=>{
-    const row=document.createElement('div');row.className='member';
-    const label=document.createElement('label');label.htmlFor='member-'+i;label.textContent=name;
-    const input=document.createElement('input');input.id='member-'+i;input.dataset.member=name;
-    if(ageMode()==='age'){
-      input.type='number';input.min='0';input.max='120';input.step='1';input.placeholder='Age in years';
-    }else{
-      input.type='date';const now=new Date();const y=now.getFullYear();const m=String(now.getMonth()+1).padStart(2,'0');const d=String(now.getDate()).padStart(2,'0');input.max=`${y}-${m}-${d}`;
-    }
-    input.addEventListener('input',clearResult);row.append(label,input);holder.appendChild(row);
-  });
+  if(type==='floater'){
+    makeFloaterChoice(holder,'Self',['Self']);
+    makeFloaterChoice(holder,'Spouse',['Spouse']);
+    makeFloaterChoice(holder,'Children',currentPolicy===POLICIES.assure?['Child 1','Child 2','Child 3']:['Child 1','Child 2','Child 3','Child 4']);
+    if(currentPolicy===POLICIES.assure)makeFloaterChoice(holder,'Parents',['Parent 1','Parent 2','Parent 3','Parent 4']);
+  }else if(type==='individual')makeAgeField('Insured Person',holder);
+  else if(type==='multi')for(let i=1;i<=8;i++)makeAgeField('Person '+i,holder);
 }
 function changePolicy(){
   currentPolicy=POLICIES[policyEl.value]||null;
@@ -81,13 +115,18 @@ function ageFromDOB(value){
 }
 function getMembers(){
   const result=[];
-  for(const input of $('members').querySelectorAll('input')){
+  for(const input of $('members').querySelectorAll('input[data-member]')){
     const value=input.value.trim();if(!value)continue;
     const age=ageMode()==='dob'?ageFromDOB(value):/^\d+$/.test(value)?Number(value):null;
     if(age===null||!Number.isInteger(age)||age<0||age>120)throw Error('Enter a valid age or DOB for '+input.dataset.member+'.');
     result.push({member:input.dataset.member,age});
   }
-  if(!result.length)throw Error('Enter at least one insured member.');
+  if(!result.length)throw Error('Select at least one member and enter their age or DOB.');
+  if($('policyType').value==='floater'){
+    const selectedCount=$('members').querySelectorAll('input[type=checkbox]:checked').length;
+    if(selectedCount!==0 && result.length===0)throw Error('Enter ages for selected members.');
+    for(const input of $('members').querySelectorAll('input[data-member]'))if(!input.value.trim())throw Error('Enter age or DOB for '+input.dataset.member+'.');
+  }
   return result;
 }
 function getZone(){
