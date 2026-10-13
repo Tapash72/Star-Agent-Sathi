@@ -24,8 +24,8 @@
 <section class="panel"><div class="notice"><strong>Rate status:</strong> Assure uses the uploaded annual premium chart for indicative 1, 2 and 3-year premiums. Fresh-policy early entry and optional deductible discounts are applied based on prospectus rules. Super Star rates are not connected. PIN mapping is provisional and not fully insurer-verified. Verify insurer quotation, eligibility and discount combination before use.</div><p class="hint">Independent agent toolkit. Not an official Star Health application.</p></section>
 </main>
 <div class="quote-modal hidden" id="quoteModal" role="dialog" aria-modal="true" aria-labelledby="quoteModalTitle"><div class="quote-dialog"><h2 id="quoteModalTitle">Generate Quotation</h2><div id="quoteStageName"><label for="quoteCustomerName">Customer Name (Optional)</label><input id="quoteCustomerName" maxlength="100" autocomplete="off" placeholder="Enter Customer Name"><div class="quote-buttons"><button class="quote-secondary" id="quoteSkip" type="button">Skip</button><button id="quoteContinue" type="button">Continue</button></div></div><div id="quoteStageActions" class="hidden"><p class="quote-small">Select covering note language, then Download or Share.</p><div class="quote-language"><button type="button" data-quote-language="bn">Bengali</button><button type="button" data-quote-language="hi">Hindi</button><button type="button" data-quote-language="en">English</button></div><p class="quote-small" id="quoteLanguageInfo">Choose a language.</p><div class="quote-buttons"><button id="quoteDownload" type="button">Download PDF</button><button id="quoteShare" type="button">Share PDF</button></div></div><div id="quoteStageShare" class="hidden"><div class="quote-buttons"><button id="quoteWhatsapp" type="button">WhatsApp</button><button id="quoteEmail" type="button">Email</button></div><div id="quoteContactArea" class="hidden"><label id="quoteContactLabel" for="quoteContact">Customer contact</label><input id="quoteContact" autocomplete="off"><p class="quote-small" id="quoteShareHelp"></p><button id="quoteShareContinue" type="button">Continue</button></div></div><p class="error" id="quoteError" role="alert"></p><button class="quote-secondary" style="margin-top:12px" id="quoteClose" type="button">Close</button></div></div>
-<div class="quote-preview" id="quotePreview" aria-hidden="true"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+
 <script>
 'use strict';
 const POLICIES={assure:{label:'Star Health Assure',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,7500000,10000000,20000000],terms:[1,2,3],ratesVerified:true},superstar:{label:'Star Health Super Star',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,10000000,'Unlimited'],terms:[1,2,3,4,5],ratesVerified:false}};
@@ -258,37 +258,50 @@ function quoteHtml(){const q=quotationSnapshot;if(!q)throw Error('Calculate prem
  const foot=`<div class="quote-footer">Independent agent-generated indicative quotation. Not an insurer-issued quote or policy document. Premiums exclude GST; rates, benefits, eligibility and underwriting require verification with Star Health. UIN: SHAHLIP26048V032526</div>`;
  return `<div class="quote-page"><div class="quote-head">Health Insurance Quotation</div><div class="quote-sub">Star Health Assure Policy | UIN: SHAHLIP26048V032526 | Date: ${d}</div><div class="quote-letter">${quoteEsc(quoteLetter())}</div><div class="quote-section">Proposed Policy Details</div><table class="quote-table"><tr><th>Product</th><td>Star Health Assure Policy</td></tr><tr><th>Policy Type</th><td>${quoteEsc(q.status)} | ${q.type==='floater'?'Family Floater':'Individual'}</td></tr><tr><th>Family Composition</th><td>${quoteEsc(q.family)}</td></tr><tr><th>Sum Insured</th><td>${currency(si)}</td></tr><tr><th>Premium Zone</th><td>Zone ${quoteEsc(q.zone)}${q.pin?' | PIN '+quoteEsc(q.pin):''}</td></tr><tr><th>Annual Aggregate Deductible</th><td>${q.deductible?currency(q.deductible):'None'}</td></tr></table><div class="quote-section">Premium Comparison</div><table class="quote-table"><tr><th>Policy Term</th><th>Indicative Premium (excluding GST)</th></tr>${premiumRows}</table><p class="quote-note">Age progresses each year. The calculation includes applicable modeled early-entry, deductible and long-term discounts. Final insurer premium and discount combinations must be verified.</p>${foot}</div><div class="quote-page"><div class="quote-head">Coverage Summary</div><div class="quote-sub">Star Health Assure Policy | Personalised to selected Sum Insured</div><div class="quote-section">Insured Members</div><table class="quote-table"><tr><th>Member</th><th>Age</th></tr>${memberRows}</table><div class="quote-section">Selected Policy Benefits</div><table class="quote-table"><tr><th>Benefit</th><th>Indicative Coverage</th></tr>${benefitRows}</table><div class="quote-section">Important Information</div><p class="quote-note">Waiting periods, exclusions, co-pay, eligibility, deductible application, modern treatment limits and all other benefits are governed by the current policy wording and prospectus. This summary does not guarantee claim admissibility. PIN-based zone mappings may be provisional; verify zone with the insurer before issuing a quote.</p><span class="quote-tag">Please verify final premium in Star Mitra / Atom Pro</span>${foot}</div>`;
 }
-async function quotePdf(){
+// Browser-native printing avoids html2canvas blank screenshots and supports Indic shaping.
+function quotePrint(){
  if(!quoteLanguage)throw Error('Choose Bengali, Hindi or English first.');
- if(typeof html2pdf!=='function')throw Error('PDF library could not load. Check your internet connection.');
- const holder=$('quotePreview');
- holder.innerHTML=quoteHtml();
- const oldStyle=holder.getAttribute('style');
- try{
-  // html2canvas needs the source in the visible viewport, not behind the calculator.
-  holder.style.cssText='position:fixed!important;left:0!important;top:0!important;z-index:2001!important;width:794px!important;height:100vh!important;overflow:visible!important;background:white!important;pointer-events:none!important;';
-  await document.fonts.ready;
-  await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
-  const filename='Star_Health_Assure_Quotation_'+new Date().toISOString().slice(0,10)+'.pdf';
-  const opt={margin:0,filename,image:{type:'jpeg',quality:0.97},html2canvas:{scale:1.5,useCORS:true,scrollY:0,windowWidth:794},jsPDF:{unit:'pt',format:'a4',orientation:'portrait'},pagebreak:{mode:['css','legacy']}};
-  const blob=await html2pdf().set(opt).from(holder).outputPdf('blob');
-  if(!blob||blob.size<1500)throw Error('PDF generation failed. Please retry.');
-  return {blob,filename};
- }finally{
-  if(oldStyle===null)holder.removeAttribute('style');else holder.setAttribute('style',oldStyle);
-  holder.replaceChildren();
- }
+ const w=window.open('','_blank');
+ if(!w)throw Error('Allow pop-ups for this site and try again.');
+ const styles=`@page{size:A4;margin:0}*{box-sizing:border-box}html,body{margin:0;padding:0;background:#fff;color:#18314a;font-family:Arial,'Noto Sans Bengali','Noto Sans Devanagari',sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}.quote-page{width:210mm;min-height:297mm;padding:14mm 15mm;position:relative;break-after:page;page-break-after:always}.quote-page:last-child{break-after:auto;page-break-after:auto}.quote-head{font-size:25px;color:#10518a;font-weight:bold;border-bottom:3px solid #f3a33e;padding-bottom:12px}.quote-sub{font-size:12px;color:#5a7387;margin:9px 0 26px}.quote-letter{font-size:14px;line-height:1.8;white-space:pre-line;margin:18px 0 26px}.quote-section{color:#0f528a;background:#edf5fd;padding:10px 12px;margin:18px 0 10px;font-size:15px;font-weight:bold}.quote-table{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0}.quote-table th,.quote-table td{border-bottom:1px solid #e1e9f1;padding:9px;text-align:left;vertical-align:top}.quote-table th{background:#f4f8fc;color:#194f7b}.quote-price{font-size:17px;font-weight:bold;color:#bd650e}.quote-footer{position:absolute;bottom:10mm;left:15mm;right:15mm;font-size:9px;color:#657789;border-top:1px solid #dce6ee;padding-top:8px}.quote-note{font-size:11px;line-height:1.6;color:#526779}.quote-tag{display:inline-block;padding:6px 10px;background:#fff3df;border-radius:6px;color:#9b5b12;font-weight:bold;font-size:11px}tr{break-inside:avoid} @media screen{body{background:#eaf0f6}.quote-page{margin:12px auto;background:#fff;box-shadow:0 2px 14px #0002}}`;
+ w.document.open();
+ w.document.write('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Star Health Assure Quotation</title><style>'+styles+'</style></head><body>'+quoteHtml()+'</body></html>');
+ w.document.close();
+ w.focus();
+ // Let the new document finish layout and load fonts before opening print dialog.
+ let printed=false;const doPrint=()=>{if(printed)return;printed=true;setTimeout(()=>{try{w.print()}catch(e){console.error(e)}},500)};
+ w.addEventListener('load',doPrint,{once:true});
+ if(w.document.readyState==='complete')doPrint();
+ return w;
 }
-async function quoteDownload(){try{$('quoteError').textContent='Preparing PDF...';const {blob,filename}=await quotePdf();const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);$('quoteError').textContent='PDF download started.'}catch(e){$('quoteError').textContent=e.message}}
+function quoteDownload(){
+ try{quotePrint();$('quoteError').textContent='In the print window choose Save as PDF (or Print > Save as PDF). Check the preview before saving.'}
+ catch(e){$('quoteError').textContent=e.message}
+}
 function quoteShareStart(){quoteStage('quoteStageShare')}
-function quoteContactMode(mode){quoteChannel=mode;$('quoteContactArea').classList.remove('hidden');$('quoteContact').value='';$('quoteContact').type=mode==='email'?'email':'tel';$('quoteContact').placeholder=mode==='email'?'customer@example.com':'10-digit WhatsApp number';$('quoteContactLabel').textContent=mode==='email'?'Customer Email ID':'Customer WhatsApp Number';$('quoteShareHelp').textContent='On supported mobiles, the PDF will open in the system Share sheet. You may need to select the recipient inside the app.'}
-async function quoteSend(){try{const c=$('quoteContact').value.trim();if(quoteChannel==='email'&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c))throw Error('Enter a valid email address.');if(quoteChannel==='whatsapp'&&!/^\+?\d{10,15}$/.test(c.replace(/[\s-]/g,'')))throw Error('Enter a valid WhatsApp number with country code if required.');$('quoteError').textContent='Preparing PDF for sharing...';const {blob,filename}=await quotePdf();const file=new File([blob],filename,{type:'application/pdf'});
- if(navigator.canShare&&navigator.canShare({files:[file]})&&navigator.share){await navigator.share({files:[file],title:'Star Health Assure Quotation',text:'Please find the Star Health Assure quotation attached.'});$('quoteError').textContent='Share sheet opened. Select the customer inside your WhatsApp or Email app if needed.';return}
- // Fallback: download the PDF, then open recipient draft. Browsers cannot attach files via wa.me or mailto.
- const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
- const dest=quoteChannel==='whatsapp'?'https://wa.me/'+c.replace(/\D/g,'')+'?text='+encodeURIComponent('Please find the Star Health Assure quotation PDF attached.'): 'mailto:'+encodeURIComponent(c)+'?subject='+encodeURIComponent('Star Health Assure Quotation')+'&body='+encodeURIComponent('Please find the Star Health Assure quotation attached.');
- $('quoteError').textContent='PDF downloaded. Opening recipient chat/draft. Please attach the downloaded PDF manually.';window.open(dest,'_blank');
- }catch(e){$('quoteError').textContent=e.name==='AbortError'?'Sharing cancelled.':e.message}}
+function quoteContactMode(mode){
+ quoteChannel=mode;const prev=$('quoteOpenRecipient');if(prev)prev.remove();$('quoteContactArea').classList.remove('hidden');$('quoteContact').value='';
+ $('quoteContact').type=mode==='email'?'email':'tel';
+ $('quoteContact').placeholder=mode==='email'?'customer@example.com':'10-digit WhatsApp number';
+ $('quoteContactLabel').textContent=mode==='email'?'Customer Email ID':'Customer WhatsApp Number';
+ $('quoteShareHelp').textContent='Step 1: Save the quotation as PDF using the print window. Step 2: Open the recipient chat/draft and attach the saved PDF.';
+}
+function quoteSend(){
+ try{
+  const c=$('quoteContact').value.trim();
+  if(quoteChannel==='email'&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c))throw Error('Enter a valid email address.');
+  if(quoteChannel==='whatsapp'&&!/^\+?\d{10,15}$/.test(c.replace(/[\s-]/g,'')))throw Error('Enter a valid WhatsApp number with country code if required.');
+  const dest=quoteChannel==='whatsapp'?'https://wa.me/'+c.replace(/\D/g,'')+'?text='+encodeURIComponent('Please find the Star Health Assure quotation PDF attached.'):'mailto:'+encodeURIComponent(c)+'?subject='+encodeURIComponent('Star Health Assure Quotation')+'&body='+encodeURIComponent('Please find the Star Health Assure quotation attached.');
+  quotePrint();
+  $('quoteShareHelp').textContent='Save the PDF from the print window first. Then tap Open '+(quoteChannel==='email'?'Email':'WhatsApp')+' below and attach that saved PDF.';
+  let btn=$('quoteOpenRecipient');
+  if(!btn){btn=document.createElement('button');btn.id='quoteOpenRecipient';btn.type='button';$('quoteContactArea').appendChild(btn)}
+  btn.textContent='Open '+(quoteChannel==='email'?'Email':'WhatsApp')+' (attach saved PDF)';
+  btn.onclick=()=>window.open(dest,'_blank');
+  btn.classList.remove('hidden');
+  $('quoteError').textContent='Print window opened. Save as PDF, then open the recipient app and attach the PDF.';
+ }catch(e){$('quoteError').textContent=e.message}
+}
 $('generateQuotation').addEventListener('click',quoteOpen);
 $('quoteClose').addEventListener('click',()=>quoteModal.classList.add('hidden'));
 $('quoteSkip').addEventListener('click',()=>quoteName(true));$('quoteContinue').addEventListener('click',()=>quoteName(false));
