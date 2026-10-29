@@ -369,7 +369,7 @@ function quoteHtml(){
  const newborn=si<=2500000?200000:400000;
  const moneyOrText=v=>typeof v==='number'?currency(v):v;
  const benefitRows=[
- ['In-Patient Hospitalisation','Up to Sum Insured'],['Room Rent',room],['ICU / Operation Theatre','As per Policy Terms'],
+ ['In-Patient Hospitalisation','Up to Sum Insured'],['Room Rent',room],['ICU / Operation Theatre','Actuals'],
  ['Day Care Treatment','Actuals'],['AYUSH Treatment','Actuals'],['Modern Treatment','Up to Sum Insured'],
  ['Pre-Hospitalisation','60 days'],['Post-Hospitalisation','180 days'],['Road Ambulance','Actuals'],
  ['Air Ambulance',money(si*.10)],['Organ Donor Expenses','Actuals'],
@@ -396,11 +396,28 @@ function quoteHtml(){
  const prem=q.rows.map(r=>'<div class="qpremium"><span>'+r.term+' '+(r.term===1?'YEAR':'YEARS')+'</span><strong>'+money(r.amount)+'</strong><small>Indicative total premium</small><small style="margin-top:7px;font-weight:700;color:'+(r.amount>=10000?'#12633d':'#8b5e29')+'">'+(r.amount>=10000?'BNPL Facility Available':'BNPL Not Available')+'</small></div>').join('');
  const details=[...(quoteCustomer?[['Quotation For',quoteCustomer]]:[]),['Policy Status',status],['Cover Type',type],['Sum Insured',currency(si)],['Family Composition',q.family],['Premium Zone','Zone '+q.zone+(q.pin?' · PIN '+q.pin:'')],['Annual Aggregate Deductible',q.deductible?currency(q.deductible):'None']];
  const memberRows=q.members.map(m=>[m.member,m.age+' years']);
- const first=page('<div class="qhero"><span>PROPOSED SUM INSURED</span><strong>'+money(si)+'</strong><small>'+esc(status)+' · '+esc(type)+'</small></div><div class="qletter">'+esc(quoteLetter())+'</div>'+sec('Quotation Details')+table(details)+sec('Premium Options')+'<div class="qpremiums">'+prem+'</div><p class="qnote">Premiums are indicative, based on the calculator rate chart and selected inputs. The insurer must confirm final rates, applicable discounts, taxes, eligibility and terms before purchase.</p>',1,3);
- const middle=page(sec('Covered Members')+table(memberRows)+sec('Benefits & Coverage Amount')+table(benefitRows.slice(0,16))+'<p class="qnote">*Restoration, bonus and all benefit payments are subject to specific policy conditions and admissibility.</p>',2,3);
+ const first=page('<div class="qhero"><span>PROPOSED SUM INSURED</span><strong>'+money(si)+'</strong><small>'+esc(status)+' · '+esc(type)+'</small></div><div class="qletter">'+esc(quoteLetter())+'</div>'+sec('Quotation Details')+table(details)+sec('Premium Options')+'<div class="qpremiums">'+prem+'</div><p class="qnote">Premiums are indicative, based on the calculator rate chart and selected inputs. The insurer must confirm final rates, applicable discounts, taxes, eligibility and terms before purchase.</p>',1,4);
+ const middle=page(sec('Covered Members')+table(memberRows)+sec('Benefits & Coverage Amount')+table(benefitRows.slice(0,16))+'<p class="qnote">*Restoration, bonus and all benefit payments are subject to specific policy conditions and admissibility.</p>',2,4);
  const waits=[['Initial Waiting Period','30 days (accidents excepted)'],['Specified Diseases / Procedures','24 months (subject to exceptions and continuity credit)'],['Pre-Existing Diseases',q.rows.some(r=>r.term===3)?'36 months for 1/2-year terms; 30 months for 3-year term':'36 months for 1/2-year terms; 30 months for 3-year term'],['Delivery / In-Utero Fetal Surgery / ART','24 months, with benefit-specific eligibility'],['Co-payment','As per age-at-entry and policy conditions']];
- const last=page(sec('Additional Benefits & Coverage Amount')+table(benefitRows.slice(16))+sec('Important Waiting Periods & Conditions')+table(waits)+'<p class="qnote">Coverage amounts are benefit limits, not guaranteed claim payments. Sub-limits, eligibility, co-payments, exclusions, waiting periods and other conditions apply. Consult the official policy wording and insurer quotation before proceeding.</p>',3,3);
- return first+middle+last;
+ const exclusion24=[
+  ['1','Cataract, other eye chamber diseases, ENT diseases, thyroid diseases and benign breast diseases'],
+  ['2','Benign subcutaneous lumps, sebaceous/dermoid/mucous cysts, carpal tunnel syndrome, trigger finger, lipoma, neurofibroma, fibroadenoma, ganglion and similar conditions'],
+  ['3','Tendon, ligament, fascia, bone and joint diseases; arthroscopy, arthroplasty and joint replacement (other than due to accident)'],
+  ['4','Degenerative disc, vertebral and musculoskeletal diseases; prolapsed intervertebral disc (other than due to accident)'],
+  ['5','Hepato-pancreato-biliary diseases, gallbladder and pancreatic stones; kidney and genitourinary tract stones'],
+  ['6','All types of hernia'],
+  ['7','Desmoid tumour, umbilical granuloma, umbilical sinus and umbilical fistula'],
+  ['8','Cervix, uterus, fallopian tube and ovarian diseases; uterine bleeding and pelvic inflammatory diseases'],
+  ['9','Prostate diseases, urethral stricture and obstructive uropathies'],
+  ['10','Benign epididymal tumours, spermatocele, varicocele and hydrocele'],
+  ['11','Fistula, anal fissure, haemorrhoids, pilonidal sinus/fistula, rectal prolapse and stress incontinence'],
+  ['12','Varicose veins and varicose ulcers'],
+  ['13','All types of transplant and related surgeries'],
+  ['14','Congenital internal diseases/defects (subject to policy exceptions for unborn/newborn coverage)']
+ ];
+ const last=page(sec('Additional Benefits & Coverage Amount')+table(benefitRows.slice(16))+sec('Important Waiting Periods & Conditions')+table(waits)+'<p class="qnote">Coverage amounts are benefit limits, not guaranteed claim payments. Sub-limits, eligibility, co-payments, exclusions, waiting periods and other conditions apply. Consult the official policy wording and insurer quotation before proceeding.</p>',3,4);
+ const fourth=page(sec('24-Month Specified Disease / Procedure Waiting Period (Excl 02)')+table(exclusion24)+'<p class="qnote">Summary of the 14 categories in Star Health Assure Policy Wordings (UIN SHAHLIP26048V032526). Listed conditions generally have a 24-month continuous-coverage waiting period. Accident-related claims are excepted as per policy wording. Increased Sum Insured, pre-existing disease waiting periods and eligible portability credits can affect applicability. Other benefits, including delivery, in-utero fetal surgery and assisted reproduction, have separate waiting-period provisions. This is a condensed guide, not the full policy wording. Refer to the official policy for exact scope and exceptions.</p>',4,4);
+ return first+middle+last+fourth;
 }
 // Browser-native printing avoids html2canvas blank screenshots and supports Indic shaping.
 function quotePrint(){
