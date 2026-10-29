@@ -7,6 +7,21 @@
 :root{font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:#18314a;background:#f3f7fc}*{box-sizing:border-box}body{margin:0}header{background:linear-gradient(120deg,#09539d,#0876b9);color:#fff;padding:20px 16px}header .wrap{max-width:760px;margin:auto}header a{color:#fff;text-decoration:none;font-size:14px}h1{margin:10px 0 4px;font-size:25px}header p{margin:0;opacity:.9;font-size:14px}main{max-width:760px;margin:18px auto;padding:0 12px 32px}.panel{background:#fff;border:1px solid #e2eaf2;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 3px 14px #164d7d0b}h2{font-size:17px;margin:0 0 14px;color:#124e86}.step{display:inline-flex;align-items:center;justify-content:center;background:#e7f3ff;color:#1266a5;border-radius:50%;width:27px;height:27px;margin-right:8px}label{font-weight:650;display:block;font-size:14px;margin:10px 0 6px}select,input{width:100%;padding:12px;border:1px solid #cbd9e6;border-radius:9px;font:inherit;background:#fff;color:#18314a}input:focus,select:focus{outline:2px solid #91c8fa;outline-offset:1px}.choices{display:flex;gap:12px;flex-wrap:wrap;margin:9px 0}.choices label{font-weight:500;margin:0;display:flex;gap:6px;align-items:center}.choices input{width:auto}.member{display:grid;grid-template-columns:minmax(100px,1fr) minmax(0,1.3fr);gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #edf1f6}.member:last-child{border:0}.member-select{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #edf1f6;font-weight:650}.member-select input{width:19px;height:19px;accent-color:#0875bb}.member-group{padding:8px 0 12px 28px}.member-group select{max-width:210px}.member-group .member{padding:8px 0}.member-group .member label{font-weight:500}.member label{margin:0}.hint{font-size:12px;color:#60768a;line-height:1.5;margin:8px 0 0}.notice{border-radius:10px;background:#fff7e6;color:#76520e;padding:12px;font-size:13px;line-height:1.55;margin:10px 0}.hidden{display:none!important}button{background:#0875bb;color:#fff;border:0;border-radius:10px;padding:14px 18px;width:100%;font-size:16px;font-weight:700;cursor:pointer}.result-row{display:flex;justify-content:space-between;align-items:center;border:1px solid #dce8f4;border-radius:10px;padding:14px;margin:9px 0}.result-row strong{font-size:19px}.error{color:#b42318;font-size:13px;margin:10px 0;white-space:pre-line}.summary{background:#f3f8ff;padding:12px;border-radius:10px;font-size:14px;line-height:1.7}.family-size{background:#eaf4ff;border:1px solid #c7e1fb;border-radius:9px;padding:12px;font-weight:650;margin-top:12px}.child-notice{margin:8px 0 2px}.discount-info{color:#246341;font-size:13px;margin-top:10px}@media(max-width:370px){.panel{padding:14px}.member{grid-template-columns:95px 1fr}}
 
 .quote-actions{margin-top:15px}.quote-modal{position:fixed;inset:0;background:#09233bb8;z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px}.quote-dialog{background:white;border-radius:16px;max-width:480px;width:100%;padding:22px;box-shadow:0 18px 60px #001d3850}.quote-dialog h2{margin:0 0 10px}.quote-buttons{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.quote-buttons button{font-size:14px;padding:12px}.quote-secondary{background:#eaf2fb;color:#145383}.quote-language{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.quote-language button{font-size:13px;padding:10px 5px}.quote-small{font-size:12px;color:#64768b;line-height:1.5}.quote-preview{position:fixed;left:-12000px;top:0;z-index:2001;pointer-events:none;width:794px;background:white;color:#18314a;font-family:'Noto Sans Bengali','Nirmala UI','Noto Sans Devanagari',Arial,sans-serif}.quote-page{width:794px;min-height:1123px;padding:54px 58px;box-sizing:border-box;background:white;position:relative;page-break-after:always}.quote-page:last-child{page-break-after:auto}.quote-head{font-size:26px;color:#10518a;font-weight:bold;border-bottom:3px solid #f3a33e;padding-bottom:14px}.quote-sub{font-size:13px;color:#5a7387;margin:9px 0 30px}.quote-letter{font-size:15px;line-height:1.9;white-space:pre-line;margin:22px 0 30px}.quote-section{color:#0f528a;background:#edf5fd;padding:11px 14px;margin:24px 0 12px;font-size:16px;font-weight:bold}.quote-table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}.quote-table th,.quote-table td{border-bottom:1px solid #e1e9f1;padding:12px 10px;text-align:left;vertical-align:top}.quote-table th{background:#f4f8fc;color:#194f7b}.quote-price{font-size:19px;font-weight:bold;color:#bd650e}.quote-footer{position:absolute;bottom:30px;left:58px;right:58px;font-size:10px;color:#657789;border-top:1px solid #dce6ee;padding-top:10px}.quote-note{font-size:12px;line-height:1.7;color:#526779}.quote-tag{display:inline-block;padding:6px 10px;background:#fff3df;border-radius:6px;color:#9b5b12;font-weight:bold;font-size:12px}
+
+/* Assure BNPL estimator */
+.bnpl-box{margin-top:18px;padding:16px;border:1px solid #c8deef;border-radius:12px;background:#f7fbff}
+.bnpl-box h3{font-size:17px;color:#124e86;margin:0 0 8px}
+.bnpl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}
+.bnpl-stat{background:#fff;border:1px solid #dce8f4;border-radius:9px;padding:12px;min-width:0}
+.bnpl-stat small{display:block;color:#60768a;font-size:12px;margin-bottom:5px}
+.bnpl-stat strong{font-size:18px;color:#164f7d}
+.bnpl-box input[type=range]{padding:0;accent-color:#0875bb}
+.bnpl-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px}
+.bnpl-table th,.bnpl-table td{padding:11px 8px;border-bottom:1px solid #dce8f4;text-align:left}
+.bnpl-table th:last-child,.bnpl-table td:last-child{text-align:right}
+.bnpl-table th{color:#174d77;font-size:12px}
+.bnpl-table td:last-child{font-weight:700}
+@media(max-width:420px){.bnpl-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -21,7 +36,25 @@
 <section class="panel hidden" id="zonePanel"><h2><span class="step">6</span>Premium Zone</h2><div class="choices"><label><input type="radio" name="zoneMode" value="manual" checked> Select Zone</label><label><input type="radio" name="zoneMode" value="pin"> Enter PIN Code</label></div><div id="manualZone"><label for="zone">Zone</label><select id="zone"><option value="">Choose Zone</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div><div id="pinZone" class="hidden"><label for="pin">6-digit PIN Code</label><input id="pin" type="text" inputmode="numeric" maxlength="6" placeholder="e.g. 700001"><p class="hint">Zone is detected from the uploaded PIN mapping database. Geographic candidate mappings are provisional and require confirmation against official insurer premium zones.</p></div></section>
 <section class="panel hidden" id="deductiblePanel"><h2><span class="step">7</span>Deductible</h2><label for="deductible">Select Annual Aggregate Deductible</label><select id="deductible"><option value="0">No Deductible</option><option value="50000">₹50,000</option><option value="100000">₹1,00,000</option></select><p class="hint" id="deductibleHint">Optional deductible premium discount depends on Sum Insured.</p></section>
 <section class="panel hidden" id="actionPanel"><button id="calculate" type="button">Calculate Premium</button><div class="error" id="error" role="alert"></div></section>
-<section class="panel hidden" id="resultPanel" aria-live="polite"><h2>Premium Quotation</h2><div class="summary" id="summary"></div><div id="premiumRows"></div><div class="discount-info" id="discountInfo"></div><p class="hint" id="resultNote"></p><div class="quote-actions"><button id="generateQuotation" type="button">Generate Quotation</button></div></section>
+<section class="panel hidden" id="resultPanel" aria-live="polite"><h2>Premium Quotation</h2><div class="summary" id="summary"></div><div id="premiumRows"></div>
+<div id="bnplPanel" class="bnpl-box hidden">
+  <h3>💳 BimaPay BNPL | EMI Estimator</h3>
+  <label for="bnplTerm">Select Policy Term</label>
+  <select id="bnplTerm"></select>
+  <label for="bnplDownSlider">Down Payment: <strong id="bnplDownValue"></strong></label>
+  <input id="bnplDownSlider" type="range" min="10" max="50" step="1" value="20">
+  <p class="hint" id="bnplDownHint"></p>
+  <div class="bnpl-grid">
+    <div class="bnpl-stat"><small>Policy Premium</small><strong id="bnplPremium"></strong></div>
+    <div class="bnpl-stat"><small>Down Payment</small><strong id="bnplDownAmount"></strong></div>
+    <div class="bnpl-stat"><small>Processing Fee (indicative)</small><strong id="bnplFee"></strong></div>
+    <div class="bnpl-stat"><small>Financed Amount</small><strong id="bnplLoan"></strong></div>
+  </div>
+  <h3>EMI Tenure</h3>
+  <table class="bnpl-table"><thead><tr><th>Tenure</th><th>Monthly EMI</th><th>Total Payable*</th></tr></thead><tbody id="bnplEmiRows"></tbody></table>
+  <p class="hint">*Estimated total = down payment + all EMIs + indicative processing fee. Actual processing fee, payment timing, EMI and eligibility must be confirmed on BimaPay before offering to a customer. This is an estimate, not a loan approval.</p>
+</div>
+<div class="discount-info" id="discountInfo"></div><p class="hint" id="resultNote"></p><div class="quote-actions"><button id="generateQuotation" type="button">Generate Quotation</button></div></section>
 <section class="panel"><div class="notice"><strong>Rate status:</strong> Assure uses the uploaded annual premium chart for indicative 1, 2 and 3-year premiums. Fresh-policy early entry and optional deductible discounts are applied based on prospectus rules. Super Star rates are not connected. PIN mapping is provisional and not fully insurer-verified. Verify insurer quotation, eligibility and discount combination before use.</div><p class="hint">Independent agent toolkit. Not an official Star Health application.</p></section>
 </main>
 <div class="quote-modal hidden" id="quoteModal" role="dialog" aria-modal="true" aria-labelledby="quoteModalTitle"><div class="quote-dialog"><h2 id="quoteModalTitle">Generate Quotation</h2><div id="quoteStageName"><label for="quoteCustomerName">Customer Name (Optional)</label><input id="quoteCustomerName" maxlength="100" autocomplete="off" placeholder="Enter Customer Name"><div class="quote-buttons"><button class="quote-secondary" id="quoteSkip" type="button">Skip</button><button id="quoteContinue" type="button">Continue</button></div></div><div id="quoteStageActions" class="hidden"><p class="quote-small">Select covering note language, then Download or Share.</p><div class="quote-language"><button type="button" data-quote-language="bn">Bengali</button><button type="button" data-quote-language="hi">Hindi</button><button type="button" data-quote-language="en">English</button></div><p class="quote-small" id="quoteLanguageInfo">Choose a language.</p><div class="quote-buttons"><button id="quoteDownload" type="button">Download PDF</button><button id="quoteShare" type="button">Share PDF</button></div></div><div id="quoteStageShare" class="hidden"><div class="quote-buttons"><button id="quoteWhatsapp" type="button">WhatsApp</button><button id="quoteEmail" type="button">Email</button></div><div id="quoteContactArea" class="hidden"><label id="quoteContactLabel" for="quoteContact">Customer contact</label><input id="quoteContact" autocomplete="off"><p class="quote-small" id="quoteShareHelp"></p><button id="quoteShareContinue" type="button">Continue</button></div></div><p class="error" id="quoteError" role="alert"></p><button class="quote-secondary" style="margin-top:12px" id="quoteClose" type="button">Close</button></div></div>
@@ -50,7 +83,7 @@ fetch('assure_rates.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Pre
 function ageMode(){return document.querySelector('input[name="ageMode"]:checked').value}
 function zoneMode(){return document.querySelector('input[name="zoneMode"]:checked').value}
 function policyStatus(){return $('policyStatus').value}
-function clearResult(){$('resultPanel').classList.add('hidden');$('error').textContent='';quotationSnapshot=null}
+function clearResult(){$('resultPanel').classList.add('hidden');$('bnplPanel').classList.add('hidden');$('error').textContent='';quotationSnapshot=null}
 function makeAgeField(name,holder){
  const row=document.createElement('div');row.className='member';const label=document.createElement('label');label.textContent=name;
  const input=document.createElement('input');input.dataset.member=name;input.id='member-'+name.replace(/[^a-z0-9]/gi,'-');label.htmlFor=input.id;
@@ -205,6 +238,57 @@ function lookupVerifiedPremium(policy,members,sumInsured,zone,term,type,status,d
  }
  return {amount:Math.round(total),earlyDiscount,deductibleRate:dedRate}
 }
+// Illustrative flat monthly rates from BimaPay examples; revalidate before customer use.
+const BNPL_CONFIG={
+  1:{minimum:20,tenures:[[3,1.12],[6,0.99],[9,0.95]]},
+  2:{minimum:15,tenures:[[4,1.05],[8,0.96],[12,0.93],[16,0.92],[20,0.92]]},
+  3:{minimum:10,tenures:[[6,0.99],[12,0.93],[18,0.92],[25,0.92],[30,0.93]]}
+};
+const BNPL_PROCESSING_FEE=590; // Indicative; confirm actual fee with provider.
+let bnplEligibleRows=[];
+function renderBnpl(){
+  const term=Number($('bnplTerm').value),config=BNPL_CONFIG[term];
+  const chosen=bnplEligibleRows.find(r=>r.term===term);
+  if(!config||!chosen){$('bnplPanel').classList.add('hidden');return}
+  const slider=$('bnplDownSlider');
+  slider.min=String(config.minimum);slider.max='50';
+  let percent=Number(slider.value);
+  if(!Number.isFinite(percent)||percent<config.minimum)percent=config.minimum;
+  percent=Math.min(50,percent);slider.value=String(percent);
+  const premium=chosen.amount,down=Math.round(premium*percent/100),loan=premium-down;
+  $('bnplDownValue').textContent=percent+'%';
+  $('bnplDownHint').textContent='Choose '+config.minimum+'% to 50% down payment.';
+  $('bnplPremium').textContent=currency(premium);
+  $('bnplDownAmount').textContent=currency(down);
+  $('bnplFee').textContent=currency(BNPL_PROCESSING_FEE);
+  $('bnplLoan').textContent=currency(loan);
+  const body=$('bnplEmiRows');body.replaceChildren();
+  for(const [months,monthlyRate] of config.tenures){
+    const emi=Math.round(loan/months+loan*monthlyRate/100);
+    const total=down+emi*months+BNPL_PROCESSING_FEE;
+    const tr=document.createElement('tr');
+    for(const value of [months+' Months',currency(emi),currency(total)]){
+      const td=document.createElement('td');td.textContent=value;tr.appendChild(td)
+    }
+    body.appendChild(tr)
+  }
+}
+function setupBnpl(rows){
+  bnplEligibleRows=rows.filter(r=>r.amount>=10000&&BNPL_CONFIG[r.term]);
+  const panel=$('bnplPanel');panel.classList.toggle('hidden',!bnplEligibleRows.length);
+  if(!bnplEligibleRows.length)return;
+  const select=$('bnplTerm');select.replaceChildren();
+  for(const row of bnplEligibleRows)select.add(new Option(row.term+' '+(row.term===1?'Year':'Years')+' | '+currency(row.amount),String(row.term)));
+  $('bnplDownSlider').value=String(BNPL_CONFIG[bnplEligibleRows[0].term].minimum);
+  renderBnpl();
+}
+$('bnplTerm').addEventListener('change',()=>{
+  const config=BNPL_CONFIG[Number($('bnplTerm').value)];
+  if(config)$('bnplDownSlider').value=String(config.minimum);
+  renderBnpl()
+});
+$('bnplDownSlider').addEventListener('input',renderBnpl);
+
 function calculate(){
  clearResult();try{
   if(!currentPolicy)throw Error('Select a policy.');
@@ -223,7 +307,8 @@ function calculate(){
   if(deductible)details.push('Optional deductible discount: '+(rows[0].deductibleRate*100)+'% per policy year.');
   $('discountInfo').textContent=details.join(' ');
   $('resultNote').textContent='Indicative calculation from annual premium chart. GST is exempt (nil) for eligible individual health insurance policies; no GST is added. Age progresses each year; 10% long-term discount on years 2 and 3. Fresh early entry discount applies only in year 1. Combined discounts and insurer rounding require verification with Star Mitra / Atom Pro. Renewal and portability may have insurer-specific rules not modeled here.';
-  quotationSnapshot={policy:currentPolicy.label,type,status,members:members.map(m=>({...m})),sumInsured,zone,deductible,rows:rows.map(r=>({...r})),family:familySizeText(),pin:zoneMode()==='pin'?$('pin').value.trim():''};$('resultPanel').classList.remove('hidden')
+  setupBnpl(rows);
+   quotationSnapshot={policy:currentPolicy.label,type,status,members:members.map(m=>({...m})),sumInsured,zone,deductible,rows:rows.map(r=>({...r})),family:familySizeText(),pin:zoneMode()==='pin'?$('pin').value.trim():''};$('resultPanel').classList.remove('hidden')
  }catch(err){$('error').textContent=err.message}
 }
 Object.entries(POLICIES).forEach(([id,config])=>policyEl.add(new Option(config.label,id)));
