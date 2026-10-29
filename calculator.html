@@ -9,9 +9,18 @@
 .quote-actions{margin-top:15px}.quote-modal{position:fixed;inset:0;background:#09233bb8;z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px}.quote-dialog{background:white;border-radius:16px;max-width:480px;width:100%;padding:22px;box-shadow:0 18px 60px #001d3850}.quote-dialog h2{margin:0 0 10px}.quote-buttons{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.quote-buttons button{font-size:14px;padding:12px}.quote-secondary{background:#eaf2fb;color:#145383}.quote-language{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.quote-language button{font-size:13px;padding:10px 5px}.quote-small{font-size:12px;color:#64768b;line-height:1.5}.quote-preview{position:fixed;left:-12000px;top:0;z-index:2001;pointer-events:none;width:794px;background:white;color:#18314a;font-family:'Noto Sans Bengali','Nirmala UI','Noto Sans Devanagari',Arial,sans-serif}.quote-page{width:794px;min-height:1123px;padding:54px 58px;box-sizing:border-box;background:white;position:relative;page-break-after:always}.quote-page:last-child{page-break-after:auto}.quote-head{font-size:26px;color:#10518a;font-weight:bold;border-bottom:3px solid #f3a33e;padding-bottom:14px}.quote-sub{font-size:13px;color:#5a7387;margin:9px 0 30px}.quote-letter{font-size:15px;line-height:1.9;white-space:pre-line;margin:22px 0 30px}.quote-section{color:#0f528a;background:#edf5fd;padding:11px 14px;margin:24px 0 12px;font-size:16px;font-weight:bold}.quote-table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}.quote-table th,.quote-table td{border-bottom:1px solid #e1e9f1;padding:12px 10px;text-align:left;vertical-align:top}.quote-table th{background:#f4f8fc;color:#194f7b}.quote-price{font-size:19px;font-weight:bold;color:#bd650e}.quote-footer{position:absolute;bottom:30px;left:58px;right:58px;font-size:10px;color:#657789;border-top:1px solid #dce6ee;padding-top:10px}.quote-note{font-size:12px;line-height:1.7;color:#526779}.quote-tag{display:inline-block;padding:6px 10px;background:#fff3df;border-radius:6px;color:#9b5b12;font-weight:bold;font-size:12px}
 
 /* Assure BNPL estimator */
+.premium-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}
+.premium-card{border:1px solid #dce8f4;border-radius:11px;padding:12px 7px;text-align:center;min-width:0;background:#fff}
+.premium-card .term-label{display:block;font-size:13px;font-weight:650}
+.premium-card .term-price{display:block;font-size:clamp(13px,2.7vw,20px);color:#124e86;margin:9px 0;overflow-wrap:anywhere}
+.premium-card button{font-size:12px;padding:10px 3px;border-radius:7px;background:#eaf2fb;color:#145383;border:1px solid #bdd8ea}
+.premium-card button[aria-expanded="true"]{background:#0875bb;color:#fff}
+.premium-card .bnpl-unavailable{font-size:11px;color:#687b8d;display:block;margin-top:9px}
+@media(max-width:420px){.premium-cards{gap:5px}.premium-card{padding:10px 4px}.premium-card button{font-size:11px}}
+
 .bnpl-box{margin-top:18px;padding:16px;border:1px solid #c8deef;border-radius:12px;background:#f7fbff}
 .bnpl-box h3{font-size:17px;color:#124e86;margin:0 0 8px}
-.bnpl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}
+.bnpl-terms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0 16px}.bnpl-term{padding:12px 6px;background:#eaf2fb;color:#145383;border:1px solid #bdd8ea;border-radius:9px;font-size:14px}.bnpl-term.active{background:#0875bb;color:#fff;border-color:#0875bb}.bnpl-term:disabled{opacity:.45;cursor:not-allowed}.bnpl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}
 .bnpl-stat{background:#fff;border:1px solid #dce8f4;border-radius:9px;padding:12px;min-width:0}
 .bnpl-stat small{display:block;color:#60768a;font-size:12px;margin-bottom:5px}
 .bnpl-stat strong{font-size:18px;color:#164f7d}
@@ -38,9 +47,8 @@
 <section class="panel hidden" id="actionPanel"><button id="calculate" type="button">Calculate Premium</button><div class="error" id="error" role="alert"></div></section>
 <section class="panel hidden" id="resultPanel" aria-live="polite"><h2>Premium Quotation</h2><div class="summary" id="summary"></div><div id="premiumRows"></div>
 <div id="bnplPanel" class="bnpl-box hidden">
-  <h3>💳 BimaPay BNPL | EMI Estimator</h3>
-  <label for="bnplTerm">Select Policy Term</label>
-  <select id="bnplTerm"></select>
+  <h3>💳 BNPL Estimator</h3>
+  <p class="hint" id="bnplTermInfo"></p>
   <label for="bnplDownSlider">Down Payment: <strong id="bnplDownValue"></strong></label>
   <input id="bnplDownSlider" type="range" min="10" max="50" step="1" value="20">
   <p class="hint" id="bnplDownHint"></p>
@@ -83,7 +91,7 @@ fetch('assure_rates.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Pre
 function ageMode(){return document.querySelector('input[name="ageMode"]:checked').value}
 function zoneMode(){return document.querySelector('input[name="zoneMode"]:checked').value}
 function policyStatus(){return $('policyStatus').value}
-function clearResult(){$('resultPanel').classList.add('hidden');$('bnplPanel').classList.add('hidden');$('error').textContent='';quotationSnapshot=null}
+function clearResult(){$('resultPanel').classList.add('hidden');$('bnplPanel').classList.add('hidden');bnplSelectedTerm=null;$('error').textContent='';quotationSnapshot=null}
 function makeAgeField(name,holder){
  const row=document.createElement('div');row.className='member';const label=document.createElement('label');label.textContent=name;
  const input=document.createElement('input');input.dataset.member=name;input.id='member-'+name.replace(/[^a-z0-9]/gi,'-');label.htmlFor=input.id;
@@ -246,8 +254,9 @@ const BNPL_CONFIG={
 };
 const BNPL_PROCESSING_FEE=590; // Indicative; confirm actual fee with provider.
 let bnplEligibleRows=[];
+let bnplSelectedTerm=null;
 function renderBnpl(){
-  const term=Number($('bnplTerm').value),config=BNPL_CONFIG[term];
+  const term=bnplSelectedTerm,config=BNPL_CONFIG[term];
   const chosen=bnplEligibleRows.find(r=>r.term===term);
   if(!config||!chosen){$('bnplPanel').classList.add('hidden');return}
   const slider=$('bnplDownSlider');
@@ -275,18 +284,32 @@ function renderBnpl(){
 }
 function setupBnpl(rows){
   bnplEligibleRows=rows.filter(r=>r.amount>=10000&&BNPL_CONFIG[r.term]);
-  const panel=$('bnplPanel');panel.classList.toggle('hidden',!bnplEligibleRows.length);
-  if(!bnplEligibleRows.length)return;
-  const select=$('bnplTerm');select.replaceChildren();
-  for(const row of bnplEligibleRows)select.add(new Option(row.term+' '+(row.term===1?'Year':'Years')+' | '+currency(row.amount),String(row.term)));
-  $('bnplDownSlider').value=String(BNPL_CONFIG[bnplEligibleRows[0].term].minimum);
-  renderBnpl();
+  bnplSelectedTerm=null;
+  $('bnplPanel').classList.add('hidden');
+  const cards=$('premiumRows');cards.replaceChildren();cards.className='premium-cards';
+  for(const {term,amount} of rows){
+    const card=document.createElement('div');card.className='premium-card';
+    const label=document.createElement('span');label.className='term-label';label.textContent=term+' '+(term===1?'Year':'Years');
+    const price=document.createElement('strong');price.className='term-price';price.textContent=currency(amount)+'/-';
+    card.append(label,price);
+    if(amount>=10000&&BNPL_CONFIG[term]){
+      const btn=document.createElement('button');btn.type='button';btn.textContent='BNPL Details';btn.setAttribute('aria-expanded','false');
+      btn.addEventListener('click',()=>{
+        const alreadyOpen=bnplSelectedTerm===term&&!$('bnplPanel').classList.contains('hidden');
+        cards.querySelectorAll('button').forEach(b=>b.setAttribute('aria-expanded','false'));
+        if(alreadyOpen){bnplSelectedTerm=null;$('bnplPanel').classList.add('hidden');return}
+        bnplSelectedTerm=term;btn.setAttribute('aria-expanded','true');
+        $('bnplDownSlider').value=String(BNPL_CONFIG[term].minimum);
+        $('bnplTermInfo').textContent=term+' '+(term===1?'Year':'Years')+' Policy · Premium '+currency(amount);
+        $('bnplPanel').classList.remove('hidden');renderBnpl();
+        $('bnplPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
+      });card.appendChild(btn);
+    }else{
+      const note=document.createElement('span');note.className='bnpl-unavailable';note.textContent='BNPL unavailable';card.appendChild(note)
+    }
+    cards.appendChild(card);
+  }
 }
-$('bnplTerm').addEventListener('change',()=>{
-  const config=BNPL_CONFIG[Number($('bnplTerm').value)];
-  if(config)$('bnplDownSlider').value=String(config.minimum);
-  renderBnpl()
-});
 $('bnplDownSlider').addEventListener('input',renderBnpl);
 
 function calculate(){
@@ -302,7 +325,7 @@ function calculate(){
   const statusLabel={fresh:'Fresh',renewal:'Renewal',portability:'Portability'}[status];
   $('summary').textContent=currentPolicy.label+' | '+statusLabel+' | Family Size: '+familySizeText()+' | '+members.map(m=>m.member+' ('+m.age+')').join(', ')+' | '+currency(sumInsured)+' | Zone '+zone+' | '+(deductible?'Deductible '+currency(deductible):'No Deductible');
   $('premiumRows').replaceChildren();
-  rows.forEach(({term,amount})=>{const row=document.createElement('div');row.className='result-row';const label=document.createElement('span');label.textContent=term+' '+(term===1?'Year':'Years');const price=document.createElement('strong');price.textContent=currency(amount)+'/-';row.append(label,price);$('premiumRows').appendChild(row)});
+
   const details=[];if(rows[0].earlyDiscount>0)details.push('Fresh Policy: 5% Early Entry Discount on eligible first-year premium (approx. '+currency(rows[0].earlyDiscount)+').');
   if(deductible)details.push('Optional deductible discount: '+(rows[0].deductibleRate*100)+'% per policy year.');
   $('discountInfo').textContent=details.join(' ');
