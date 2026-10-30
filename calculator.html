@@ -64,7 +64,7 @@
   <p class="hint">*Estimated total = down payment + all EMIs + indicative processing fee. Actual processing fee, payment timing, EMI and eligibility must be confirmed on BimaPay before offering to a customer. This is an estimate, not a loan approval.</p>
 </div>
 <div class="discount-info" id="discountInfo"></div><p class="hint" id="resultNote"></p><div class="quote-actions"><button id="generateQuotation" type="button">Generate Quotation</button></div></section>
-<section class="panel"><div class="notice"><strong>Rate status:</strong> Comprehensive premiums are indicative; its quotation PDF and PIN mapping are not connected yet. Assure uses the uploaded annual premium chart for indicative 1, 2 and 3-year premiums. Fresh-policy early entry and optional deductible discounts are applied based on prospectus rules. Super Star rates are not connected. PIN mapping is provisional and not fully insurer-verified. Verify insurer quotation, eligibility and discount combination before use.</div><p class="hint">Independent agent toolkit. Not an official Star Health application.</p></section>
+<section class="panel"><div class="notice"><strong>Rate status:</strong> Comprehensive premiums and policy-specific quotation are indicative; Comprehensive PIN mapping is not connected. Assure uses the uploaded annual premium chart for indicative 1, 2 and 3-year premiums. Fresh-policy early entry and optional deductible discounts are applied based on prospectus rules. Super Star rates are not connected. PIN mapping is provisional and not fully insurer-verified. Verify insurer quotation, eligibility and discount combination before use.</div><p class="hint">Independent agent toolkit. Not an official Star Health application.</p></section>
 </main>
 <div class="quote-modal hidden" id="quoteModal" role="dialog" aria-modal="true" aria-labelledby="quoteModalTitle"><div class="quote-dialog"><h2 id="quoteModalTitle">Generate Quotation</h2><div id="quoteStageName"><label for="quoteCustomerName">Customer Name (Optional)</label><input id="quoteCustomerName" maxlength="100" autocomplete="off" placeholder="Enter Customer Name"><div class="quote-buttons"><button class="quote-secondary" id="quoteSkip" type="button">Skip</button><button id="quoteContinue" type="button">Continue</button></div></div><div id="quoteStageActions" class="hidden"><p class="quote-small">Select covering note language, then Download or Share.</p><div class="quote-language"><button type="button" data-quote-language="bn">Bengali</button><button type="button" data-quote-language="hi">Hindi</button><button type="button" data-quote-language="en">English</button></div><p class="quote-small" id="quoteLanguageInfo">Choose a language.</p><div class="quote-buttons"><button id="quoteDownload" type="button">Download PDF</button><button id="quoteShare" type="button">Share PDF</button></div></div><div id="quoteStageShare" class="hidden"><div class="quote-buttons"><button id="quoteWhatsapp" type="button">WhatsApp</button><button id="quoteEmail" type="button">Email</button></div><div id="quoteContactArea" class="hidden"><label id="quoteContactLabel" for="quoteContact">Customer contact</label><input id="quoteContact" autocomplete="off"><p class="quote-small" id="quoteShareHelp"></p><button id="quoteShareContinue" type="button">Continue</button></div></div><p class="error" id="quoteError" role="alert"></p><button class="quote-secondary" style="margin-top:12px" id="quoteClose" type="button">Close</button></div></div>
 
@@ -388,7 +388,7 @@ function calculate(){
   $('discountInfo').textContent=details.join(' ');
   $('resultNote').textContent=currentPolicy===POLICIES.comprehensive?'Indicative Comprehensive annual chart rates; year 2 discounted 10%, year 3 discounted 12.5% for upfront long-term payment. Verify final rates and eligibility with insurer. Comprehensive zone selection is manual; PIN mapping is not verified. No GST added.':currentPolicy===POLICIES.womencare?'Indicative Women Care chart premiums. Year 2 uses 10% discount; year 3 uses 12.5% discount. Adult ages advance annually. No promotional discount applied. Confirm term discounts, eligibility and insurer quote before use. GST not added.':'Indicative calculation from annual premium chart. GST is exempt (nil) for eligible individual health insurance policies; no GST is added. Age progresses each year; 10% long-term discount on years 2 and 3. Fresh early entry discount applies only in year 1. Combined discounts and insurer rounding require verification with Star Mitra / Atom Pro. Renewal and portability may have insurer-specific rules not modeled here.';
   setupBnpl(rows);
-  $('generateQuotation').classList.toggle('hidden',currentPolicy===POLICIES.comprehensive);
+  $('generateQuotation').classList.remove('hidden');
    quotationSnapshot={policy:currentPolicy.label,type,status,members:members.map(m=>({...m})),sumInsured,zone,deductible,rows:rows.map(r=>({...r})),family:familySizeText(),pin:zoneMode()==='pin'?$('pin').value.trim():''};$('resultPanel').classList.remove('hidden')
  }catch(err){$('error').textContent=err.message}
 }
@@ -406,7 +406,7 @@ $('calculate').addEventListener('click',calculate);
 let quoteCustomer='',quoteLanguage='',quoteChannel='';
 const quoteModal=$('quoteModal');
 function quoteStage(stage){['quoteStageName','quoteStageActions','quoteStageShare'].forEach(id=>$(id).classList.toggle('hidden',id!==stage));$('quoteError').textContent=''}
-function quoteOpen(){if(currentPolicy===POLICIES.comprehensive){$('error').textContent='Comprehensive quotation template pending policy-specific benefit validation.';return}if(!quotationSnapshot){$('error').textContent='Calculate premium first.';return}quoteCustomer='';$('quoteCustomerName').value='';quoteLanguage='';quoteStage('quoteStageName');quoteModal.classList.remove('hidden')}
+function quoteOpen(){if(!quotationSnapshot){$('error').textContent='Calculate premium first.';return}quoteCustomer='';$('quoteCustomerName').value='';quoteLanguage='';quoteStage('quoteStageName');quoteModal.classList.remove('hidden')}
 function quoteName(skip){quoteCustomer=skip?'':$('quoteCustomerName').value.trim().replace(/[<>]/g,'').slice(0,100);quoteStage('quoteStageActions')}
 function quoteLang(lang){quoteLanguage=lang;$('quoteLanguageInfo').textContent='Covering note: '+({bn:'Bengali',hi:'Hindi',en:'English'}[lang])+'. All policy details remain in English.';document.querySelectorAll('[data-quote-language]').forEach(b=>b.style.background=b.dataset.quoteLanguage===lang?'#e58a18':'#0875bb')}
 function quoteEsc(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -417,6 +417,7 @@ function quoteLetter(){const n=quoteCustomer;
 }
 function quoteHtml(){
  if(quotationSnapshot?.policy===POLICIES.womencare.label)return womenCareQuoteHtml();
+ if(quotationSnapshot?.policy===POLICIES.comprehensive.label)return comprehensiveQuoteHtml();
  const q=quotationSnapshot;if(!q)throw Error('Calculate premium again.');
  const si=q.sumInsured, money=n=>quoteEsc(currency(n));
  const d=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'});
@@ -478,6 +479,71 @@ function quoteHtml(){
  const fourth=page(sec('24-Month Specified Disease / Procedure Waiting Period (Excl 02)')+table(exclusion24)+'<p class="qnote">Summary of the 14 categories in Star Health Assure Policy Wordings (UIN SHAHLIP26048V032526). Listed conditions generally have a 24-month continuous-coverage waiting period. Accident-related claims are excepted as per policy wording. Increased Sum Insured, pre-existing disease waiting periods and eligible portability credits can affect applicability. Other benefits, including delivery, in-utero fetal surgery and assisted reproduction, have separate waiting-period provisions. This is a condensed guide, not the full policy wording. Refer to the official policy for exact scope and exceptions.</p>',4,4);
  return first+middle+last+fourth;
 }
+// Comprehensive quotation: sourced from Star Comprehensive policy wordings UIN SHAHLIP26044V092526.
+function comprehensiveQuoteHtml(){
+ const q=quotationSnapshot;if(!q)throw Error('Calculate premium first.');
+ const esc=quoteEsc,money=n=>esc(currency(n)),si=q.sumInsured;
+ const date=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'});
+ const status=({fresh:'Fresh',renewal:'Renewal',portability:'Portability'})[q.status]||q.status;
+ const cover=q.type==='floater'?'Family Floater':'Individual';
+ const table=rows=>'<table class="qtable"><tbody>'+rows.map(([a,b])=>'<tr><th>'+esc(a)+'</th><td>'+esc(b)+'</td></tr>').join('')+'</tbody></table>';
+ const sec=t=>'<h2 class="qsection">'+esc(t)+'</h2>';
+ const head='<div class="qhead"><div class="qeyebrow">PERSONALISED HEALTH INSURANCE QUOTATION</div><div class="qtitle">Star Comprehensive Insurance Policy</div><div class="qsub">UIN SHAHLIP26044V092526 · Prepared '+esc(date)+'</div></div>';
+ const foot=(i,n)=>'<div class="qfooter"><span>Indicative agent quotation. Official insurer quote and policy schedule prevail.</span><span>Page '+i+' of '+n+'</span></div>';
+ const page=(content,i,n)=>'<section class="qpage">'+head+content+foot(i,n)+'</section>';
+ const premium=q.rows.map(r=>'<div class="qpremium"><span>'+r.term+' '+(r.term===1?'YEAR':'YEARS')+'</span><strong>'+money(r.amount)+'</strong><small>Indicative total premium</small><small style="margin-top:7px;font-weight:700;color:'+(r.amount>=10000?'#12633d':'#8b5e29')+'">'+(r.amount>=10000?'BNPL Facility Available (Bima Pay)':'BNPL Not Available')+'</small></div>').join('');
+ const details=[...(quoteCustomer?[['Quotation For',quoteCustomer]]:[]),['Policy Status',status],['Cover Type',cover],['Sum Insured',currency(si)],['Family Composition',q.family],['Premium Zone','Zone '+q.zone],['Deductible','None applied']];
+ const members=q.members.map(m=>[m.member,m.age+' years']);
+ const name=quoteCustomer||'Customer';
+ const letter=quoteLanguage==='bn'?'প্রিয় '+name+',\n\nআপনার জন্য Star Comprehensive Insurance Policy-এর ব্যক্তিগত quotation প্রস্তুত করা হয়েছে। নিচে নির্বাচিত coverage, premium এবং গুরুত্বপূর্ণ policy benefits-এর সংক্ষিপ্ত বিবরণ দেওয়া হলো। সম্পূর্ণ শর্ত জানতে আপনার Health Insurance Advisor-এর সঙ্গে যোগাযোগ করুন।':quoteLanguage==='hi'?'प्रिय '+name+',\n\nआपके लिए Star Comprehensive Insurance Policy का व्यक्तिगत quotation प्रस्तुत है। इसमें चुनी हुई coverage, premium और महत्वपूर्ण policy benefits का सारांश है। पूरी शर्तों के लिए अपने Health Insurance Advisor से संपर्क करें।':'Dear '+name+',\n\nPlease find your personalised Star Comprehensive Insurance Policy quotation, with your selected coverage, premium options and a summary of key benefits. Please consult your Health Insurance Advisor for the full policy conditions.';
+ const benefits=[
+  ['In-Patient Hospitalisation','Subject to Sum Insured and admissibility'],
+  ['Room Rent / ICU','As per room category and ICU provisions in policy schedule; proportionate deductions may apply'],
+  ['Day Care Procedures','Subject to policy terms'],
+  ['Pre-Hospitalisation','Up to 60 days, linked to admissible hospitalisation'],
+  ['Post-Hospitalisation','Up to 90 days, linked to admissible hospitalisation'],
+  ['Road Ambulance','Subject to admissible claim and policy conditions'],
+  ['Air Ambulance','Up to ₹2,50,000 per hospitalisation, maximum ₹5,00,000 per policy period; conditions apply'],
+  ['Organ Donor Expenses','Covered subject to admissible transplantation claim and conditions'],
+  ['AYUSH Treatment','Subject to policy terms and admissibility'],
+  ['Modern Treatments','Treatment-specific sublimits apply; refer to official policy schedule'],
+  ['Automatic Restoration','100% of basic Sum Insured, once per policy period upon exhaustion; subsequent hospitalisation and other conditions apply'],
+  ['Cumulative Bonus','Subject to Sum Insured tier, claim history and policy conditions'],
+  ['Maternity / Newborn Benefits','Subject to policy-specific limits, waiting periods and eligibility'],
+  ['Cataract / Specified Procedures','Subject to applicable sublimits and specified disease waiting period'],
+  ['Co-Payment','10% on applicable claims for insured persons entering at age 61 or above; continuous renewals from earlier entry are exempt as specified']
+ ];
+ const waits=[
+  ['Initial Waiting Period','30 days for illness; accident exception as specified'],
+  ['Pre-Existing Diseases','Normally 36 months of continuous coverage; optional PED waiting-period reduction may alter this; declaration and continuity rules apply'],
+  ['Specified Diseases / Procedures','24 months; subject to accident exceptions, prior coverage credits and enhanced SI rules'],
+  ['Maternity / Other Special Benefits','Benefit-specific eligibility and waiting periods; check official policy schedule'],
+  ['Co-Payment at Entry Age 61+','10% on applicable claims, with continuous-renewal exception per policy wording']
+ ];
+ const exclusions=[
+  ['1','Cataract, anterior/posterior eye chamber, ENT, thyroid and benign breast diseases'],
+  ['2','Benign lumps and cysts, carpal tunnel, trigger finger, lipoma, neurofibroma, fibroadenoma, ganglion and similar conditions'],
+  ['3','Tendon, ligament, fascia, bone and joint conditions; arthroscopy, arthroplasty and joint replacement except accidents'],
+  ['4','Degenerative disc, vertebral and musculoskeletal diseases; prolapsed intervertebral disc except accidents'],
+  ['5','Hepato-pancreato-biliary diseases, gallbladder and pancreatic stones; kidney and genitourinary stones'],
+  ['6','All types of hernia'],
+  ['7','Desmoid tumour, umbilical granuloma, sinus and fistula'],
+  ['8','Cervix, uterus, fallopian tube, ovarian diseases, uterine bleeding and pelvic inflammatory diseases'],
+  ['9','Prostate diseases, urethral stricture and obstructive uropathies'],
+  ['10','Benign epididymal tumours, spermatocele, varicocele and hydrocele'],
+  ['11','Fistula, anal fissure, haemorrhoids, pilonidal sinus/fistula, rectal prolapse and stress incontinence'],
+  ['12','Varicose veins and varicose ulcers'],
+  ['13','All types of transplant and related surgeries'],
+  ['14','Congenital internal diseases/defects, except specific newborn benefit provisions']
+ ];
+ const note='<p class="qnote">Indicative chart-based premiums only. 2nd year: estimated 10% discount; 3rd year: estimated 12.5% discount. Ages advance annually. No GST added. Zone must be manually confirmed for Comprehensive. Bima Pay is an indicative estimator, not financing approval. Coverage, waiting periods, sublimits, co-payment, discounts and premium must be checked against the insurer quote and official policy schedule. Policy wording UIN SHAHLIP26044V092526; policy version and rate chart may differ.</p>';
+ const p1=page('<div class="qhero"><span>PROPOSED SUM INSURED</span><strong>'+money(si)+'</strong><small>'+esc(status)+' · '+esc(cover)+'</small></div><div class="qletter">'+esc(letter.replace(/\\n/g,'\n'))+'</div>'+sec('Quotation Details')+table(details)+sec('Premium Options')+'<div class="qpremiums">'+premium+'</div>'+note,1,4);
+ const p2=page(sec('Covered Members')+table(members)+sec('Benefits & Coverage')+table(benefits.slice(0,10))+note,2,4);
+ const p3=page(sec('Additional Benefits & Coverage')+table(benefits.slice(10))+sec('Important Waiting Periods & Conditions')+table(waits)+note,3,4);
+ const p4=page(sec('24-Month Specified Disease / Procedure Waiting Period (Excl 02)')+table(exclusions)+'<p class="qnote">Condensed list of 14 categories in Star Comprehensive Insurance Policy wording (UIN SHAHLIP26044V092526). Accident exceptions, portability/migration continuity, increased Sum Insured and longer pre-existing disease waiting periods may change applicability. Refer to the official policy wording for exact scope.</p>',4,4);
+ return p1+p2+p3+p4;
+}
+
 // Women Care quotation uses only Women Care benefits from the 2026 brochure/wordings.
 function womenCareQuoteHtml(){
  const q=quotationSnapshot,si=q.sumInsured,esc=quoteEsc,money=n=>esc(currency(n));
