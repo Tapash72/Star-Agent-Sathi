@@ -454,7 +454,7 @@ function quoteHtml(){
  const page=(content,i,n)=>'<section class="qpage">'+head('UIN SHAHLIP26048V032526')+content+foot(i,n)+'</section>';
  const sec=t=>'<h2 class="qsection">'+esc(t)+'</h2>';
  const prem=q.rows.map(r=>'<div class="qpremium"><span>'+r.term+' '+(r.term===1?'YEAR':'YEARS')+'</span><strong>'+money(r.amount)+'</strong><small>Indicative total premium</small><small style="margin-top:7px;font-weight:700;color:'+(r.amount>=10000?'#12633d':'#8b5e29')+'">'+(r.amount>=10000?'BNPL Facility Available':'BNPL Not Available')+'</small></div>').join('');
- const details=[...(quoteCustomer?[['Quotation For',quoteCustomer]]:[]),['Policy Status',status],['Cover Type',type],['Sum Insured',currency(si)],['Family Composition',q.family],['Premium Zone','Zone '+q.zone+(q.pin?' · PIN '+q.pin:'')],['Annual Aggregate Deductible',q.deductible?currency(q.deductible):'None']];
+ const details=[...(quoteCustomer?[['Quotation For',quoteCustomer]]:[]),['Policy Status',status],['Cover Type',type],['Sum Insured',currency(si)],['Family Composition',q.family],['Age-wise Co-payment',copayText],['Premium Zone','Zone '+q.zone+(q.pin?' · PIN '+q.pin:'')],['Annual Aggregate Deductible',q.deductible?currency(q.deductible):'None']];
  const memberRows=q.members.map(m=>[m.member,m.age+' years']);
  const first=page('<div class="qhero"><span>PROPOSED SUM INSURED</span><strong>'+money(si)+'</strong><small>'+esc(status)+' · '+esc(type)+'</small></div><div class="qletter">'+esc(quoteLetter())+'</div>'+sec('Quotation Details')+table(details)+sec('Premium Options')+'<div class="qpremiums">'+prem+'</div><p class="qnote">Premiums are indicative, based on the calculator rate chart and selected inputs. The insurer must confirm final rates, applicable discounts, taxes, eligibility and terms before purchase.</p>',1,4);
  const middle=page(sec('Covered Members')+table(memberRows)+sec('Benefits & Coverage Amount')+table(benefitRows.slice(0,16))+'<p class="qnote">*Restoration, bonus and all benefit payments are subject to specific policy conditions and admissibility.</p>',2,4);
@@ -496,29 +496,48 @@ function comprehensiveQuoteHtml(){
  const members=q.members.map(m=>[m.member,m.age+' years']);
  const name=quoteCustomer||'Customer';
  const letter=quoteLanguage==='bn'?'প্রিয় '+name+',\n\nআপনার জন্য Star Comprehensive Insurance Policy-এর ব্যক্তিগত quotation প্রস্তুত করা হয়েছে। নিচে নির্বাচিত coverage, premium এবং গুরুত্বপূর্ণ policy benefits-এর সংক্ষিপ্ত বিবরণ দেওয়া হলো। সম্পূর্ণ শর্ত জানতে আপনার Health Insurance Advisor-এর সঙ্গে যোগাযোগ করুন।':quoteLanguage==='hi'?'प्रिय '+name+',\n\nआपके लिए Star Comprehensive Insurance Policy का व्यक्तिगत quotation प्रस्तुत है। इसमें चुनी हुई coverage, premium और महत्वपूर्ण policy benefits का सारांश है। पूरी शर्तों के लिए अपने Health Insurance Advisor से संपर्क करें।':'Dear '+name+',\n\nPlease find your personalised Star Comprehensive Insurance Policy quotation, with your selected coverage, premium options and a summary of key benefits. Please consult your Health Insurance Advisor for the full policy conditions.';
+ const delivery=si===500000?[15000,20000,100000]:si===750000?[25000,40000,100000]:si<=2500000?[30000,50000,100000]:[50000,100000,200000];
+ const hospitalCash=si===500000?500:si<=1000000?750:si<=2000000?1000:si===2500000?1500:2500;
+ const opd=({500000:1200,750000:1500,1000000:2100,1500000:2400,2000000:3000,2500000:3300})[si]||5000;
+ const dental=si<=750000?5000:si<=2500000?10000:15000;
+ const adults=q.members.filter(m=>!m.member.startsWith('Child'));
+ const children=q.members.filter(m=>m.member.startsWith('Child'));
+ const eligibleCouple=q.type==='floater'&&q.members.some(m=>m.member==='Self')&&q.members.some(m=>m.member==='Spouse');
+ const copayMembers=adults.filter(m=>m.age>=61);
+ const copayText=copayMembers.length?'10% Co-pay for applicable insured member(s): '+copayMembers.map(m=>m.member+' ('+m.age+')').join(', ')+'; other members: No Co-pay (subject to policy exceptions)':'No Co-pay (standard age-at-entry rule; subject to policy exceptions)';
+ const maternityText=eligibleCouple?'Eligible couple: up to ':'Not Applicable to selected family composition; eligible self-and-spouse cover required. Reference limit: ';
+
  const benefits=[
-  ['In-Patient Hospitalisation','Subject to Sum Insured and admissibility'],
-  ['Room Rent / ICU','As per room category and ICU provisions in policy schedule; proportionate deductions may apply'],
-  ['Day Care Procedures','Subject to policy terms'],
-  ['Pre-Hospitalisation','Up to 60 days, linked to admissible hospitalisation'],
-  ['Post-Hospitalisation','Up to 90 days, linked to admissible hospitalisation'],
-  ['Road Ambulance','Subject to admissible claim and policy conditions'],
-  ['Air Ambulance','Up to ₹2,50,000 per hospitalisation, maximum ₹5,00,000 per policy period; conditions apply'],
-  ['Organ Donor Expenses','Covered subject to admissible transplantation claim and conditions'],
-  ['AYUSH Treatment','Subject to policy terms and admissibility'],
-  ['Modern Treatments','Treatment-specific sublimits apply; refer to official policy schedule'],
-  ['Automatic Restoration','100% of basic Sum Insured, once per policy period upon exhaustion; subsequent hospitalisation and other conditions apply'],
-  ['Cumulative Bonus','Subject to Sum Insured tier, claim history and policy conditions'],
-  ['Maternity / Newborn Benefits','Subject to policy-specific limits, waiting periods and eligibility'],
-  ['Cataract / Specified Procedures','Subject to applicable sublimits and specified disease waiting period'],
-  ['Co-Payment','10% on applicable claims for insured persons entering at age 61 or above; continuous renewals from earlier entry are exempt as specified']
+  ['In-Patient Hospitalisation','Up to Sum Insured ('+currency(si)+')'],
+  ['Room Rent','Private Single A/C Room (excluding deluxe room / suite)'],
+  ['ICU Charges','Actual'],
+  ['Day Care Procedures','Up to Sum Insured ('+currency(si)+')'],
+  ['Pre-Hospitalisation','60 days'],
+  ['Post-Hospitalisation','90 days'],
+  ['Road Ambulance','Actual admissible ambulance expenses; no separate monetary cap stated in core clause'],
+  ['Air Ambulance','Up to ₹2,50,000 per hospitalisation; maximum ₹5,00,000 per policy period'],
+  ['Organ Donor Expenses','Additional cover up to Basic Sum Insured ('+currency(si)+')'],
+  ['AYUSH Treatment','Up to Sum Insured ('+currency(si)+')'],
+  ['Home Care Treatment','10% of Sum Insured, maximum ₹5,00,000 ('+currency(Math.min(si*.10,500000))+')'],
+  ['Automatic Restoration','100% of Basic Sum Insured ('+currency(si)+'), once per policy period after exhaustion'],
+  ['Cumulative Bonus',si===500000?'50% of Basic Sum Insured per claim-free year; maximum 100%':'100% of Basic Sum Insured after a claim-free year; maximum 100%'],
+  ['Normal Delivery',maternityText+currency(delivery[0])+' per delivery; 24-month waiting applies if eligible'],
+  ['Caesarean Delivery',maternityText+currency(delivery[1])+' per delivery; 24-month waiting applies if eligible'],
+  ['Newborn Hospitalisation',eligibleCouple?'Up to '+currency(delivery[2])+' under eligible delivery benefit':'Not Applicable without eligible delivery benefit; reference limit '+currency(delivery[2]) ],
+  ['Hospital Cash','₹'+hospitalCash.toLocaleString('en-IN')+' per completed eligible day; up to 7 days per hospitalisation, 120 days per policy period; first 24h excluded'],
+  ['Outpatient Medical Consultation','Up to '+currency(opd)+' per policy period; maximum ₹300 per consultation'],
+  ['Dental & Ophthalmic OPD','Up to '+currency(dental)+' per block of 3 continuous policy years'],
+  ['Preventive Health Check-up',si<=1000000?'Package A, once per policy year for insured adults':'Package B, once per policy year for insured adults'],
+  ['Modern Treatments','Treatment-specific SI-based sublimits; see policy table, Section II.4'],
+  ['Cataract / Specified Procedures','Up to applicable Sum Insured, subject to specified-disease waiting period and policy wording'],
+  ['Co-Payment',copayText]
  ];
  const waits=[
   ['Initial Waiting Period','30 days for illness; accident exception as specified'],
   ['Pre-Existing Diseases','Normally 36 months of continuous coverage; optional PED waiting-period reduction may alter this; declaration and continuity rules apply'],
   ['Specified Diseases / Procedures','24 months; subject to accident exceptions, prior coverage credits and enhanced SI rules'],
   ['Maternity / Other Special Benefits','Benefit-specific eligibility and waiting periods; check official policy schedule'],
-  ['Co-Payment at Entry Age 61+','10% on applicable claims, with continuous-renewal exception per policy wording']
+  ['Co-Payment',copayText+'; continuous-renewal exceptions may apply']
  ];
  const exclusions=[
   ['1','Cataract, anterior/posterior eye chamber, ENT, thyroid and benign breast diseases'],
