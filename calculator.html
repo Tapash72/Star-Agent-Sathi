@@ -71,7 +71,7 @@
 
 <script>
 'use strict';
-const POLICIES={assure:{label:'Star Health Assure',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,7500000,10000000,20000000],terms:[1,2,3],ratesVerified:true},superstar:{label:'Star Health Super Star',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,10000000,'Unlimited'],terms:[1,2,3,4,5],ratesVerified:false},womencare:{label:'Star Women Care',sumInsured:[500000,1000000,1500000,2000000,2500000,5000000,10000000],terms:[1,2,3],ratesVerified:false}};
+const POLICIES={assure:{label:'Star Health Assure',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,7500000,10000000,20000000],terms:[1,2,3],ratesVerified:true},superstar:{label:'Star Health Super Star',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,10000000,'Unlimited'],terms:[1,2,3,4,5],ratesVerified:false},womencare:{label:'Star Women Care',sumInsured:[500000,1000000,1500000,2000000,2500000,5000000,10000000],terms:[1,2,3],ratesVerified:true}};
 let PIN_TO_ZONE=Object.create(null),pinMappingLoaded=false,pinMappingError='';
 fetch('assure_pin_zone_mapping.json',{cache:'no-store'})
  .then(r=>{if(!r.ok)throw Error('PIN mapping file not found');return r.json()})
@@ -87,7 +87,8 @@ fetch('assure_pin_zone_mapping.json',{cache:'no-store'})
  }).catch(e=>{pinMappingError=e.message;console.error('PIN mapping error:',e)});
 const $=id=>document.getElementById(id),policyEl=$('policy');
 const currency=n=>'₹'+Number(n).toLocaleString('en-IN',{maximumFractionDigits:2});
-let currentPolicy=null,assureData=null;let quotationSnapshot=null;
+let currentPolicy=null,assureData=null,womenCareData=null;let quotationSnapshot=null;
+fetch('women_care_rates.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Women Care rate file missing');return r.json()}).then(d=>{if(!d.adultRates?.['1Female']||!d.adultRates?.['2AdultsFemaleMale']||!d.childRates)throw Error('Invalid Women Care rate file');womenCareData=d}).catch(e=>{console.error(e);womenCareData=null});
 fetch('assure_rates.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Premium rate file not found');return r.json()}).then(d=>{if(!d.zones||!d.zones.D||!d.sumInsured)throw Error('Invalid rate file');assureData=d}).catch(e=>{console.error(e);assureData=null});
 function ageMode(){return document.querySelector('input[name="ageMode"]:checked').value}
 function zoneMode(){return document.querySelector('input[name="zoneMode"]:checked').value}
@@ -145,7 +146,7 @@ function renderMembers(){
  const type=$('policyType').value;
  if(type==='floater'){
   makeFloaterChoice(holder,'Self',['Self']);makeFloaterChoice(holder,'Spouse',['Spouse']);
-  makeFloaterChoice(holder,'Children',currentPolicy===POLICIES.assure?['Child 1','Child 2','Child 3']:['Child 1','Child 2','Child 3','Child 4']);
+  makeFloaterChoice(holder,'Children',(currentPolicy===POLICIES.assure||currentPolicy===POLICIES.womencare)?['Child 1','Child 2','Child 3']:['Child 1','Child 2','Child 3','Child 4']);
   if(currentPolicy===POLICIES.assure)makeFloaterChoice(holder,'Parents',['Parent 1','Parent 2','Parent 3','Parent 4'])
  }else if(type==='individual')makeAgeField('Insured Person',holder);
  else if(type==='multi')for(let i=1;i<=8;i++)makeAgeField('Person '+i,holder);
@@ -156,10 +157,10 @@ function changePolicy(){
  ['statusPanel','typePanel','sumPanel','zonePanel','deductiblePanel','actionPanel'].forEach(id=>$(id).classList.toggle('hidden',!currentPolicy));
  $('memberPanel').classList.add('hidden');clearResult();
  const typeSelect=$('policyType');typeSelect.replaceChildren(new Option('Choose cover type',''));
- if(currentPolicy){typeSelect.add(new Option('Individual','individual'));typeSelect.add(new Option('Family Floater','floater'));if(currentPolicy!==POLICIES.assure)typeSelect.add(new Option('Multi-Individual','multi'))}
+ if(currentPolicy){typeSelect.add(new Option(currentPolicy===POLICIES.womencare?'Individual (Female)':'Individual','individual'));typeSelect.add(new Option('Family Floater','floater'));if(currentPolicy===POLICIES.superstar)typeSelect.add(new Option('Multi-Individual','multi'))}
  renderMembers();const sum=$('sumInsured');sum.replaceChildren(new Option('Choose sum insured',''));
  if(currentPolicy)currentPolicy.sumInsured.forEach(n=>sum.add(new Option(n==='Unlimited'?'Unlimited':currency(n),String(n))));
- $('zone').value='';$('pin').value='';$('deductible').value='0';$('policyStatus').value='fresh';updateDeductibleHint()
+ $('zonePanel').classList.toggle('hidden',!currentPolicy||currentPolicy===POLICIES.womencare);$('deductiblePanel').classList.toggle('hidden',!currentPolicy||currentPolicy===POLICIES.womencare);$('zone').value='';$('pin').value='';$('deductible').value='0';$('policyStatus').value='fresh';updateDeductibleHint()
 }
 function ageFromDOB(value){
  const parts=value.split('-').map(Number);if(parts.length!==3)return null;
@@ -247,6 +248,40 @@ function lookupVerifiedPremium(policy,members,sumInsured,zone,term,type,status,d
  }
  return {amount:Math.round(total),earlyDiscount,deductibleRate:dedRate}
 }
+// Star Women Care: chart rates are unzoned and child rates are by child order.
+function womenCareAgeBand(age){
+ if(age<18)throw Error('Women Care adult must be at least 18 years old.');
+ if(age<=35)return '18-35';if(age<=40)return '36-40';if(age<=45)return '41-45';
+ if(age<=50)return '46-50';if(age<=55)return '51-55';if(age<=60)return '56-60';
+ if(age<=65)return '61-65';if(age<=70)return '66-70';if(age<=75)return '71-75';return 'Above 75';
+}
+function womenCarePremium(members,si,term,type){
+ if(!womenCareData)throw Error('Women Care rates not loaded. Confirm women_care_rates.json is uploaded and refresh.');
+ const adults=type==='individual'?members:members.filter(m=>m.member==='Self'||m.member==='Spouse');
+ const children=type==='individual'?[]:members.filter(m=>m.member.startsWith('Child'));
+ if(type!=='individual'&&type!=='floater')throw Error('Women Care supports Individual or Family Floater only.');
+ if(adults.length<1||adults.length>2)throw Error('Select one or two adults.');
+ if(children.length>3)throw Error('Maximum 3 children allowed.');
+ if(children.some(m=>m.age>25))throw Error('Child age over 25 requires separate eligibility verification; quotation unavailable.');
+ if(children.some(m=>m.age<0))throw Error('Invalid child age.');
+ const key=adults.length===2?'2AdultsFemaleMale':'1Female';
+ let total=0;
+ for(let y=0;y<term;y++){
+  const eldest=Math.max(...adults.map(m=>m.age+y));
+  const rate=womenCareData.adultRates[key]?.[womenCareAgeBand(eldest)]?.[String(si)];
+  if(!Number.isFinite(rate))throw Error('Women Care adult premium unavailable for selected age/SI.');
+  let annual=rate;
+  for(let i=0;i<children.length;i++){
+   if(children[i].age+y>25)throw Error('Child reaches age above 25 during selected term. Please verify eligibility with insurer.');
+   const childKey=['First Child','Second Child','Third Child'][i];
+   const childRate=womenCareData.childRates[childKey]?.[String(si)];
+   if(!Number.isFinite(childRate))throw Error('Women Care child premium unavailable.');
+   annual+=childRate;
+  }
+  total+=annual*(y===0?1:y===1?0.90:0.875);
+ }
+ return {amount:Math.round(total),earlyDiscount:0,deductibleRate:0};
+}
 // Illustrative flat monthly rates from BimaPay examples; revalidate before customer use.
 const BNPL_CONFIG={
   1:{minimum:20,tenures:[[3,1.12],[6,0.99],[9,0.95]]},
@@ -319,19 +354,20 @@ function calculate(){
   const type=$('policyType').value;if(!type)throw Error('Select a cover type.');
   const members=getMembers();if(type==='individual'&&members.length!==1)throw Error('Individual requires one insured person.');
   const sumValue=$('sumInsured').value;if(!sumValue)throw Error('Select a sum insured.');
-  const sumInsured=sumValue==='Unlimited'?'Unlimited':Number(sumValue),zone=getZone(),status=policyStatus(),deductible=Number($('deductible').value);
+  const sumInsured=sumValue==='Unlimited'?'Unlimited':Number(sumValue),zone=currentPolicy===POLICIES.womencare?'':getZone(),status=policyStatus(),deductible=currentPolicy===POLICIES.womencare?0:Number($('deductible').value);
   if(!currentPolicy.ratesVerified)throw Error('Verified premium rates are not yet connected for '+currentPolicy.label+'.');
-  const rows=currentPolicy.terms.map(term=>({term,...lookupVerifiedPremium(currentPolicy,members,sumInsured,zone,term,type,status,deductible)}));
+  const rows=currentPolicy.terms.map(term=>({term,...(currentPolicy===POLICIES.womencare?womenCarePremium(members,sumInsured,term,type):lookupVerifiedPremium(currentPolicy,members,sumInsured,zone,term,type,status,deductible))}));
   if(!rows.length)throw Error('No quotation is available.');
   const statusLabel={fresh:'Fresh',renewal:'Renewal',portability:'Portability'}[status];
-  $('summary').textContent=currentPolicy.label+' | '+statusLabel+' | Family Size: '+familySizeText()+' | '+members.map(m=>m.member+' ('+m.age+')').join(', ')+' | '+currency(sumInsured)+' | Zone '+zone+' | '+(deductible?'Deductible '+currency(deductible):'No Deductible');
+  $('summary').textContent=currentPolicy.label+' | '+statusLabel+' | Family Size: '+familySizeText()+' | '+members.map(m=>m.member+' ('+m.age+')').join(', ')+' | '+currency(sumInsured)+(currentPolicy===POLICIES.womencare?' | No Zone / Deductible':' | Zone '+zone+' | '+(deductible?'Deductible '+currency(deductible):'No Deductible'));
   $('premiumRows').replaceChildren();
 
   const details=[];if(rows[0].earlyDiscount>0)details.push('Fresh Policy: 5% Early Entry Discount on eligible first-year premium (approx. '+currency(rows[0].earlyDiscount)+').');
   if(deductible)details.push('Optional deductible discount: '+(rows[0].deductibleRate*100)+'% per policy year.');
   $('discountInfo').textContent=details.join(' ');
-  $('resultNote').textContent='Indicative calculation from annual premium chart. GST is exempt (nil) for eligible individual health insurance policies; no GST is added. Age progresses each year; 10% long-term discount on years 2 and 3. Fresh early entry discount applies only in year 1. Combined discounts and insurer rounding require verification with Star Mitra / Atom Pro. Renewal and portability may have insurer-specific rules not modeled here.';
+  $('resultNote').textContent=currentPolicy===POLICIES.womencare?'Indicative Women Care chart premiums. Year 2 uses 10% discount; year 3 uses 12.5% discount. Adult ages advance annually. No promotional discount applied. Confirm term discounts, eligibility and insurer quote before use. GST not added.':'Indicative calculation from annual premium chart. GST is exempt (nil) for eligible individual health insurance policies; no GST is added. Age progresses each year; 10% long-term discount on years 2 and 3. Fresh early entry discount applies only in year 1. Combined discounts and insurer rounding require verification with Star Mitra / Atom Pro. Renewal and portability may have insurer-specific rules not modeled here.';
   setupBnpl(rows);
+  $('generateQuotation').classList.toggle('hidden',currentPolicy===POLICIES.womencare);
    quotationSnapshot={policy:currentPolicy.label,type,status,members:members.map(m=>({...m})),sumInsured,zone,deductible,rows:rows.map(r=>({...r})),family:familySizeText(),pin:zoneMode()==='pin'?$('pin').value.trim():''};$('resultPanel').classList.remove('hidden')
  }catch(err){$('error').textContent=err.message}
 }
