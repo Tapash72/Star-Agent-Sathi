@@ -71,7 +71,7 @@
 
 <script>
 'use strict';
-const POLICIES={assure:{label:'Star Health Assure',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,7500000,10000000,20000000],terms:[1,2,3],ratesVerified:true},superstar:{label:'Star Health Super Star',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,10000000,'Unlimited'],terms:[1,2,3,4,5],ratesVerified:false}};
+const POLICIES={assure:{label:'Star Health Assure',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,7500000,10000000,20000000],terms:[1,2,3],ratesVerified:true},superstar:{label:'Star Health Super Star',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,10000000,'Unlimited'],terms:[1,2,3,4,5],ratesVerified:false},womencare:{label:'Star Women Care',sumInsured:[500000,1000000,1500000,2000000,2500000,5000000,10000000],terms:[1,2,3],ratesVerified:false}};
 let PIN_TO_ZONE=Object.create(null),pinMappingLoaded=false,pinMappingError='';
 fetch('assure_pin_zone_mapping.json',{cache:'no-store'})
  .then(r=>{if(!r.ok)throw Error('PIN mapping file not found');return r.json()})
