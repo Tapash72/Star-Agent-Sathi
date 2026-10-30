@@ -367,7 +367,7 @@ function calculate(){
   $('discountInfo').textContent=details.join(' ');
   $('resultNote').textContent=currentPolicy===POLICIES.womencare?'Indicative Women Care chart premiums. Year 2 uses 10% discount; year 3 uses 12.5% discount. Adult ages advance annually. No promotional discount applied. Confirm term discounts, eligibility and insurer quote before use. GST not added.':'Indicative calculation from annual premium chart. GST is exempt (nil) for eligible individual health insurance policies; no GST is added. Age progresses each year; 10% long-term discount on years 2 and 3. Fresh early entry discount applies only in year 1. Combined discounts and insurer rounding require verification with Star Mitra / Atom Pro. Renewal and portability may have insurer-specific rules not modeled here.';
   setupBnpl(rows);
-  $('generateQuotation').classList.toggle('hidden',currentPolicy===POLICIES.womencare);
+  $('generateQuotation').classList.remove('hidden');
    quotationSnapshot={policy:currentPolicy.label,type,status,members:members.map(m=>({...m})),sumInsured,zone,deductible,rows:rows.map(r=>({...r})),family:familySizeText(),pin:zoneMode()==='pin'?$('pin').value.trim():''};$('resultPanel').classList.remove('hidden')
  }catch(err){$('error').textContent=err.message}
 }
@@ -395,6 +395,7 @@ function quoteLetter(){const n=quoteCustomer;
  return `${n?'Dear '+n+',':'Dear Customer,'}\n\nThank you for choosing Star Health as your Health Insurance partner. We are pleased to present a personalised health insurance quotation tailored to your selected coverage and family protection needs.\n\nThis quotation summarises your proposed coverage, available premium options and selected policy benefits to help you make an informed decision. Please contact your Health Insurance Advisor for further guidance.\n\nWarm regards,\nYour Health Insurance Advisor`;
 }
 function quoteHtml(){
+ if(quotationSnapshot?.policy===POLICIES.womencare.label)return womenCareQuoteHtml();
  const q=quotationSnapshot;if(!q)throw Error('Calculate premium again.');
  const si=q.sumInsured, money=n=>quoteEsc(currency(n));
  const d=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'});
@@ -456,12 +457,91 @@ function quoteHtml(){
  const fourth=page(sec('24-Month Specified Disease / Procedure Waiting Period (Excl 02)')+table(exclusion24)+'<p class="qnote">Summary of the 14 categories in Star Health Assure Policy Wordings (UIN SHAHLIP26048V032526). Listed conditions generally have a 24-month continuous-coverage waiting period. Accident-related claims are excepted as per policy wording. Increased Sum Insured, pre-existing disease waiting periods and eligible portability credits can affect applicability. Other benefits, including delivery, in-utero fetal surgery and assisted reproduction, have separate waiting-period provisions. This is a condensed guide, not the full policy wording. Refer to the official policy for exact scope and exceptions.</p>',4,4);
  return first+middle+last+fourth;
 }
+// Women Care quotation uses only Women Care benefits from the 2026 brochure/wordings.
+function womenCareQuoteHtml(){
+ const q=quotationSnapshot,si=q.sumInsured,esc=quoteEsc,money=n=>esc(currency(n));
+ const date=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'});
+ const status=({fresh:'Fresh',renewal:'Renewal',portability:'Portability'})[q.status]||q.status;
+ const cover=q.type==='floater'?'Family Floater':'Individual (Female)';
+ const room=si===500000?'Up to 1% of Sum Insured per day':si<=2500000?'Any Room (except suite or above)':'Any Room';
+ const delivery=si===500000?25000:si<=2000000?50000:si<=5000000?75000:100000;
+ const antenatal=si<=1500000?2500:5000;
+ const art=si===500000?50000:si===1000000?100000:si===1500000?150000:si<=2500000?200000:si===5000000?250000:300000;
+ const opd=si<=1500000?2500:si<=2500000?3500:5000;
+ const miscarriage=si<=1500000?25000:si<=2500000?35000:40000;
+ const maternityWait=si<=1000000?'24 months':'12 months';
+ const benefits=[
+ ['In-patient Hospitalisation','Up to Sum Insured'],['Room Rent',room],['ICU Charges','Actuals, subject to admissible claim'],
+ ['Day Care Procedures','All day care procedures'],['AYUSH Treatment','Up to Sum Insured, subject to policy terms'],
+ ['Modern Treatments','As per treatment-specific limits'],['Pre-Hospitalisation','60 days'],['Post-Hospitalisation','90 days'],
+ ['Road Ambulance','As per policy terms'],['Air Ambulance',si>=1000000?'Up to '+currency(si*.10)+' per policy year':'Not available for ₹5 Lakh SI'],
+ ['Organ Donor Expenses','As per policy terms'],['Home Care Treatment','Up to '+currency(Math.min(si*.10,500000))+' per policy year; specified conditions'],
+ ['Cumulative Bonus','20% SI per claim-free year; maximum 100% SI'],['Automatic Restoration','100% SI, once; subsequent hospitalisation'],
+ ['Delivery Expenses','Up to '+currency(delivery)+' per delivery; maximum 2 qualifying events in lifetime'],
+ ['Ante-Natal Care','Up to '+currency(antenatal)+' per policy year after waiting period'],
+ ['In-Utero Fetal Surgery / Repair','As per policy terms and waiting period'],
+ ['Assisted Reproduction Treatment','Up to '+currency(art)+' per policy year; 1 cycle; 36-month waiting period'],
+ ['Surrogacy / Oocyte Donor Cover','Subject to special eligibility, term and coverage conditions'],
+ ['Voluntary Sterilisation','Subject to eligibility and 24-month waiting period'],
+ ['Miscarriage due to Accident','Lump sum '+currency(miscarriage)+'; once in lifetime, subject to waiting period'],
+ ['Newborn Hospitalisation','From day 1, generally up to 25% SI; specific congenital-defect exceptions'],
+ ['Newborn Vaccination','Up to '+currency(si<=1000000?2500:3500)+'; up to 12 months from birth'],
+ ['Newborn Metabolic Screening','Up to ₹3,500, once'],['Pediatrician Consultation','Up to 4 per year, ₹500 each; child up to age 12'],
+ ['Star Mother Cover','Mother’s stay when insured child under 12 is in ICU; conditions apply'],
+ ['Bariatric Surgery','Up to '+currency(si<=1500000?250000:500000)+'; cashless only, after waiting period'],
+ ['Female Outpatient Medical Consultations','Up to '+currency(opd)+' per policy year'],
+ ['Shared Accommodation','₹2,000 per completed day, maximum 7 days per hospitalisation'],
+ ['Preventive Health Check-up','Age/gender-specific limits; refer to policy'],
+ ['Unlimited Tele-Consultation','Available subject to service conditions'],
+ ['Rehabilitation / Pain Management','Subject to policy limits and authorised centres'],
+ ['Non-Medical Items','Specified items subject to admissible claim']
+ ];
+ const waits=[
+ ['Initial Waiting Period','30 days for illness; accidents excepted'],
+ ['Pre-Existing Diseases','24 months of continuous coverage, subject to declaration, acceptance and continuity credits'],
+ ['Specified Diseases / Procedures','24 months; see full list on page 4'],
+ ['Delivery / Ante-Natal / In-Utero Fetal Surgery',maternityWait+' (SI-dependent; special exceptions apply)'],
+ ['Miscarriage due to Accident',maternityWait+' (SI-dependent)'],
+ ['Assisted Reproduction Treatment','36 months'],['Voluntary Sterilisation','24 months'],['Bariatric Surgery','24 months']
+ ];
+ const exclusions=[
+ ['1','Cataract, eye chamber diseases, ENT, thyroid and benign breast diseases'],
+ ['2','Benign lumps, cysts, carpal tunnel, trigger finger, lipoma, neurofibroma, fibroadenoma, ganglion and similar pathology'],
+ ['3','Tendon, ligament, fascia, bone and joint diseases, arthroscopy and joint replacement (other than accidents)'],
+ ['4','Degenerative disc, vertebral and musculoskeletal diseases, prolapsed intervertebral disc (other than accidents)'],
+ ['5','Hepato-pancreato-biliary disease, gallbladder/pancreatic stones, kidney and genitourinary stones'],
+ ['6','All types of hernia'],['7','Desmoid tumour, umbilical granuloma, sinus and fistula'],
+ ['8','Cervix, uterus, fallopian tube, ovarian diseases, uterine bleeding and pelvic inflammatory diseases'],
+ ['9','Prostate diseases, urethral stricture and obstructive uropathies'],
+ ['10','Benign epididymal tumours, spermatocele, varicocele and hydrocele'],
+ ['11','Fistula, anal fissure, haemorrhoids, pilonidal sinus/fistula, rectal prolapse and stress incontinence'],
+ ['12','Varicose veins and varicose ulcers'],['13','All transplants and related surgeries'],
+ ['14','Congenital internal disease/defect, except specific unborn/newborn coverage']
+ ];
+ const table=rows=>'<table class="qtable"><tbody>'+rows.map(([a,b])=>'<tr><th>'+esc(a)+'</th><td>'+esc(b)+'</td></tr>').join('')+'</tbody></table>';
+ const sec=t=>'<h2 class="qsection">'+esc(t)+'</h2>';
+ const head='<div class="qhead"><div class="qeyebrow">PERSONALISED HEALTH INSURANCE QUOTATION</div><div class="qtitle">Star Women Care Insurance Policy</div><div class="qsub">UIN SHAHLIP27051V032627 · Prepared '+esc(date)+'</div></div>';
+ const foot=(i,n)=>'<div class="qfooter"><span>Indicative agent-prepared quotation. Insurer confirmation and official policy wording prevail.</span><span>Page '+i+' of '+n+'</span></div>';
+ const page=(content,i,n)=>'<section class="qpage">'+head+content+foot(i,n)+'</section>';
+ const premium=q.rows.map(r=>'<div class="qpremium"><span>'+r.term+' '+(r.term===1?'YEAR':'YEARS')+'</span><strong>'+money(r.amount)+'</strong><small>Indicative total premium</small><small style="margin-top:7px;font-weight:700;color:'+(r.amount>=10000?'#12633d':'#8b5e29')+'">'+(r.amount>=10000?'BNPL Facility Available':'BNPL Not Available')+'</small></div>').join('');
+ const details=[...(quoteCustomer?[['Quotation For',quoteCustomer]]:[]),['Policy Status',status],['Cover Type',cover],['Sum Insured',currency(si)],['Family Composition',q.family]];
+ const members=q.members.map(m=>[m.member,m.age+' years']);
+ const salutation=quoteCustomer||'Customer';
+ const letter=quoteLanguage==='bn'?'প্রিয় '+salutation+',\n\nআপনার পরিবারের স্বাস্থ্য সুরক্ষার জন্য Star Women Care Insurance Policy-এর একটি ব্যক্তিগত quotation প্রস্তুত করা হয়েছে। নিচে নির্বাচিত কভারেজ, প্রিমিয়াম এবং গুরুত্বপূর্ণ সুবিধার বিবরণ দেওয়া হলো। সম্পূর্ণ শর্ত জানতে আপনার Health Insurance Advisor-এর সঙ্গে যোগাযোগ করুন।':quoteLanguage==='hi'?'प्रिय '+salutation+',\n\nआपके परिवार की स्वास्थ्य सुरक्षा के लिए Star Women Care Insurance Policy का व्यक्तिगत quotation प्रस्तुत है। नीचे चुनी गई coverage, premium और प्रमुख benefits दिए गए हैं। पूरी शर्तों के लिए अपने Health Insurance Advisor से संपर्क करें।':'Dear '+salutation+',\n\nPlease find your personalised Star Women Care Insurance Policy quotation, including the proposed coverage, premium options and key policy benefits. Your Health Insurance Advisor can explain the full terms and eligibility.';
+ const note='<p class="qnote">All benefits are subject to the policy schedule, eligibility, sublimits, waiting periods, exclusions, underwriting and admissibility. The annual premium chart used for calculation predates this UIN; final premiums and long-term discounts must be verified with the insurer. No optional cancer cover included.</p>';
+ const p1=page('<div class="qhero"><span>PROPOSED SUM INSURED</span><strong>'+money(si)+'</strong><small>'+esc(status)+' · '+esc(cover)+'</small></div><div class="qletter">'+esc(letter.replace(/\\n/g,'\n'))+'</div>'+sec('Quotation Details')+table(details)+sec('Premium Options')+'<div class="qpremiums">'+premium+'</div>'+note,1,4);
+ const p2=page(sec('Covered Members')+table(members)+sec('Benefits & Coverage Amount')+table(benefits.slice(0,17))+note,2,4);
+ const p3=page(sec('Additional Benefits & Coverage Amount')+table(benefits.slice(17))+sec('Important Waiting Periods')+table(waits)+note,3,4);
+ const p4=page(sec('24-Month Specified Disease / Procedure Waiting Period (Excl 02)')+table(exclusions)+'<p class="qnote">Condensed summary of the 14 specified categories in Star Women Care Insurance Policy wordings (UIN SHAHLIP27051V032627). Accident-related exceptions, portability credits, increased Sum Insured and other benefit-specific conditions can change applicability. Refer to the official wording for exact scope.</p>',4,4);
+ return p1+p2+p3+p4;
+}
+
 // Browser-native printing avoids html2canvas blank screenshots and supports Indic shaping.
 function quotePrint(){
  if(!quoteLanguage)throw Error('Choose Bengali, Hindi or English first.');
  const w=window.open('','_blank');if(!w)throw Error('Allow pop-ups and try again.');
  const styles=`@page{size:A4;margin:0}*{box-sizing:border-box}html,body{margin:0;padding:0;color:#18314a;font-family:'Noto Sans Bengali','Nirmala UI','Noto Sans Devanagari',Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}.qpage{width:210mm;min-height:297mm;padding:14mm 15mm 20mm;position:relative;break-after:page;page-break-after:always;background:linear-gradient(145deg,#f3f9ff 0%,#fff 42%,#f8fbff 100%)}.qpage:last-child{break-after:auto;page-break-after:auto}.qpage:before{content:'Star Agent Sathi';position:absolute;top:49%;left:18%;transform:rotate(-32deg);font-size:39px;font-weight:800;color:rgba(26,96,150,.045);pointer-events:none;white-space:nowrap}.qhead{border-bottom:2px solid #91bcd9;padding-bottom:10px;margin-bottom:12px}.qeyebrow{font-size:9px;letter-spacing:1.5px;color:#5588ac;font-weight:bold}.qtitle{font-size:24px;color:#0b5087;font-weight:800;margin-top:4px}.qsub{font-size:10px;color:#657e90;margin-top:4px}.qhero{background:#0b568d;color:#fff;border-radius:10px;padding:15px 18px;margin:13px 0}.qhero span,.qhero small{display:block;font-size:10px;letter-spacing:.6px}.qhero strong{display:block;font-size:29px;margin:4px 0}.qletter{font-size:11px;line-height:1.5;white-space:pre-line;margin:12px 0}.qsection{font-size:13px;color:#11588a;background:#e5f1fa;border-left:3px solid #e4a74c;padding:7px 10px;margin:13px 0 6px}.qtable{width:100%;border-collapse:collapse;font-size:10px;line-height:1.3;table-layout:fixed;margin:6px 0}.qtable th,.qtable td{padding:5px 8px;border-bottom:1px solid #dce9f2;text-align:left;vertical-align:top;overflow-wrap:anywhere}.qtable th{width:52%;font-weight:650;color:#234d6c}.qtable tr:nth-child(even){background:#eff7fd}.qpremiums{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.qpremium{background:#e8f3fc;border:1px solid #bdd8ea;border-radius:9px;padding:12px 10px}.qpremium span,.qpremium small{display:block;font-size:9px;color:#56758b}.qpremium strong{display:block;color:#09568d;font-size:19px;margin:7px 0}.qnote{font-size:9px;line-height:1.5;color:#526d80;margin:11px 0}.qfooter{position:absolute;bottom:8mm;left:15mm;right:15mm;display:flex;justify-content:space-between;gap:14px;border-top:1px solid #c9ddea;padding-top:6px;font-size:8px;color:#61798c}.qfooter span:last-child{white-space:nowrap}tr{break-inside:avoid}@media screen{body{background:#dbe8f1}.qpage{margin:12px auto;box-shadow:0 3px 15px #1234}}`;
- w.document.open();w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Star Health Assure Quotation</title><style>'+styles+'</style></head><body>'+quoteHtml()+'</body></html>');w.document.close();w.focus();
+ w.document.open();w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+quoteEsc(quotationSnapshot?.policy||'Health Insurance')+' Quotation</title><style>'+styles+'</style></head><body>'+quoteHtml()+'</body></html>');w.document.close();w.focus();
  let printed=false;const doPrint=()=>{if(printed)return;printed=true;setTimeout(()=>{try{w.print()}catch(e){console.error(e)}},550)};
  w.addEventListener('load',doPrint,{once:true});if(w.document.readyState==='complete')doPrint();return w;
 }
@@ -483,7 +563,7 @@ function quoteSend(){
   const c=$('quoteContact').value.trim();
   if(quoteChannel==='email'&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c))throw Error('Enter a valid email address.');
   if(quoteChannel==='whatsapp'&&!/^\+?\d{10,15}$/.test(c.replace(/[\s-]/g,'')))throw Error('Enter a valid WhatsApp number with country code if required.');
-  const dest=quoteChannel==='whatsapp'?'https://wa.me/'+c.replace(/\D/g,'')+'?text='+encodeURIComponent('Please find the Star Health Assure quotation PDF attached.'):'mailto:'+encodeURIComponent(c)+'?subject='+encodeURIComponent('Star Health Assure Quotation')+'&body='+encodeURIComponent('Please find the Star Health Assure quotation attached.');
+  const dest=quoteChannel==='whatsapp'?'https://wa.me/'+c.replace(/\D/g,'')+'?text='+encodeURIComponent('Please find the '+quotationSnapshot.policy+' quotation PDF attached.'):'mailto:'+encodeURIComponent(c)+'?subject='+encodeURIComponent(quotationSnapshot.policy+' Quotation')+'&body='+encodeURIComponent('Please find the '+quotationSnapshot.policy+' quotation attached.');
   quotePrint();
   $('quoteShareHelp').textContent='Save the PDF from the print window first. Then tap Open '+(quoteChannel==='email'?'Email':'WhatsApp')+' below and attach that saved PDF.';
   let btn=$('quoteOpenRecipient');
