@@ -32,6 +32,44 @@
 .bnpl-table td:last-child{font-weight:700}
 @media(max-width:420px){.bnpl-grid{grid-template-columns:1fr}}
 .save-toggle{display:inline-block;width:auto;align-self:center;font-size:13px;font-weight:700;padding:3px 0;border:0;border-radius:0;background:transparent;color:#16803c;margin:3px 0 7px;cursor:pointer;text-decoration:none;box-shadow:none}.save-toggle:hover,.save-toggle:focus-visible{color:#0b6230;text-decoration:underline;outline-offset:3px}.savings-breakup{font-size:11px;text-align:left;background:#f4fbf6;border:1px solid #c7e6d1;border-radius:8px;padding:8px;margin-bottom:8px}.savings-breakup[hidden]{display:none}.savings-line{display:flex;justify-content:space-between;gap:5px;margin:5px 0}.savings-line strong{font-size:11px;color:#176337}.savings-breakup .hint{font-size:10px;margin-top:6px}
+
+/* Savings link: override the generic premium-card button rules. */
+.premium-card button.save-toggle,
+.premium-card button.save-toggle[aria-expanded="true"]{
+ display:inline-block;width:auto;max-width:100%;padding:3px 0;margin:3px auto 7px;
+ border:0!important;border-radius:0;background:transparent!important;
+ box-shadow:none;color:#16803c!important;font-size:13px;font-weight:700;
+ line-height:1.4;text-decoration:none;cursor:pointer;
+}
+.premium-card button.save-toggle:hover,.premium-card button.save-toggle:focus-visible{
+ color:#09662c!important;text-decoration:underline;
+}
+.premium-card .savings-breakup:not([hidden]){display:block!important;}
+.premium-card .savings-breakup[hidden]{display:none!important;}
+
+/* Atom Pro-inspired premium breakdown modal; green text link without a button box. */
+.premium-card button.save-toggle,.premium-card button.save-toggle[aria-expanded="true"]{appearance:none!important;-webkit-appearance:none!important;background:none!important;background-color:transparent!important;border:none!important;outline:none;box-shadow:none!important;color:#16803c!important;padding:0!important;margin:5px auto 9px!important;min-height:0!important;width:auto!important;font-weight:750!important;text-decoration:none!important;cursor:pointer}
+.premium-card button.save-toggle:hover{text-decoration:underline!important;color:#086c30!important}
+.premium-breakup-overlay{position:fixed;inset:0;z-index:9999;background:rgba(15,23,42,.53);display:flex;justify-content:center;align-items:flex-end;padding:12px}
+.premium-breakup-overlay[hidden]{display:none!important}
+.premium-breakup-sheet{background:#fff;width:min(100%,580px);max-height:90vh;overflow:auto;border-radius:22px 22px 15px 15px;box-shadow:0 15px 45px #12253b50;color:#17243a;font-family:system-ui,Arial,sans-serif}
+.pb-head{display:flex;justify-content:space-between;align-items:center;padding:20px 22px;border-bottom:1px solid #e4e8ef;font-size:21px;font-weight:750}
+.pb-close{border:0!important;background:transparent!important;box-shadow:none!important;color:#657385!important;width:auto!important;font-size:30px!important;line-height:1!important;padding:0!important;cursor:pointer}
+.pb-body{padding:20px 22px 25px}
+.pb-policy{background:#f7f9fc;border:1px solid #e8edf3;border-radius:15px;padding:19px}
+.pb-policy-name{font-weight:750;font-size:16px;padding-bottom:17px;border-bottom:1px solid #e2e6ec}
+.pb-facts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0 24px}
+.pb-fact{background:#fff;border:1px solid #e7eaf0;border-radius:12px;padding:12px}
+.pb-fact span{display:block;color:#7a8391;font-size:12px;margin-bottom:5px}
+.pb-fact strong{font-size:15px}
+.pb-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:15px;margin:15px 0}
+.pb-row span:last-child{white-space:nowrap;font-variant-numeric:tabular-nums}
+.pb-discount-items{padding-left:8px}
+.pb-discount-items .pb-row{font-size:14px;color:#677281;margin:12px 0}
+.pb-total{border-top:1px solid #e1e6ec;padding-top:17px;font-weight:750}
+.pb-overall{border:1px solid #e5eaf0;background:#f9fafc;border-radius:14px;padding:19px;margin-top:24px;font-weight:750;font-size:17px;display:flex;justify-content:space-between}
+.pb-note{font-size:11px;color:#687589;line-height:1.5;margin:15px 0 0}
+@media(min-width:700px){.premium-breakup-overlay{align-items:center}.premium-breakup-sheet{border-radius:22px}}
 </style>
 </head>
 <body>
@@ -368,14 +406,43 @@ function discountBreakdownForTerm(policy,members,si,zone,term,type,status,deduct
  }
  return {early:Math.round(early),longTerm:Math.round(longTerm),total:Math.round(early+longTerm)};
 }
-function renderSavingsBreakup(target,breakdown,term){
- const details=document.createElement('div');details.className='savings-breakup';details.hidden=true;
- const lines=[['Early Entry Discount',breakdown.early],['Long Term Discount',breakdown.longTerm]];
- for(const [name,value] of lines){if(value<=0)continue;const line=document.createElement('div');line.className='savings-line';const a=document.createElement('span');a.textContent=name;const b=document.createElement('strong');b.textContent=currency(value);line.append(a,b);details.appendChild(line)}
- const note=document.createElement('p');note.className='hint';note.textContent='Discounts already included in the displayed premium. Figures are rounded; insurer confirmation required.';details.appendChild(note);
- const button=document.createElement('button');button.type='button';button.className='save-toggle';button.textContent='Save '+currency(breakdown.total)+' ▾';button.setAttribute('aria-expanded','false');
- button.addEventListener('click',()=>{details.hidden=!details.hidden;button.setAttribute('aria-expanded',String(!details.hidden));button.textContent='Save '+currency(breakdown.total)+(details.hidden?' ▾':' ▴')});
- target.append(button,details);
+function showPremiumBreakup(breakdown,term,amount){
+ const current=window.quotationSnapshot||{};
+ const si=Number(current.sumInsured)||0;
+ const policy=current.policy||'';
+ const policyName=policy===POLICIES.assure?'Star Health Assure Insurance Policy':policy===POLICIES.womencare?'Star Health Women Care Insurance Policy':policy===POLICIES.comprehensive?'Star Health Comprehensive Insurance Policy':String(policy||'Health Insurance Policy');
+ const discounts=[['Early Entry Discount',breakdown.early],['Long Term Discount',breakdown.longTerm]].filter(x=>x[1]>0);
+ // The calculator does not separately expose floater or health discounts; do not invent them.
+ const totalDiscount=discounts.reduce((sum,x)=>sum+x[1],0);
+ const base=amount+totalDiscount;
+ document.querySelector('.premium-breakup-overlay')?.remove();
+ const overlay=document.createElement('div');overlay.className='premium-breakup-overlay';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','Total Premium');
+ const sheet=document.createElement('div');sheet.className='premium-breakup-sheet';
+ const head=document.createElement('div');head.className='pb-head';head.textContent='Total Premium';
+ const close=document.createElement('button');close.className='pb-close';close.type='button';close.textContent='×';close.setAttribute('aria-label','Close premium breakup');head.appendChild(close);
+ const body=document.createElement('div');body.className='pb-body';
+ const panel=document.createElement('div');panel.className='pb-policy';
+ const name=document.createElement('div');name.className='pb-policy-name';name.textContent=policyName;panel.appendChild(name);
+ const facts=document.createElement('div');facts.className='pb-facts';
+ for(const [label,value] of [['Sum Insured',si?currency(si):'As selected'],['Policy Period',term+' '+(term===1?'Year':'Years')]]){
+  const fact=document.createElement('div');fact.className='pb-fact';const cap=document.createElement('span');cap.textContent=label;const strong=document.createElement('strong');strong.textContent=value;fact.append(cap,strong);facts.appendChild(fact);
+ }panel.appendChild(facts);
+ const addRow=(parent,label,value,cls='')=>{const row=document.createElement('div');row.className='pb-row '+cls;const l=document.createElement('span');l.textContent=label;const v=document.createElement('span');v.textContent=value;row.append(l,v);parent.appendChild(row)};
+ addRow(panel,'Base Premium',currency(base));
+ addRow(panel,'Discount(s)','−'+currency(totalDiscount));
+ const items=document.createElement('div');items.className='pb-discount-items';for(const [label,value] of discounts)addRow(items,label,'−'+currency(value));panel.appendChild(items);
+ addRow(panel,'Total Premium',currency(amount),'pb-total');body.appendChild(panel);
+ const overall=document.createElement('div');overall.className='pb-overall';const ot=document.createElement('span');ot.textContent='Overall Premium';const ov=document.createElement('span');ov.textContent=currency(amount);overall.append(ot,ov);body.appendChild(overall);
+ const note=document.createElement('p');note.className='pb-note';note.textContent='Base Premium shown here is the amount before the separately calculated Early Entry and Long Term discounts. Other pricing adjustments already included in the calculator rates are not broken out. Insurer confirmation required.';body.appendChild(note);
+ sheet.append(head,body);overlay.appendChild(sheet);document.body.appendChild(overlay);
+ const dismiss=()=>{overlay.remove();document.removeEventListener('keydown',escHandler)};
+ const escHandler=e=>{if(e.key==='Escape')dismiss()};
+ close.addEventListener('click',dismiss);overlay.addEventListener('click',e=>{if(e.target===overlay)dismiss()});document.addEventListener('keydown',escHandler);close.focus();
+}
+function renderSavingsBreakup(target,breakdown,term,amount){
+ const button=document.createElement('button');button.type='button';button.className='save-toggle';button.textContent='Save '+currency(breakdown.total)+' ▾';
+ button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();showPremiumBreakup(breakdown,term,amount)});
+ target.appendChild(button);
 }
 function setupBnpl(rows){
   bnplEligibleRows=rows.filter(r=>r.amount>=10000&&BNPL_CONFIG[r.term]);
@@ -387,7 +454,7 @@ function setupBnpl(rows){
     const label=document.createElement('span');label.className='term-label';label.textContent=term+' '+(term===1?'Year':'Years');
     const price=document.createElement('strong');price.className='term-price';price.textContent=currency(amount)+'/-';
     card.append(label,price);
-    if(savings?.total>0)renderSavingsBreakup(card,savings,term);
+    if(savings?.total>0)renderSavingsBreakup(card,savings,term,amount);
     if(amount>=10000&&BNPL_CONFIG[term]){
       const btn=document.createElement('button');btn.type='button';btn.textContent='BNPL Details';btn.setAttribute('aria-expanded','false');
       btn.addEventListener('click',()=>{
