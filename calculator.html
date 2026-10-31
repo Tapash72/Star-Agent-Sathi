@@ -767,11 +767,15 @@ function comprehensiveQuoteHtml(){
   ['14','Congenital internal diseases/defects, except specific newborn benefit provisions']
  ];
  const note='<p class="qnote">Indicative chart-based premiums only. 2nd year: estimated 10% discount; 3rd year: estimated 12.5% discount. Ages advance annually. No GST added. Zone must be manually confirmed for Comprehensive. Bima Pay is an indicative estimator, not financing approval. Coverage, waiting periods, sublimits, co-payment, discounts and premium must be checked against the insurer quote and official policy schedule. Policy wording UIN SHAHLIP26044V092526; policy version and rate chart may differ.</p>';
- const p1=page('<div class="qhero"><span>PROPOSED SUM INSURED</span><strong>'+money(si)+'</strong><small>'+esc(status)+' · '+esc(cover)+'</small></div><div class="qletter">'+esc(letter.replace(/\\n/g,'\n'))+'</div>'+sec('Quotation Details')+table(details)+sec('Premium Options')+'<div class="qpremiums">'+premium+'</div>'+quoteDiscount.earlyHtml+quoteDiscount.noteHtml+note,1,4);
- const p2=page(sec('Covered Members')+table(members)+sec('Benefits & Coverage')+table(benefits.slice(0,10))+note,2,4);
- const p3=page(sec('Additional Benefits & Coverage')+table(benefits.slice(10))+sec('Important Waiting Periods & Conditions')+table(waits)+note,3,4);
- const p4=page(sec('24-Month Specified Disease / Procedure Waiting Period (Excl 02)')+table(exclusions)+'<p class="qnote">Condensed list of 14 categories in Star Comprehensive Insurance Policy wording (UIN SHAHLIP26044V092526). Accident exceptions, portability/migration continuity, increased Sum Insured and longer pre-existing disease waiting periods may change applicability. Refer to the official policy wording for exact scope.</p>',4,4);
- return p1+p2+p3+p4;
+ const p1=page('<div class="qhero"><span>PROPOSED SUM INSURED</span><strong>'+money(si)+'</strong><small>'+esc(status)+' · '+esc(cover)+'</small></div><div class="qletter">'+esc(letter.replace(/\\n/g,'\n'))+'</div>'+sec('Quotation Details')+table(details)+sec('Premium Options')+'<div class="qpremiums">'+premium+'</div>'+quoteDiscount.earlyHtml+quoteDiscount.noteHtml+note,1,6);
+ const p2=page(sec('Covered Members')+table(members)+sec('Benefits & Coverage')+table(benefits.slice(0,10))+note,2,6);
+ const p3=page(sec('Additional Benefits & Coverage')+table(benefits.slice(10))+sec('Important Waiting Periods & Conditions')+table(waits)+note,3,6);
+ const p4=page(sec('24-Month Specified Disease / Procedure Waiting Period (Excl 02)')+table(exclusions)+'<p class="qnote">Condensed list of 14 categories in Star Comprehensive Insurance Policy wording (UIN SHAHLIP26044V092526). Accident exceptions, portability/migration continuity, increased Sum Insured and longer pre-existing disease waiting periods may change applicability. Refer to the official policy wording for exact scope.</p>',4,6);
+ const annexureRows=sharedNonMedicalList.map((item,i)=>[String(i+1),item]);
+ const annexureNote='<p class="qnote">Reference List I item names reproduced from Women Care wordings; Comprehensive-specific coverage and inclusion must be verified against its official policy wordings. This annexure is not a confirmation of coverage.</p>';
+ const p5=page(sec('Annexure: Non-Medical Items (Consumables) · List I (1–34)')+table(annexureRows.slice(0,34))+annexureNote,5,6);
+ const p6=page(sec('Annexure: Non-Medical Items (Consumables) · List I (35–68)')+table(annexureRows.slice(34))+annexureNote,6,6);
+ return p1+p2+p3+p4+p5+p6;
 }
 
 // Women Care quotation uses only Women Care benefits from the 2026 brochure/wordings.
@@ -859,68 +863,6 @@ function womenCareQuoteHtml(){
  const annexureTwo=page(sec('Annexure: Non-Medical Items (Consumables) · List I (35–68)')+table(annexureRows.slice(34))+annexureNote,6,6);
  return p1+p2+p3+p4+annexureOne+annexureTwo;
 }
-// Comprehensive quotation: sourced from Star Comprehensive policy wordings UIN SHAHLIP26044V092526.
-function comprehensiveQuoteHtml(){
- const quoteDiscount=quoteDiscountDetails(quotationSnapshot);
- const q=quotationSnapshot;if(!q)throw Error('Calculate premium first.');
- const esc=quoteEsc,money=n=>esc(currency(n)),si=q.sumInsured;
- const date=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'});
- const status=({fresh:'Fresh',renewal:'Renewal',portability:'Portability'})[q.status]||q.status;
- const cover=q.type==='floater'?'Family Floater':'Individual';
- const table=rows=>'<table class="qtable"><tbody>'+rows.map(([a,b])=>'<tr><th>'+esc(a)+'</th><td>'+esc(b)+'</td></tr>').join('')+'</tbody></table>';
- const sec=t=>'<h2 class="qsection">'+esc(t)+'</h2>';
- const head='<div class="qhead"><div class="qeyebrow">PERSONALISED HEALTH INSURANCE QUOTATION</div><div class="qtitle">Star Comprehensive Insurance Policy</div><div class="qsub">UIN SHAHLIP26044V092526 · Prepared '+esc(date)+'</div></div>';
- const foot=(i,n)=>'<div class="qfooter"><span>Indicative agent quotation. Official insurer quote and policy schedule prevail.</span><span>Page '+i+' of '+n+'</span></div>';
- const page=(content,i,n)=>'<section class="qpage">'+head+content+foot(i,n)+'</section>';
- const premium=q.rows.map(r=>'<div class="qpremium"><span>'+r.term+' '+(r.term===1?'YEAR':'YEARS')+'</span><strong>'+money(r.amount)+'</strong>'+quoteDiscount.savingsHtml(r)+'<small>Indicative total premium</small><small style="margin-top:7px;font-weight:700;color:'+(r.amount>=10000?'#12633d':'#8b5e29')+'">'+(r.amount>=10000?'BNPL Facility Available (Bima Pay)':'BNPL Not Available')+'</small></div>').join('');
- const details=[...(quoteCustomer?[['Quotation For',quoteCustomer]]:[]),['Policy Status',status],['Cover Type',cover],['Sum Insured',currency(si)],['Family Composition',q.family],['Premium Zone','Zone '+q.zone],['Deductible','None applied']];
- const members=q.members.map(m=>[m.member,m.age+' years']);
- const name=quoteCustomer||'Customer';
- const letter=quoteLanguage==='bn'?'প্রিয় '+name+',\n\nআপনার জন্য Star Comprehensive Insurance Policy-এর ব্যক্তিগত quotation প্রস্তুত করা হয়েছে। নিচে নির্বাচিত coverage, premium এবং গুরুত্বপূর্ণ policy benefits-এর সংক্ষিপ্ত বিবরণ দেওয়া হলো। সম্পূর্ণ শর্ত জানতে আপনার Health Insurance Advisor-এর সঙ্গে যোগাযোগ করুন।':quoteLanguage==='hi'?'प्रिय '+name+',\n\nआपके लिए Star Comprehensive Insurance Policy का व्यक्तिगत quotation प्रस्तुत है। इसमें चुनी हुई coverage, premium और महत्वपूर्ण policy benefits का सारांश है। पूरी शर्तों के लिए अपने Health Insurance Advisor से संपर्क करें।':'Dear '+name+',\n\nPlease find your personalised Star Comprehensive Insurance Policy quotation, with your selected coverage, premium options and a summary of key benefits. Please consult your Health Insurance Advisor for the full policy conditions.';
- const delivery=si===500000?[15000,20000,100000]:si===750000?[25000,40000,100000]:si<=2500000?[30000,50000,100000]:[50000,100000,200000];
- const hospitalCash=si===500000?500:si<=1000000?750:si<=2000000?1000:si===2500000?1500:2500;
- const opd=({500000:1200,750000:1500,1000000:2100,1500000:2400,2000000:3000,2500000:3300})[si]||5000;
- const dental=si<=750000?5000:si<=2500000?10000:15000;
- const adults=q.members.filter(m=>!m.member.startsWith('Child'));
- const children=q.members.filter(m=>m.member.startsWith('Child'));
- const eligibleCouple=q.type==='floater'&&q.members.some(m=>m.member==='Self')&&q.members.some(m=>m.member==='Spouse');
- const copayMembers=adults.filter(m=>m.age>=61);
- const copayText=copayMembers.length?'10% Co-pay for applicable insured member(s): '+copayMembers.map(m=>m.member+' ('+m.age+')').join(', ')+'; other members: No Co-pay (subject to policy exceptions)':'No Co-pay (standard age-at-entry rule; subject to policy exceptions)';
- const maternityText=eligibleCouple?'Eligible couple: up to ':'Not Applicable to selected family composition; eligible self-and-spouse cover required. Reference limit: ';
-
- const benefits=[
-  ['In-Patient Hospitalisation','Up to Sum Insured ('+currency(si)+')'],
-  ['Room Rent','Private Single A/C Room (excluding deluxe room / suite)'],
-  ['ICU Charges','Actual'],
-  ['Day Care Procedures','Up to Sum Insured ('+currency(si)+')'],
-  ['Pre-Hospitalisation','60 days'],
-  ['Post-Hospitalisation','90 days'],
-  ['Road Ambulance','Actual admissible ambulance expenses; no separate monetary cap stated in core clause'],
-  ['Air Ambulance','Up to ₹2,50,000 per hospitalisation; maximum ₹5,00,000 per policy period'],
-  ['Organ Donor Expenses','Additional cover up to Basic Sum Insured ('+currency(si)+')'],
-  ['AYUSH Treatment','Up to Sum Insured ('+currency(si)+')'],
-  ['Home Care Treatment','10% of Sum Insured, maximum ₹5,00,000 ('+currency(Math.min(si*.10,500000))+')'],
-  ['Automatic Restoration','100% of Basic Sum Insured ('+currency(si)+'), once per policy period after exhaustion'],
-  ['Cumulative Bonus',si===500000?'50% of Basic Sum Insured per claim-free year; maximum 100%':'100% of Basic Sum Insured after a claim-free year; maximum 100%'],
-  ['Normal Delivery',maternityText+currency(delivery[0])+' per delivery; 24-month waiting applies if eligible'],
-  ['Caesarean Delivery',maternityText+currency(delivery[1])+' per delivery; 24-month waiting applies if eligible'],
-  ['Newborn Hospitalisation',eligibleCouple?'Up to '+currency(delivery[2])+' under eligible delivery benefit':'Not Applicable without eligible delivery benefit; reference limit '+currency(delivery[2]) ],
-  ['Hospital Cash','₹'+hospitalCash.toLocaleString('en-IN')+' per completed eligible day; up to 7 days per hospitalisation, 120 days per policy period; first 24h excluded'],
-  ['Outpatient Medical Consultation','Up to '+currency(opd)+' per policy period; maximum ₹300 per consultation'],
-  ['Dental & Ophthalmic OPD','Up to '+currency(dental)+' per block of 3 continuous policy years'],
-  ['Preventive Health Check-up',si<=1000000?'Package A, once per policy year for insured adults':'Package B, once per policy year for insured adults'],
-  ['Modern Treatments','Treatment-specific SI-based sublimits; see policy table, Section II.4'],
-  ['Cataract / Specified Procedures','Up to applicable Sum Insured, subject to specified-disease waiting period and policy wording'],
-  ['Co-Payment',copayText]
- ];
- const annexureRows=sharedNonMedicalList.map((name,i)=>[String(i+1),name]);
- const annexureNote='<p class="qnote">Reference List I item names reproduced from Women Care wordings; Comprehensive-specific coverage and inclusion must be verified against its official policy wordings. This annexure is not a confirmation of coverage.</p>';
- const p5=page(sec('Annexure: Non-Medical Items (Consumables) · List I (1–34)')+table(annexureRows.slice(0,34))+annexureNote,5,6);
- const p6=page(sec('Annexure: Non-Medical Items (Consumables) · List I (35–68)')+table(annexureRows.slice(34))+annexureNote,6,6);
- return p1+p2+p3+p4+p5+p6;
-}
-
-
 // Multilingual quotation presentation. Insurance feature names, medical names and official List I stay in English.
 const QUOTE_TRANSLATIONS = {"PERSONALISED HEALTH INSURANCE QUOTATION": ["ব্যক্তিগত স্বাস্থ্যবিমার Quotation", "व्यक्तिगत स्वास्थ्य बीमा Quotation"], "PROPOSED SUM INSURED": ["প্রস্তাবিত Sum Insured", "प्रस्तावित Sum Insured"], "Quotation Details": ["Quotation-এর বিবরণ", "Quotation का विवरण"], "Premium Options": ["Premium-এর বিকল্প", "Premium के विकल्प"], "Covered Members": ["বিমার আওতাভুক্ত সদস্য", "बीमा में शामिल सदस्य"], "Benefits & Coverage Amount": ["Benefits ও Coverage Amount", "Benefits और Coverage Amount"], "Additional Benefits & Coverage Amount": ["অতিরিক্ত Benefits ও Coverage Amount", "अतिरिक्त Benefits और Coverage Amount"], "Important Waiting Periods & Conditions": ["গুরুত্বপূর্ণ Waiting Periods ও শর্তাবলি", "महत्त्वपूर्ण Waiting Periods और शर्तें"], "24-Month Specified Disease / Procedure Waiting Period (Excl 02)": ["২৪ মাসের নির্দিষ্ট রোগ / চিকিৎসার Waiting Period (Excl 02)", "२४ महीने की निर्दिष्ट रोग / उपचार Waiting Period (Excl 02)"], "Annexure: Non-Medical Items (Consumables) · List I (1–34)": ["সংযোজনী: Non-Medical Items (Consumables) · List I (1–34)", "परिशिष्ट: Non-Medical Items (Consumables) · List I (1–34)"], "Annexure: Non-Medical Items (Consumables) · List I (35–68)": ["সংযোজনী: Non-Medical Items (Consumables) · List I (35–68)", "परिशिष्ट: Non-Medical Items (Consumables) · List I (35–68)"], "Quotation For": ["যাঁর জন্য Quotation", "जिसके लिए Quotation"], "Policy Status": ["Policy-এর অবস্থা", "Policy की स्थिति"], "Cover Type": ["Cover-এর ধরন", "Cover का प्रकार"], "Family Composition": ["পরিবারের সদস্যবিন্যাস", "परिवार की संरचना"], "Age-wise Co-payment": ["বয়সভিত্তিক Co-payment", "आयु-आधारित Co-payment"], "Premium Zone": ["Premium Zone", "Premium Zone"], "Annual Aggregate Deductible": ["বার্ষিক Aggregate Deductible", "वार्षिक Aggregate Deductible"], "Deductible": ["Deductible", "Deductible"], "Fresh": ["নতুন Policy", "नई Policy"], "Renewal": ["Renewal", "Renewal"], "Portability": ["Portability", "Portability"], "Individual": ["Individual", "Individual"], "Family Floater": ["Family Floater", "Family Floater"], "None": ["নেই", "नहीं"], "None applied": ["প্রযোজ্য নয়", "लागू नहीं"], "Up to Sum Insured": ["Sum Insured পর্যন্ত", "Sum Insured तक"], "Actuals": ["প্রকৃত অনুমোদিত খরচ অনুযায়ী", "वास्तविक स्वीकृत खर्च के अनुसार"], "At Actuals": ["প্রকৃত অনুমোদিত খরচ অনুযায়ী", "वास्तविक स्वीकृत खर्च के अनुसार"], "As per Policy Terms": ["Policy-এর শর্ত অনুযায়ী", "Policy की शर्तों के अनुसार"], "Available": ["উপলব্ধ", "उपलब्ध"], "Not Available": ["উপলব্ধ নয়", "उपलब्ध नहीं"], "Indicative total premium": ["আনুমানিক মোট Premium", "अनुमानित कुल Premium"], "BNPL Facility Available": ["BNPL সুবিধা উপলব্ধ", "BNPL सुविधा उपलब्ध"], "BNPL Facility Available (Bima Pay)": ["BNPL সুবিধা উপলব্ধ (Bima Pay)", "BNPL सुविधा उपलब्ध (Bima Pay)"], "BNPL Not Available": ["BNPL সুবিধা উপলব্ধ নয়", "BNPL सुविधा उपलब्ध नहीं"], "30 days (accidents excepted)": ["৩০ দিন (Accident ব্যতীত)", "३० दिन (Accident को छोड़कर)"], "24 months (subject to exceptions and continuity credit)": ["২৪ মাস (ব্যতিক্রম ও Continuity Credit প্রযোজ্য)", "२४ महीने (अपवाद और Continuity Credit लागू)"], "36 months for 1/2-year terms; 30 months for 3-year term": ["১/২ বছরের মেয়াদে ৩৬ মাস; ৩ বছরের মেয়াদে ৩০ মাস", "१/२ वर्ष की अवधि में ३६ महीने; ३ वर्ष की अवधि में ३० महीने"], "24 months, with benefit-specific eligibility": ["২৪ মাস, সংশ্লিষ্ট Benefit-এর যোগ্যতার শর্তসাপেক্ষে", "२४ महीने, संबंधित Benefit की पात्रता शर्तों के अधीन"], "As per age-at-entry and policy conditions": ["Policy-তে প্রবেশের বয়স ও শর্ত অনুযায়ী", "Policy में प्रवेश की आयु और शर्तों के अनुसार"], "Initial Waiting Period": ["প্রাথমিক Waiting Period", "प्रारंभिक Waiting Period"], "Specified Diseases / Procedures": ["নির্দিষ্ট রোগ / চিকিৎসা", "निर्दिष्ट रोग / उपचार"], "Pre-Existing Diseases": ["আগে থেকে থাকা রোগ (PED)", "पहले से मौजूद रोग (PED)"], "Co-payment": ["Co-payment", "Co-payment"], "Delivery / In-Utero Fetal Surgery / ART": ["Delivery / In-Utero Fetal Surgery / ART", "Delivery / In-Utero Fetal Surgery / ART"], "Consult your advisor": ["আপনার Advisor-এর সঙ্গে কথা বলুন", "अपने Advisor से संपर्क करें"], "No Deductible": ["Deductible নেই", "Deductible नहीं"], "Insured Person": ["বিমাকৃত ব্যক্তি", "बीमित व्यक्ति"], "Prepared": ["প্রস্তুত করা হয়েছে", "तैयार किया गया"], "Page": ["পৃষ্ঠা", "पृष्ठ"], "YEAR": ["বছর", "वर्ष"], "YEARS": ["বছর", "वर्ष"], "years": ["বছর", "वर्ष"], "days": ["দিন", "दिन"], "per complete 24 hours": ["প্রতি পূর্ণ ২৪ ঘণ্টায়", "प्रत्येक पूरे २४ घंटे पर"], "per claim-free year; max": ["প্রতি Claim-free বছরে; সর্বোচ্চ", "प्रति Claim-free वर्ष; अधिकतम"], "per restoration; unlimited restorations*": ["প্রতি Restoration-এ; সীমাহীন Restoration*", "प्रत्येक Restoration पर; असीमित Restoration*"], "Applicable sublimit or 20% SI, whichever lower": ["প্রযোজ্য Sublimit অথবা SI-এর ২০%, যেটি কম", "लागू Sublimit या SI का २०%, जो कम हो"], "Specified List I items": ["List I-এ নির্দিষ্ট Items", "List I में निर्दिष्ट Items"], "Any room except suite or above": ["Suite বা তার উপরের শ্রেণি ছাড়া যেকোনো Room", "Suite या उससे ऊँची श्रेणी को छोड़कर कोई भी Room"], "Any room": ["যেকোনো Room", "कोई भी Room"], "Subject to applicable policy co-payment conditions": ["প্রযোজ্য Policy Co-payment শর্তসাপেক্ষে", "लागू Policy Co-payment शर्तों के अधीन"], "No age-based co-payment indicated for entry below 61; subject to policy terms": ["৬১ বছরের নিচে প্রবেশের ক্ষেত্রে বয়সভিত্তিক Co-payment উল্লেখ নেই; Policy শর্তসাপেক্ষে", "६१ वर्ष से कम प्रवेश आयु पर आयु-आधारित Co-payment निर्दिष्ट नहीं; Policy शर्तें लागू"], "10% co-payment may apply for entry age 61 or above; verify policy conditions": ["৬১ বছর বা তার বেশি প্রবেশের বয়সে ১০% Co-payment প্রযোজ্য হতে পারে; Policy যাচাই করুন", "६१ वर्ष या अधिक प्रवेश आयु पर १०% Co-payment लागू हो सकता है; Policy सत्यापित करें"]};
 function translateQuoteDocument(doc,lang){
