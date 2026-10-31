@@ -6,7 +6,7 @@
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:#18314a;background:#f3f7fc}*{box-sizing:border-box}body{margin:0}header{background:linear-gradient(120deg,#09539d,#0876b9);color:#fff;padding:20px 16px}header .wrap{max-width:760px;margin:auto}header a{color:#fff;text-decoration:none;font-size:14px}h1{margin:10px 0 4px;font-size:25px}header p{margin:0;opacity:.9;font-size:14px}main{max-width:760px;margin:18px auto;padding:0 12px 32px}.panel{background:#fff;border:1px solid #e2eaf2;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 3px 14px #164d7d0b}h2{font-size:17px;margin:0 0 14px;color:#124e86}.step{display:inline-flex;align-items:center;justify-content:center;background:#e7f3ff;color:#1266a5;border-radius:50%;width:27px;height:27px;margin-right:8px}label{font-weight:650;display:block;font-size:14px;margin:10px 0 6px}select,input{width:100%;padding:12px;border:1px solid #cbd9e6;border-radius:9px;font:inherit;background:#fff;color:#18314a}input:focus,select:focus{outline:2px solid #91c8fa;outline-offset:1px}.choices{display:flex;gap:12px;flex-wrap:wrap;margin:9px 0}.choices label{font-weight:500;margin:0;display:flex;gap:6px;align-items:center}.choices input{width:auto}.member{display:grid;grid-template-columns:minmax(100px,1fr) minmax(0,1.3fr);gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #edf1f6}.member:last-child{border:0}.member-select{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #edf1f6;font-weight:650}.member-select input{width:19px;height:19px;accent-color:#0875bb}.member-group{padding:8px 0 12px 28px}.member-group select{max-width:210px}.member-group .member{padding:8px 0}.member-group .member label{font-weight:500}.member label{margin:0}.hint{font-size:12px;color:#60768a;line-height:1.5;margin:8px 0 0}.notice{border-radius:10px;background:#fff7e6;color:#76520e;padding:12px;font-size:13px;line-height:1.55;margin:10px 0}.hidden{display:none!important}button{background:#0875bb;color:#fff;border:0;border-radius:10px;padding:14px 18px;width:100%;font-size:16px;font-weight:700;cursor:pointer}.result-row{display:flex;justify-content:space-between;align-items:center;border:1px solid #dce8f4;border-radius:10px;padding:14px;margin:9px 0}.result-row strong{font-size:19px}.error{color:#b42318;font-size:13px;margin:10px 0;white-space:pre-line}.summary{background:#f3f8ff;padding:12px;border-radius:10px;font-size:14px;line-height:1.7}.family-size{background:#eaf4ff;border:1px solid #c7e1fb;border-radius:9px;padding:12px;font-weight:650;margin-top:12px}.child-notice{margin:8px 0 2px}.discount-info{color:#246341;font-size:13px;margin-top:10px}@media(max-width:370px){.panel{padding:14px}.member{grid-template-columns:95px 1fr}}
 
-.quote-actions{margin-top:15px}.quote-modal{position:fixed;inset:0;background:#09233bb8;z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px}.quote-dialog{background:white;border-radius:16px;max-width:480px;width:100%;padding:22px;box-shadow:0 18px 60px #001d3850}.quote-dialog h2{margin:0 0 10px}.quote-buttons{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.quote-buttons button{font-size:14px;padding:12px}.quote-secondary{background:#eaf2fb;color:#145383}.quote-language{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.quote-language button{font-size:13px;padding:10px 5px}.quote-small{font-size:12px;color:#64768b;line-height:1.5}.quote-preview{position:fixed;left:-12000px;top:0;z-index:2001;pointer-events:none;width:794px;background:white;color:#18314a;font-family:'Noto Sans Bengali','Nirmala UI','Noto Sans Devanagari',Arial,sans-serif}.quote-page{width:794px;min-height:1123px;padding:54px 58px;box-sizing:border-box;background:white;position:relative;page-break-after:always}.quote-page:last-child{page-break-after:auto}.quote-head{font-size:26px;color:#10518a;font-weight:bold;border-bottom:3px solid #f3a33e;padding-bottom:14px}.quote-sub{font-size:13px;color:#5a7387;margin:9px 0 30px}.quote-letter{font-size:15px;line-height:1.9;white-space:pre-line;margin:22px 0 30px}.quote-section{color:#0f528a;background:#edf5fd;padding:11px 14px;margin:24px 0 12px;font-size:16px;font-weight:bold}.quote-table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}.quote-table th,.quote-table td{border-bottom:1px solid #e1e9f1;padding:12px 10px;text-align:left;vertical-align:top}.quote-table th{background:#f4f8fc;color:#194f7b}.quote-price{font-size:19px;font-weight:bold;color:#bd650e}.quote-footer{position:absolute;bottom:30px;left:58px;right:58px;font-size:10px;color:#657789;border-top:1px solid #dce6ee;padding-top:10px}.quote-note{font-size:12px;line-height:1.7;color:#526779}.quote-tag{display:inline-block;padding:6px 10px;background:#fff3df;border-radius:6px;color:#9b5b12;font-weight:bold;font-size:12px}
+.quote-actions{margin-top:15px}.quote-modal{position:fixed;inset:0;background:#09233bb8;z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px}.quote-dialog{background:white;border-radius:16px;max-width:480px;width:100%;padding:22px;box-shadow:0 18px 60px #001d3850}.quote-dialog h2{margin:0 0 10px}.quote-buttons{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.quote-buttons button{font-size:14px;padding:12px}.quote-secondary{background:#eaf2fb;color:#145383}.quote-language{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.quote-language button{font-size:13px;padding:10px 5px}.quote-small{font-size:12px;color:#64768b;line-height:1.5}.quote-preview{position:fixed;left:-12000px;top:0;z-index:2001;pointer-events:none;width:794px;background:white;color:#18314a;font-family:'Nirmala UI','Noto Sans Bengali','Noto Sans Devanagari',Arial,sans-serif}.quote-page{width:794px;min-height:1123px;padding:54px 58px;box-sizing:border-box;background:white;position:relative;page-break-after:always}.quote-page:last-child{page-break-after:auto}.quote-head{font-size:26px;color:#10518a;font-weight:bold;border-bottom:3px solid #f3a33e;padding-bottom:14px}.quote-sub{font-size:13px;color:#5a7387;margin:9px 0 30px}.quote-letter{font-size:15px;line-height:1.9;white-space:pre-line;margin:22px 0 30px}.quote-section{color:#0f528a;background:#edf5fd;padding:11px 14px;margin:24px 0 12px;font-size:16px;font-weight:bold}.quote-table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}.quote-table th,.quote-table td{border-bottom:1px solid #e1e9f1;padding:12px 10px;text-align:left;vertical-align:top}.quote-table th{background:#f4f8fc;color:#194f7b}.quote-price{font-size:19px;font-weight:bold;color:#bd650e}.quote-footer{position:absolute;bottom:30px;left:58px;right:58px;font-size:10px;color:#657789;border-top:1px solid #dce6ee;padding-top:10px}.quote-note{font-size:12px;line-height:1.7;color:#526779}.quote-tag{display:inline-block;padding:6px 10px;background:#fff3df;border-radius:6px;color:#9b5b12;font-weight:bold;font-size:12px}
 
 /* Assure BNPL estimator */
 .premium-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}
@@ -66,7 +66,7 @@
 <div class="discount-info" id="discountInfo"></div><p class="hint" id="resultNote"></p><div class="quote-actions"><button id="generateQuotation" type="button">Generate Quotation</button></div></section>
 <section class="panel"><div class="notice"><strong>Rate status:</strong> Comprehensive premiums and policy-specific quotation are indicative; Comprehensive PIN mapping is not connected. Assure uses the uploaded annual premium chart for indicative 1, 2 and 3-year premiums. Fresh-policy early entry and optional deductible discounts are applied based on prospectus rules. Super Star rates are not connected. PIN mapping is provisional and not fully insurer-verified. Verify insurer quotation, eligibility and discount combination before use.</div><p class="hint">Independent agent toolkit. Not an official Star Health application.</p></section>
 </main>
-<div class="quote-modal hidden" id="quoteModal" role="dialog" aria-modal="true" aria-labelledby="quoteModalTitle"><div class="quote-dialog"><h2 id="quoteModalTitle">Generate Quotation</h2><div id="quoteStageName"><label for="quoteCustomerName">Customer Name (Optional)</label><input id="quoteCustomerName" maxlength="100" autocomplete="off" placeholder="Enter Customer Name"><div class="quote-buttons"><button class="quote-secondary" id="quoteSkip" type="button">Skip</button><button id="quoteContinue" type="button">Continue</button></div></div><div id="quoteStageActions" class="hidden"><p class="quote-small">Select covering note language, then Download or Share.</p><div class="quote-language"><button type="button" data-quote-language="bn">Bengali</button><button type="button" data-quote-language="hi">Hindi</button><button type="button" data-quote-language="en">English</button></div><p class="quote-small" id="quoteLanguageInfo">Choose a language.</p><div class="quote-buttons"><button id="quoteDownload" type="button">Download PDF</button><button id="quoteShare" type="button">Share PDF</button></div></div><div id="quoteStageShare" class="hidden"><div class="quote-buttons"><button id="quoteWhatsapp" type="button">WhatsApp</button><button id="quoteEmail" type="button">Email</button></div><div id="quoteContactArea" class="hidden"><label id="quoteContactLabel" for="quoteContact">Customer contact</label><input id="quoteContact" autocomplete="off"><p class="quote-small" id="quoteShareHelp"></p><button id="quoteShareContinue" type="button">Continue</button></div></div><p class="error" id="quoteError" role="alert"></p><button class="quote-secondary" style="margin-top:12px" id="quoteClose" type="button">Close</button></div></div>
+<div class="quote-modal hidden" id="quoteModal" role="dialog" aria-modal="true" aria-labelledby="quoteModalTitle"><div class="quote-dialog"><h2 id="quoteModalTitle">Generate Quotation</h2><div id="quoteStageName"><label for="quoteCustomerName">Customer Name (Optional)</label><input id="quoteCustomerName" maxlength="100" autocomplete="off" placeholder="Enter Customer Name"><div class="quote-buttons"><button class="quote-secondary" id="quoteSkip" type="button">Skip</button><button id="quoteContinue" type="button">Continue</button></div></div><div id="quoteStageActions" class="hidden"><p class="quote-small">Select quotation language, then Download or Share. Official insurance feature names and medical terms remain in English.</p><div class="quote-language"><button type="button" data-quote-language="bn">Bengali</button><button type="button" data-quote-language="hi">Hindi</button><button type="button" data-quote-language="en">English</button></div><p class="quote-small" id="quoteLanguageInfo">Choose a language.</p><div class="quote-buttons"><button id="quoteDownload" type="button">Download PDF</button><button id="quoteShare" type="button">Share PDF</button></div></div><div id="quoteStageShare" class="hidden"><div class="quote-buttons"><button id="quoteWhatsapp" type="button">WhatsApp</button><button id="quoteEmail" type="button">Email</button></div><div id="quoteContactArea" class="hidden"><label id="quoteContactLabel" for="quoteContact">Customer contact</label><input id="quoteContact" autocomplete="off"><p class="quote-small" id="quoteShareHelp"></p><button id="quoteShareContinue" type="button">Continue</button></div></div><p class="error" id="quoteError" role="alert"></p><button class="quote-secondary" style="margin-top:12px" id="quoteClose" type="button">Close</button></div></div>
 
 
 <script>
@@ -408,7 +408,7 @@ const quoteModal=$('quoteModal');
 function quoteStage(stage){['quoteStageName','quoteStageActions','quoteStageShare'].forEach(id=>$(id).classList.toggle('hidden',id!==stage));$('quoteError').textContent=''}
 function quoteOpen(){if(!quotationSnapshot){$('error').textContent='Calculate premium first.';return}quoteCustomer='';$('quoteCustomerName').value='';quoteLanguage='';quoteStage('quoteStageName');quoteModal.classList.remove('hidden')}
 function quoteName(skip){quoteCustomer=skip?'':$('quoteCustomerName').value.trim().replace(/[<>]/g,'').slice(0,100);quoteStage('quoteStageActions')}
-function quoteLang(lang){quoteLanguage=lang;$('quoteLanguageInfo').textContent='Covering note: '+({bn:'Bengali',hi:'Hindi',en:'English'}[lang])+'. All policy details remain in English.';document.querySelectorAll('[data-quote-language]').forEach(b=>b.style.background=b.dataset.quoteLanguage===lang?'#e58a18':'#0875bb')}
+function quoteLang(lang){quoteLanguage=lang;$('quoteLanguageInfo').textContent='Full quotation language: '+({bn:'Bengali',hi:'Hindi',en:'English'}[lang])+'. Insurance and medical terms remain in English.';document.querySelectorAll('[data-quote-language]').forEach(b=>b.style.background=b.dataset.quoteLanguage===lang?'#e58a18':'#0875bb')}
 function quoteEsc(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function quoteLetter(){const n=quoteCustomer;
  if(quoteLanguage==='bn')return `${n?'প্রিয় '+n+',':'প্রিয় গ্রাহক,'}\n\nStar Health-কে আপনার Health Insurance partner হিসেবে বেছে নেওয়ার জন্য ধন্যবাদ। আপনার নির্বাচিত কভারেজ ও পরিবারের সুরক্ষার প্রয়োজন অনুযায়ী তৈরি করা Star Health Assure Policy-এর একটি ব্যক্তিগত quotation আপনাকে দিতে পেরে আমরা আনন্দিত।\n\nএই quotation-এ প্রস্তাবিত কভারেজ, প্রিমিয়ামের বিকল্প এবং গুরুত্বপূর্ণ policy benefits-এর সংক্ষিপ্ত বিবরণ রয়েছে। সঠিক সিদ্ধান্ত নিতে আরও বিস্তারিত জানতে আপনার Health Insurance Advisor-এর সঙ্গে যোগাযোগ করুন।\n\nশুভেচ্ছান্তে,\nYour Health Insurance Advisor`;
@@ -429,23 +429,23 @@ function quoteHtml(){
  const newborn=si<=2500000?200000:400000;
  const moneyOrText=v=>typeof v==='number'?currency(v):v;
  const benefitRows=[
- ['In-Patient Hospitalisation','Up to Sum Insured'],['Room Rent',room],['ICU / Operation Theatre','Actuals'],
- ['Day Care Treatment','Actuals'],['AYUSH Treatment','Actuals'],['Modern Treatment','Up to Sum Insured'],
+ ['In-Patient Hospitalisation','Up to '+currency(si)+' (Sum Insured), subject to admissibility'],['Room Rent',room],['ICU / Operation Theatre','Actuals'],
+ ['Day Care Treatment','Actuals'],['AYUSH Treatment','Actuals'],['Modern Treatment','Up to '+currency(si)+' for covered modern treatments, subject to policy conditions'],
  ['Pre-Hospitalisation','60 days'],['Post-Hospitalisation','180 days'],['Road Ambulance','Actuals'],
  ['Air Ambulance',money(si*.10)],['Organ Donor Expenses','Actuals'],
- ['Home Care Treatment',money(Math.min(si*.10,500000))],['Domiciliary Hospitalisation','As per Policy Terms'],
+ ['Home Care Treatment',money(Math.min(si*.10,500000))],['Domiciliary Hospitalisation','Up to '+currency(si)+'; home confinement treatment exceeding 3 days, subject to specified conditions and exclusions'],
  ['Automatic Restoration','100% SI per restoration; unlimited restorations*'],
  ['Cumulative Bonus','25% SI per claim-free year; max 100% SI'],
  ['Chronic Severe Refractory Asthma',money(Math.min(si*.10,500000))],
  ['Delivery Expenses',money(si*.10)],['Assisted Reproduction Treatment',money(art)],
- ['Newborn Baby Cover',money(newborn)],['In-Utero Fetal Surgery','As per Policy Terms'],
+ ['Newborn Baby Cover',money(newborn)],['In-Utero Fetal Surgery','Up to '+currency(si)+' for specified fetal procedures; generally 24-month waiting period, subject to exceptions'],
  ['Shared Accommodation','₹1,000 per complete 24 hours'],['Preventive Health Check-up',money(checkup)],
  ['Compassionate Travel','₹10,000'],['Repatriation of Mortal Remains','₹15,000'],
  ['Valuable Service Provider Network',money(Math.min(si*.01,5000))],
- ['Rehabilitation & Pain Management','Applicable sublimit or 20% SI, whichever lower'],
- ['Non-Medical Consumables','Specified List I items'],['E-Domestic Second Medical Opinion','Available'],
+ ['Rehabilitation & Pain Management','Up to '+currency(si*.20)+' (20% SI) or applicable treatment sublimit, whichever is lower, per policy year'],
+ ['Non-Medical Consumables','Specified List I (68 items); payable with an admissible inpatient/day-care claim. See Annexure.'],['E-Domestic Second Medical Opinion','Available'],
  ['Unlimited Tele-Consultation','Available'],['AI-driven Face Scan','Up to 2 times/month/insured'],
- ['Cataract Surgery','As per Policy Terms']
+ ['Cataract Surgery','Up to '+currency(si)+' subject to 24-month specified disease waiting period and other policy conditions']
  ];
  const esc=quoteEsc;
  const table=rows=>'<table class="qtable"><tbody>'+rows.map(([a,b])=>'<tr><th>'+esc(a)+'</th><td>'+esc(moneyOrText(b))+'</td></tr>').join('')+'</tbody></table>';
@@ -459,8 +459,8 @@ function quoteHtml(){
    : 'Subject to applicable policy co-payment conditions';
  const details=[...(quoteCustomer?[['Quotation For',quoteCustomer]]:[]),['Policy Status',status],['Cover Type',type],['Sum Insured',currency(si)],['Family Composition',q.family],['Age-wise Co-payment',copayText],['Premium Zone','Zone '+q.zone+(q.pin?' · PIN '+q.pin:'')],['Annual Aggregate Deductible',q.deductible?currency(q.deductible):'None']];
  const memberRows=q.members.map(m=>[m.member,m.age+' years']);
- const first=page('<div class="qhero"><span>PROPOSED SUM INSURED</span><strong>'+money(si)+'</strong><small>'+esc(status)+' · '+esc(type)+'</small></div><div class="qletter">'+esc(quoteLetter())+'</div>'+sec('Quotation Details')+table(details)+sec('Premium Options')+'<div class="qpremiums">'+prem+'</div><p class="qnote">Premiums are indicative, based on the calculator rate chart and selected inputs. The insurer must confirm final rates, applicable discounts, taxes, eligibility and terms before purchase.</p>',1,4);
- const middle=page(sec('Covered Members')+table(memberRows)+sec('Benefits & Coverage Amount')+table(benefitRows.slice(0,16))+'<p class="qnote">*Restoration, bonus and all benefit payments are subject to specific policy conditions and admissibility.</p>',2,4);
+ const first=page('<div class="qhero"><span>PROPOSED SUM INSURED</span><strong>'+money(si)+'</strong><small>'+esc(status)+' · '+esc(type)+'</small></div><div class="qletter">'+esc(quoteLetter())+'</div>'+sec('Quotation Details')+table(details)+sec('Premium Options')+'<div class="qpremiums">'+prem+'</div><p class="qnote">Premiums are indicative, based on the calculator rate chart and selected inputs. The insurer must confirm final rates, applicable discounts, taxes, eligibility and terms before purchase.</p>',1,6);
+ const middle=page(sec('Covered Members')+table(memberRows)+sec('Benefits & Coverage Amount')+table(benefitRows.slice(0,16))+'<p class="qnote">*Restoration, bonus and all benefit payments are subject to specific policy conditions and admissibility.</p>',2,6);
  const waits=[['Initial Waiting Period','30 days (accidents excepted)'],['Specified Diseases / Procedures','24 months (subject to exceptions and continuity credit)'],['Pre-Existing Diseases',q.rows.some(r=>r.term===3)?'36 months for 1/2-year terms; 30 months for 3-year term':'36 months for 1/2-year terms; 30 months for 3-year term'],['Delivery / In-Utero Fetal Surgery / ART','24 months, with benefit-specific eligibility'],['Co-payment','As per age-at-entry and policy conditions']];
  const exclusion24=[
   ['1','Cataract, other eye chamber diseases, ENT diseases, thyroid diseases and benign breast diseases'],
@@ -478,9 +478,85 @@ function quoteHtml(){
   ['13','All types of transplant and related surgeries'],
   ['14','Congenital internal diseases/defects (subject to policy exceptions for unborn/newborn coverage)']
  ];
- const last=page(sec('Additional Benefits & Coverage Amount')+table(benefitRows.slice(16))+sec('Important Waiting Periods & Conditions')+table(waits)+'<p class="qnote">Coverage amounts are benefit limits, not guaranteed claim payments. Sub-limits, eligibility, co-payments, exclusions, waiting periods and other conditions apply. Consult the official policy wording and insurer quotation before proceeding.</p>',3,4);
- const fourth=page(sec('24-Month Specified Disease / Procedure Waiting Period (Excl 02)')+table(exclusion24)+'<p class="qnote">Summary of the 14 categories in Star Health Assure Policy Wordings (UIN SHAHLIP26048V032526). Listed conditions generally have a 24-month continuous-coverage waiting period. Accident-related claims are excepted as per policy wording. Increased Sum Insured, pre-existing disease waiting periods and eligible portability credits can affect applicability. Other benefits, including delivery, in-utero fetal surgery and assisted reproduction, have separate waiting-period provisions. This is a condensed guide, not the full policy wording. Refer to the official policy for exact scope and exceptions.</p>',4,4);
- return first+middle+last+fourth;
+ const last=page(sec('Additional Benefits & Coverage Amount')+table(benefitRows.slice(16))+sec('Important Waiting Periods & Conditions')+table(waits)+'<p class="qnote">Coverage amounts are benefit limits, not guaranteed claim payments. Sub-limits, eligibility, co-payments, exclusions, waiting periods and other conditions apply. Consult the official policy wording and insurer quotation before proceeding.</p>',3,6);
+ const fourth=page(sec('24-Month Specified Disease / Procedure Waiting Period (Excl 02)')+table(exclusion24)+'<p class="qnote">Summary of the 14 categories in Star Health Assure Policy Wordings (UIN SHAHLIP26048V032526). Listed conditions generally have a 24-month continuous-coverage waiting period. Accident-related claims are excepted as per policy wording. Increased Sum Insured, pre-existing disease waiting periods and eligible portability credits can affect applicability. Other benefits, including delivery, in-utero fetal surgery and assisted reproduction, have separate waiting-period provisions. This is a condensed guide, not the full policy wording. Refer to the official policy for exact scope and exceptions.</p>',4,6);
+
+ // Official Assure prospectus List I, 68 non-medical consumable items.
+ const nonMedicalList = [
+  'BABY FOOD',
+  'BABY UTILITIES CHARGES',
+  'BEAUTY SERVICES',
+  'BELTS / BRACES',
+  'BUDS',
+  'COLD PACK / HOT PACK',
+  'CARRY BAGS',
+  'EMAIL / INTERNET CHARGES',
+  'FOOD CHARGES (OTHER THAN PATIENT’S DIET PROVIDED BY HOSPITAL)',
+  'LEGGINGS',
+  'LAUNDRY CHARGES',
+  'MINERAL WATER',
+  'SANITARY PAD',
+  'TELEPHONE CHARGES',
+  'GUEST SERVICES',
+  'CREPE BANDAGE',
+  'DIAPER OF ANY TYPE',
+  'EYELET COLLAR',
+  'SLINGS',
+  'BLOOD GROUPING AND CROSS MATCHING OF DONORS SAMPLES',
+  'SERVICE CHARGES WHERE NURSING CHARGE ALSO CHARGED',
+  'TELEVISION CHARGES',
+  'SURCHARGES',
+  'ATTENDANT CHARGES',
+  'EXTRA DIET OF PATIENT (OTHER THAN THAT WHICH FORMS PART OF BED CHARGE)',
+  'BIRTH CERTIFICATE',
+  'CERTIFICATE CHARGES',
+  'COURIER CHARGES',
+  'CONVEYANCE CHARGES',
+  'MEDICAL CERTIFICATE',
+  'MEDICAL RECORDS',
+  'PHOTOCOPIES CHARGES',
+  'MORTUARY CHARGES',
+  'WALKING AIDS CHARGES',
+  'OXYGEN CYLINDER (FOR USAGE OUTSIDE THE HOSPITAL)',
+  'SPACER',
+  'SPIROMETRE',
+  'NEBULIZER KIT',
+  'STEAM INHALER',
+  'ARMSLING',
+  'THERMOMETER',
+  'CERVICAL COLLAR',
+  'SPLINT',
+  'DIABETIC FOOT WEAR',
+  'KNEE BRACES (LONG / SHORT / HINGED)',
+  'KNEE IMMOBILIZER / SHOULDER IMMOBILIZER',
+  'LUMBO SACRAL BELT',
+  'NIMBUS BED OR WATER OR AIR BED CHARGES',
+  'AMBULANCE COLLAR',
+  'AMBULANCE EQUIPMENT',
+  'ABDOMINAL BINDER',
+  'PRIVATE NURSES CHARGES - SPECIAL NURSING CHARGES',
+  'SUGAR FREE TABLETS',
+  'CREAMS POWDERS LOTIONS (Toiletries not payable; only prescribed medical pharmaceuticals payable)',
+  'ECG ELECTRODES',
+  'GLOVES',
+  'NEBULISATION KIT',
+  'ANY KIT WITH NO DETAILS MENTIONED [DELIVERY KIT, ORTHOKIT, RECOVERY KIT, ETC]',
+  'KIDNEY TRAY',
+  'MASK',
+  'OUNCE GLASS',
+  'OXYGEN MASK',
+  'PELVIC TRACTION BELT',
+  'PAN CAN',
+  'TROLLY COVER',
+  'UROMETER, URINE JUG',
+  'AMBULANCE',
+  'VASOFIX SAFETY'
+];
+ const annexureRows = nonMedicalList.map((name,i)=>[String(i+1),name]);
+ const annexureNote='<p class="qnote">List I reference: Star Health Assure Prospectus, UIN SHAHLIP23131V022223, PROS/SHA/V.5/2025, page 79. This list is included as a reference for the selected Assure product. Payment is subject to an admissible inpatient/day-care claim, the applicable policy wording and final insurer confirmation.</p>';
+ const annexureOne=page(sec('Annexure: Non-Medical Items (Consumables) · List I (1–34)')+table(annexureRows.slice(0,34))+annexureNote,5,6);
+ const annexureTwo=page(sec('Annexure: Non-Medical Items (Consumables) · List I (35–68)')+table(annexureRows.slice(34))+annexureNote,6,6);
+ return first+middle+last+fourth+annexureOne+annexureTwo;
 }
 // Comprehensive quotation: sourced from Star Comprehensive policy wordings UIN SHAHLIP26044V092526.
 function comprehensiveQuoteHtml(){
@@ -645,13 +721,58 @@ function womenCareQuoteHtml(){
  return p1+p2+p3+p4;
 }
 
+
+// Multilingual quotation presentation. Insurance feature names, medical names and official List I stay in English.
+const QUOTE_TRANSLATIONS = {"PERSONALISED HEALTH INSURANCE QUOTATION": ["ব্যক্তিগত স্বাস্থ্যবিমার Quotation", "व्यक्तिगत स्वास्थ्य बीमा Quotation"], "PROPOSED SUM INSURED": ["প্রস্তাবিত Sum Insured", "प्रस्तावित Sum Insured"], "Quotation Details": ["Quotation-এর বিবরণ", "Quotation का विवरण"], "Premium Options": ["Premium-এর বিকল্প", "Premium के विकल्प"], "Covered Members": ["বিমার আওতাভুক্ত সদস্য", "बीमा में शामिल सदस्य"], "Benefits & Coverage Amount": ["Benefits ও Coverage Amount", "Benefits और Coverage Amount"], "Additional Benefits & Coverage Amount": ["অতিরিক্ত Benefits ও Coverage Amount", "अतिरिक्त Benefits और Coverage Amount"], "Important Waiting Periods & Conditions": ["গুরুত্বপূর্ণ Waiting Periods ও শর্তাবলি", "महत्त्वपूर्ण Waiting Periods और शर्तें"], "24-Month Specified Disease / Procedure Waiting Period (Excl 02)": ["২৪ মাসের নির্দিষ্ট রোগ / চিকিৎসার Waiting Period (Excl 02)", "२४ महीने की निर्दिष्ट रोग / उपचार Waiting Period (Excl 02)"], "Annexure: Non-Medical Items (Consumables) · List I (1–34)": ["সংযোজনী: Non-Medical Items (Consumables) · List I (1–34)", "परिशिष्ट: Non-Medical Items (Consumables) · List I (1–34)"], "Annexure: Non-Medical Items (Consumables) · List I (35–68)": ["সংযোজনী: Non-Medical Items (Consumables) · List I (35–68)", "परिशिष्ट: Non-Medical Items (Consumables) · List I (35–68)"], "Quotation For": ["যাঁর জন্য Quotation", "जिसके लिए Quotation"], "Policy Status": ["Policy-এর অবস্থা", "Policy की स्थिति"], "Cover Type": ["Cover-এর ধরন", "Cover का प्रकार"], "Family Composition": ["পরিবারের সদস্যবিন্যাস", "परिवार की संरचना"], "Age-wise Co-payment": ["বয়সভিত্তিক Co-payment", "आयु-आधारित Co-payment"], "Premium Zone": ["Premium Zone", "Premium Zone"], "Annual Aggregate Deductible": ["বার্ষিক Aggregate Deductible", "वार्षिक Aggregate Deductible"], "Deductible": ["Deductible", "Deductible"], "Fresh": ["নতুন Policy", "नई Policy"], "Renewal": ["Renewal", "Renewal"], "Portability": ["Portability", "Portability"], "Individual": ["Individual", "Individual"], "Family Floater": ["Family Floater", "Family Floater"], "None": ["নেই", "नहीं"], "None applied": ["প্রযোজ্য নয়", "लागू नहीं"], "Up to Sum Insured": ["Sum Insured পর্যন্ত", "Sum Insured तक"], "Actuals": ["প্রকৃত অনুমোদিত খরচ অনুযায়ী", "वास्तविक स्वीकृत खर्च के अनुसार"], "At Actuals": ["প্রকৃত অনুমোদিত খরচ অনুযায়ী", "वास्तविक स्वीकृत खर्च के अनुसार"], "As per Policy Terms": ["Policy-এর শর্ত অনুযায়ী", "Policy की शर्तों के अनुसार"], "Available": ["উপলব্ধ", "उपलब्ध"], "Not Available": ["উপলব্ধ নয়", "उपलब्ध नहीं"], "Indicative total premium": ["আনুমানিক মোট Premium", "अनुमानित कुल Premium"], "BNPL Facility Available": ["BNPL সুবিধা উপলব্ধ", "BNPL सुविधा उपलब्ध"], "BNPL Facility Available (Bima Pay)": ["BNPL সুবিধা উপলব্ধ (Bima Pay)", "BNPL सुविधा उपलब्ध (Bima Pay)"], "BNPL Not Available": ["BNPL সুবিধা উপলব্ধ নয়", "BNPL सुविधा उपलब्ध नहीं"], "30 days (accidents excepted)": ["৩০ দিন (Accident ব্যতীত)", "३० दिन (Accident को छोड़कर)"], "24 months (subject to exceptions and continuity credit)": ["২৪ মাস (ব্যতিক্রম ও Continuity Credit প্রযোজ্য)", "२४ महीने (अपवाद और Continuity Credit लागू)"], "36 months for 1/2-year terms; 30 months for 3-year term": ["১/২ বছরের মেয়াদে ৩৬ মাস; ৩ বছরের মেয়াদে ৩০ মাস", "१/२ वर्ष की अवधि में ३६ महीने; ३ वर्ष की अवधि में ३० महीने"], "24 months, with benefit-specific eligibility": ["২৪ মাস, সংশ্লিষ্ট Benefit-এর যোগ্যতার শর্তসাপেক্ষে", "२४ महीने, संबंधित Benefit की पात्रता शर्तों के अधीन"], "As per age-at-entry and policy conditions": ["Policy-তে প্রবেশের বয়স ও শর্ত অনুযায়ী", "Policy में प्रवेश की आयु और शर्तों के अनुसार"], "Initial Waiting Period": ["প্রাথমিক Waiting Period", "प्रारंभिक Waiting Period"], "Specified Diseases / Procedures": ["নির্দিষ্ট রোগ / চিকিৎসা", "निर्दिष्ट रोग / उपचार"], "Pre-Existing Diseases": ["আগে থেকে থাকা রোগ (PED)", "पहले से मौजूद रोग (PED)"], "Co-payment": ["Co-payment", "Co-payment"], "Delivery / In-Utero Fetal Surgery / ART": ["Delivery / In-Utero Fetal Surgery / ART", "Delivery / In-Utero Fetal Surgery / ART"], "Consult your advisor": ["আপনার Advisor-এর সঙ্গে কথা বলুন", "अपने Advisor से संपर्क करें"], "No Deductible": ["Deductible নেই", "Deductible नहीं"], "Insured Person": ["বিমাকৃত ব্যক্তি", "बीमित व्यक्ति"], "Prepared": ["প্রস্তুত করা হয়েছে", "तैयार किया गया"], "Page": ["পৃষ্ঠা", "पृष्ठ"], "YEAR": ["বছর", "वर्ष"], "YEARS": ["বছর", "वर्ष"], "years": ["বছর", "वर्ष"], "days": ["দিন", "दिन"], "per complete 24 hours": ["প্রতি পূর্ণ ২৪ ঘণ্টায়", "प्रत्येक पूरे २४ घंटे पर"], "per claim-free year; max": ["প্রতি Claim-free বছরে; সর্বোচ্চ", "प्रति Claim-free वर्ष; अधिकतम"], "per restoration; unlimited restorations*": ["প্রতি Restoration-এ; সীমাহীন Restoration*", "प्रत्येक Restoration पर; असीमित Restoration*"], "Applicable sublimit or 20% SI, whichever lower": ["প্রযোজ্য Sublimit অথবা SI-এর ২০%, যেটি কম", "लागू Sublimit या SI का २०%, जो कम हो"], "Specified List I items": ["List I-এ নির্দিষ্ট Items", "List I में निर्दिष्ट Items"], "Any room except suite or above": ["Suite বা তার উপরের শ্রেণি ছাড়া যেকোনো Room", "Suite या उससे ऊँची श्रेणी को छोड़कर कोई भी Room"], "Any room": ["যেকোনো Room", "कोई भी Room"], "Subject to applicable policy co-payment conditions": ["প্রযোজ্য Policy Co-payment শর্তসাপেক্ষে", "लागू Policy Co-payment शर्तों के अधीन"], "No age-based co-payment indicated for entry below 61; subject to policy terms": ["৬১ বছরের নিচে প্রবেশের ক্ষেত্রে বয়সভিত্তিক Co-payment উল্লেখ নেই; Policy শর্তসাপেক্ষে", "६१ वर्ष से कम प्रवेश आयु पर आयु-आधारित Co-payment निर्दिष्ट नहीं; Policy शर्तें लागू"], "10% co-payment may apply for entry age 61 or above; verify policy conditions": ["৬১ বছর বা তার বেশি প্রবেশের বয়সে ১০% Co-payment প্রযোজ্য হতে পারে; Policy যাচাই করুন", "६१ वर्ष या अधिक प्रवेश आयु पर १०% Co-payment लागू हो सकता है; Policy सत्यापित करें"]};
+function translateQuoteDocument(doc,lang){
+ if(lang==='en')return;
+ const index=lang==='bn'?0:1;
+ const trans=(raw)=>{
+   if(Object.prototype.hasOwnProperty.call(QUOTE_TRANSLATIONS,raw))return QUOTE_TRANSLATIONS[raw][index];
+   let out=raw;
+   // Translate recurring explanatory phrases without changing official feature names.
+   for(const [en,vals] of Object.entries(QUOTE_TRANSLATIONS)){
+     if(en.length<8||!out.includes(en))continue;
+     out=out.split(en).join(vals[index]);
+   }
+   return out;
+ };
+ const walker=doc.createTreeWalker(doc.body,NodeFilter.SHOW_TEXT);
+ let node;while((node=walker.nextNode())){
+   const original=node.nodeValue;
+   if(!original||!original.trim())continue;
+   // Do not translate technical benefit labels (first column) or official consumable item names.
+   const parent=node.parentElement;
+   if(parent?.closest('.qtable th'))continue;
+   const clean=original.trim();
+   const translated=trans(clean);
+   if(translated!==clean)node.nodeValue=original.replace(clean,translated);
+ }
+ // Translate static labels that appear as first-column headings, but never feature names.
+ const labelKeys=new Set(['Quotation For','Policy Status','Cover Type','Family Composition','Age-wise Co-payment','Premium Zone','Annual Aggregate Deductible','Deductible','Insured Person','Initial Waiting Period','Specified Diseases / Procedures','Pre-Existing Diseases','Delivery / In-Utero Fetal Surgery / ART','Co-payment']);
+ doc.querySelectorAll('.qtable th').forEach(th=>{const k=th.textContent.trim();if(labelKeys.has(k))th.textContent=trans(k)});
+ // Translate explanatory paragraphs through phrase-level substitutions, leaving policy-specific legal language intact.
+ doc.querySelectorAll('.qnote,.qfooter').forEach(el=>{
+   if(el.classList.contains('qfooter')){
+     const spans=el.querySelectorAll('span');
+     if(spans[0])spans[0].textContent=lang==='bn'?'এটি Advisor-এর প্রস্তুত করা আনুমানিক Quotation। চূড়ান্ত Premium, Underwriting ও Policy wording-এর জন্য Insurer-এর অনুমোদন প্রযোজ্য।':'यह Advisor द्वारा तैयार अनुमानित Quotation है। अंतिम Premium, Underwriting और Policy wording के लिए Insurer की पुष्टि आवश्यक है।';
+   }
+ });
+ doc.querySelectorAll('.qnote').forEach(el=>{
+   const t=el.textContent;
+   if(t.startsWith('Premiums are indicative')||t.startsWith('Premium is indicative'))el.textContent=lang==='bn'?'এখানে দেখানো Premium আনুমানিক। Policy কেনার আগে চূড়ান্ত Premium, Discount, Tax, যোগ্যতা ও শর্ত Insurer-এর কাছ থেকে নিশ্চিত করুন।':'दिखाया गया Premium अनुमानित है। Policy खरीदने से पहले अंतिम Premium, Discount, Tax, पात्रता और शर्तों की Insurer से पुष्टि करें।';
+   else if(t.startsWith('Coverage amounts are benefit limits'))el.textContent=lang==='bn'?'Coverage Amount হলো Benefit-এর সর্বোচ্চ সীমা, নিশ্চিত Claim Payment নয়। Sublimit, Eligibility, Co-payment, Exclusion এবং Waiting Period প্রযোজ্য। সঠিক শর্তের জন্য Official Policy Wording দেখুন।':'Coverage Amount, Benefit की अधिकतम सीमा है, सुनिश्चित Claim Payment नहीं। Sublimit, Eligibility, Co-payment, Exclusion और Waiting Period लागू हैं। सटीक शर्तों के लिए Official Policy Wording देखें।';
+   else if(t.startsWith('*Restoration'))el.textContent=lang==='bn'?'*Restoration, Bonus ও সব Benefit Payment সংশ্লিষ্ট Policy শর্ত এবং Claim Admissibility-এর অধীন।':'*Restoration, Bonus और सभी Benefit Payment संबंधित Policy शर्तों और Claim Admissibility के अधीन हैं।';
+ });
+}
+
 // Browser-native printing avoids html2canvas blank screenshots and supports Indic shaping.
 function quotePrint(){
  if(!quoteLanguage)throw Error('Choose Bengali, Hindi or English first.');
  const w=window.open('','_blank');if(!w)throw Error('Allow pop-ups and try again.');
- const styles=`@page{size:A4;margin:0}*{box-sizing:border-box}html,body{margin:0;padding:0;color:#18314a;font-family:'Noto Sans Bengali','Nirmala UI','Noto Sans Devanagari',Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}.qpage{width:210mm;min-height:297mm;padding:14mm 15mm 20mm;position:relative;break-after:page;page-break-after:always;background:linear-gradient(145deg,#f3f9ff 0%,#fff 42%,#f8fbff 100%)}.qpage:last-child{break-after:auto;page-break-after:auto}.qpage:before{content:'Star Agent Sathi';position:absolute;top:49%;left:18%;transform:rotate(-32deg);font-size:39px;font-weight:800;color:rgba(26,96,150,.045);pointer-events:none;white-space:nowrap}.qhead{border-bottom:2px solid #91bcd9;padding-bottom:10px;margin-bottom:12px}.qeyebrow{font-size:9px;letter-spacing:1.5px;color:#5588ac;font-weight:bold}.qtitle{font-size:24px;color:#0b5087;font-weight:800;margin-top:4px}.qsub{font-size:10px;color:#657e90;margin-top:4px}.qhero{background:#0b568d;color:#fff;border-radius:10px;padding:15px 18px;margin:13px 0}.qhero span,.qhero small{display:block;font-size:10px;letter-spacing:.6px}.qhero strong{display:block;font-size:29px;margin:4px 0}.qletter{font-size:11px;line-height:1.5;white-space:pre-line;margin:12px 0}.qsection{font-size:13px;color:#11588a;background:#e5f1fa;border-left:3px solid #e4a74c;padding:7px 10px;margin:13px 0 6px}.qtable{width:100%;border-collapse:collapse;font-size:10px;line-height:1.3;table-layout:fixed;margin:6px 0}.qtable th,.qtable td{padding:5px 8px;border-bottom:1px solid #dce9f2;text-align:left;vertical-align:top;overflow-wrap:anywhere}.qtable th{width:52%;font-weight:650;color:#234d6c}.qtable tr:nth-child(even){background:#eff7fd}.qpremiums{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.qpremium{background:#e8f3fc;border:1px solid #bdd8ea;border-radius:9px;padding:12px 10px}.qpremium span,.qpremium small{display:block;font-size:9px;color:#56758b}.qpremium strong{display:block;color:#09568d;font-size:19px;margin:7px 0}.qnote{font-size:9px;line-height:1.5;color:#526d80;margin:11px 0}.qfooter{position:absolute;bottom:8mm;left:15mm;right:15mm;display:flex;justify-content:space-between;gap:14px;border-top:1px solid #c9ddea;padding-top:6px;font-size:8px;color:#61798c}.qfooter span:last-child{white-space:nowrap}tr{break-inside:avoid}@media screen{body{background:#dbe8f1}.qpage{margin:12px auto;box-shadow:0 3px 15px #1234}}`;
- w.document.open();w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+quoteEsc(quotationSnapshot?.policy||'Health Insurance')+' Quotation</title><style>'+styles+'</style></head><body>'+quoteHtml()+'</body></html>');w.document.close();w.focus();
- let printed=false;const doPrint=()=>{if(printed)return;printed=true;setTimeout(()=>{try{w.print()}catch(e){console.error(e)}},550)};
+ const styles=`@page{size:A4;margin:0}*{box-sizing:border-box}html,body{margin:0;padding:0;color:#18314a;font-family:'Nirmala UI','Noto Sans Bengali','Noto Sans Devanagari',Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}.qpage{width:210mm;min-height:297mm;padding:14mm 15mm 20mm;position:relative;break-after:page;page-break-after:always;background:linear-gradient(145deg,#f3f9ff 0%,#fff 42%,#f8fbff 100%)}.qpage:last-child{break-after:auto;page-break-after:auto}.qpage:before{content:'Star Agent Sathi';position:absolute;top:49%;left:18%;transform:rotate(-32deg);font-size:39px;font-weight:800;color:rgba(26,96,150,.045);pointer-events:none;white-space:nowrap}.qhead{border-bottom:2px solid #91bcd9;padding-bottom:10px;margin-bottom:12px}.qeyebrow{font-size:9px;letter-spacing:1.5px;color:#5588ac;font-weight:bold}.qtitle{font-size:24px;color:#0b5087;font-weight:800;margin-top:4px}.qsub{font-size:10px;color:#657e90;margin-top:4px}.qhero{background:#0b568d;color:#fff;border-radius:10px;padding:15px 18px;margin:13px 0}.qhero span,.qhero small{display:block;font-size:10px;letter-spacing:.6px}.qhero strong{display:block;font-size:29px;margin:4px 0}.qletter{font-size:11px;line-height:1.5;white-space:pre-line;margin:12px 0}.qsection{font-size:13px;color:#11588a;background:#e5f1fa;border-left:3px solid #e4a74c;padding:7px 10px;margin:13px 0 6px}.qtable{width:100%;border-collapse:collapse;font-size:10px;line-height:1.3;table-layout:fixed;margin:6px 0}.qtable th,.qtable td{padding:5px 8px;border-bottom:1px solid #dce9f2;text-align:left;vertical-align:top;overflow-wrap:anywhere}.qtable th{width:52%;font-weight:650;color:#234d6c}.qtable tr:nth-child(even){background:#eff7fd}.qpremiums{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.qpremium{background:#e8f3fc;border:1px solid #bdd8ea;border-radius:9px;padding:12px 10px}.qpremium span,.qpremium small{display:block;font-size:9px;color:#56758b}.qpremium strong{display:block;color:#09568d;font-size:19px;margin:7px 0}.qnote{font-size:9px;line-height:1.5;color:#526d80;margin:11px 0}.qfooter{position:absolute;bottom:8mm;left:15mm;right:15mm;display:flex;justify-content:space-between;gap:14px;border-top:1px solid #c9ddea;padding-top:6px;font-size:8px;color:#61798c}.qfooter span:last-child{white-space:nowrap}tr{break-inside:avoid}@media screen{body{background:#dbe8f1}.qpage{margin:12px auto;box-shadow:0 3px 15px #1234}}`;
+ w.document.open();w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+quoteEsc(quotationSnapshot?.policy||'Health Insurance')+' Quotation</title><style>'+styles+'</style></head><body>'+quoteHtml()+'</body></html>');w.document.close();translateQuoteDocument(w.document,quoteLanguage);w.focus();
+ let printed=false;const doPrint=()=>{if(printed)return;printed=true;setTimeout(async()=>{try{await w.document.fonts.ready;w.print()}catch(e){console.error(e)}},550)};
  w.addEventListener('load',doPrint,{once:true});if(w.document.readyState==='complete')doPrint();return w;
 }
 
