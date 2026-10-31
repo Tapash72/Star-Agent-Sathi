@@ -688,6 +688,76 @@ function quoteHtml(){
  const annexureTwo=page(sec('Annexure: Non-Medical Items (Consumables) · List I (35–68)')+table(annexureRows.slice(34))+annexureNote,6,6);
  return first+middle+last+fourth+annexureOne+annexureTwo;
 }
+ const sharedNonMedicalList = [
+  'BABY FOOD',
+  'BABY UTILITIES CHARGES',
+  'BEAUTY SERVICES',
+  'BELTS / BRACES',
+  'BUDS',
+  'COLD PACK / HOT PACK',
+  'CARRY BAGS',
+  'EMAIL / INTERNET CHARGES',
+  'FOOD CHARGES (OTHER THAN PATIENT’S DIET PROVIDED BY HOSPITAL)',
+  'LEGGINGS',
+  'LAUNDRY CHARGES',
+  'MINERAL WATER',
+  'SANITARY PAD',
+  'TELEPHONE CHARGES',
+  'GUEST SERVICES',
+  'CREPE BANDAGE',
+  'DIAPER OF ANY TYPE',
+  'EYELET COLLAR',
+  'SLINGS',
+  'BLOOD GROUPING AND CROSS MATCHING OF DONORS SAMPLES',
+  'SERVICE CHARGES WHERE NURSING CHARGE ALSO CHARGED',
+  'TELEVISION CHARGES',
+  'SURCHARGES',
+  'ATTENDANT CHARGES',
+  'EXTRA DIET OF PATIENT (OTHER THAN THAT WHICH FORMS PART OF BED CHARGE)',
+  'BIRTH CERTIFICATE',
+  'CERTIFICATE CHARGES',
+  'COURIER CHARGES',
+  'CONVEYANCE CHARGES',
+  'MEDICAL CERTIFICATE',
+  'MEDICAL RECORDS',
+  'PHOTOCOPIES CHARGES',
+  'MORTUARY CHARGES',
+  'WALKING AIDS CHARGES',
+  'OXYGEN CYLINDER (FOR USAGE OUTSIDE THE HOSPITAL)',
+  'SPACER',
+  'SPIROMETRE',
+  'NEBULIZER KIT',
+  'STEAM INHALER',
+  'ARMSLING',
+  'THERMOMETER',
+  'CERVICAL COLLAR',
+  'SPLINT',
+  'DIABETIC FOOT WEAR',
+  'KNEE BRACES (LONG / SHORT / HINGED)',
+  'KNEE IMMOBILIZER / SHOULDER IMMOBILIZER',
+  'LUMBO SACRAL BELT',
+  'NIMBUS BED OR WATER OR AIR BED CHARGES',
+  'AMBULANCE COLLAR',
+  'AMBULANCE EQUIPMENT',
+  'ABDOMINAL BINDER',
+  'PRIVATE NURSES CHARGES - SPECIAL NURSING CHARGES',
+  'SUGAR FREE TABLETS',
+  'CREAMS POWDERS LOTIONS (Toiletries not payable; only prescribed medical pharmaceuticals payable)',
+  'ECG ELECTRODES',
+  'GLOVES',
+  'NEBULISATION KIT',
+  'ANY KIT WITH NO DETAILS MENTIONED [DELIVERY KIT, ORTHOKIT, RECOVERY KIT, ETC]',
+  'KIDNEY TRAY',
+  'MASK',
+  'OUNCE GLASS',
+  'OXYGEN MASK',
+  'PELVIC TRACTION BELT',
+  'PAN CAN',
+  'TROLLY COVER',
+  'UROMETER, URINE JUG',
+  'AMBULANCE',
+  'VASOFIX SAFETY'
+];
 // Comprehensive quotation: sourced from Star Comprehensive policy wordings UIN SHAHLIP26044V092526.
 function comprehensiveQuoteHtml(){
  const quoteDiscount=quoteDiscountDetails(quotationSnapshot);
@@ -921,7 +991,7 @@ function womenCareQuoteHtml(){
   'AMBULANCE',
   'VASOFIX SAFETY'
 ];
- const annexureRows = nonMedicalList.map((name,i)=>[String(i+1),name]);
+ const annexureRows = sharedNonMedicalList.map((name,i)=>[String(i+1),name]);
  const annexureNote='<p class="qnote">List I reference: Star Women Care Insurance Policy wordings, UIN SHAHLIP27051V032627. Payment is subject to an admissible inpatient/day-care claim, the applicable policy wording and final insurer confirmation.</p>';
  const annexureOne=page(sec('Annexure: Non-Medical Items (Consumables) · List I (1–34)')+table(annexureRows.slice(0,34))+annexureNote,5,6);
  const annexureTwo=page(sec('Annexure: Non-Medical Items (Consumables) · List I (35–68)')+table(annexureRows.slice(34))+annexureNote,6,6);
@@ -981,8 +1051,8 @@ function comprehensiveQuoteHtml(){
   ['Cataract / Specified Procedures','Up to applicable Sum Insured, subject to specified-disease waiting period and policy wording'],
   ['Co-Payment',copayText]
  ];
- const annexureRows=nonMedicalList.map((name,i)=>[String(i+1),name]);
- const annexureNote='<p class="qnote">Source: Star Women Care Insurance Policy, UIN SHAHLIP27051V032627, Policy Wordings POL / SWC / V.12 / 2026, printed page 54/56. Coverage for List I items applies to reasonable and customary charges where there is an admissible claim, subject to policy terms and insurer assessment.</p>';
+ const annexureRows=sharedNonMedicalList.map((name,i)=>[String(i+1),name]);
+ const annexureNote='<p class="qnote">Reference List I item names reproduced from Women Care wordings; Comprehensive-specific coverage and inclusion must be verified against its official policy wordings. This annexure is not a confirmation of coverage.</p>';
  const p5=page(sec('Annexure: Non-Medical Items (Consumables) · List I (1–34)')+table(annexureRows.slice(0,34))+annexureNote,5,6);
  const p6=page(sec('Annexure: Non-Medical Items (Consumables) · List I (35–68)')+table(annexureRows.slice(34))+annexureNote,6,6);
  return p1+p2+p3+p4+p5+p6;
