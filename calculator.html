@@ -811,7 +811,7 @@ function womenCareQuoteHtml(){
  ['Preventive Health Check-up','Age/gender-specific limits; refer to policy'],
  ['Unlimited Tele-Consultation','Available subject to service conditions'],
  ['Rehabilitation / Pain Management','Subject to policy limits and authorised centres'],
- ['Non-Medical Items','List I (68 items); reasonable and customary charges payable for admissible claims, subject to policy terms. See Annexure.']
+ ['Non-Medical Items','Specified items subject to admissible claim']
  ];
  const waits=[
  ['Initial Waiting Period','30 days for illness; accidents excepted'],
@@ -851,7 +851,6 @@ function womenCareQuoteHtml(){
  const p3=page(sec('Additional Benefits & Coverage Amount')+table(benefits.slice(17))+sec('Important Waiting Periods')+table(waits)+note,3,6);
  const p4=page(sec('24-Month Specified Disease / Procedure Waiting Period (Excl 02)')+table(exclusions)+'<p class="qnote">Condensed summary of the 14 specified categories in Star Women Care Insurance Policy wordings (UIN SHAHLIP27051V032627). Accident-related exceptions, portability credits, increased Sum Insured and other benefit-specific conditions can change applicability. Refer to the official wording for exact scope.</p>',4,6);
 
- // Official Women Care Policy Wordings V03, printed page 54/56: List I (68 items).
  const nonMedicalList = [
   'BABY FOOD',
   'BABY UTILITIES CHARGES',
