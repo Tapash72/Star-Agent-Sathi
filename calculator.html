@@ -922,10 +922,10 @@ function womenCareQuoteHtml(){
   'VASOFIX SAFETY'
 ];
  const annexureRows = nonMedicalList.map((name,i)=>[String(i+1),name]);
- const annexureNote='<p class="qnote">List I reference: Star Health Assure Prospectus, UIN SHAHLIP23131V022223, PROS/SHA/V.5/2025, page 79. This list is included as a reference for the selected Assure product. Payment is subject to an admissible inpatient/day-care claim, the applicable policy wording and final insurer confirmation.</p>';
+ const annexureNote='<p class="qnote">List I reference: Star Women Care Insurance Policy wordings, UIN SHAHLIP27051V032627. Payment is subject to an admissible inpatient/day-care claim, the applicable policy wording and final insurer confirmation.</p>';
  const annexureOne=page(sec('Annexure: Non-Medical Items (Consumables) · List I (1–34)')+table(annexureRows.slice(0,34))+annexureNote,5,6);
  const annexureTwo=page(sec('Annexure: Non-Medical Items (Consumables) · List I (35–68)')+table(annexureRows.slice(34))+annexureNote,6,6);
- return first+middle+last+fourth+annexureOne+annexureTwo;
+ return p1+p2+p3+p4+annexureOne+annexureTwo;
 }
 // Comprehensive quotation: sourced from Star Comprehensive policy wordings UIN SHAHLIP26044V092526.
 function comprehensiveQuoteHtml(){
