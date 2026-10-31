@@ -334,10 +334,11 @@ function womenCarePremium(members,si,term,type){
  const adults=type==='individual'?members:members.filter(m=>m.member==='Self'||m.member==='Spouse');
  const children=type==='individual'?[]:members.filter(m=>m.member.startsWith('Child'));
  if(type!=='individual'&&type!=='floater')throw Error('Women Care supports Individual or Family Floater only.');
- if(adults.length<1||adults.length>2)throw Error('Select one or two adults.');
+ if(adults.length<1||adults.length>2)throw Error('Select one or two adults. Women Care Individual requires a female; Floater requires at least one adult female.');
  if(children.length>3)throw Error('Maximum 3 children allowed.');
- if(children.some(m=>m.age>25))throw Error('Child age over 25 requires separate eligibility verification; quotation unavailable.');
+ if(children.some(m=>m.age>25))throw Error('Dependent child above 25: unmarried/unemployed daughters may qualify up to 30, but the premium chart does not separately model this exception. Please verify with insurer.');
  if(children.some(m=>m.age<0))throw Error('Invalid child age.');
+ if(adults.some(m=>m.age>75))throw Error('Women Care: new entry is limited to age 75. For existing renewals above 75, please confirm insurer eligibility and premium separately.');
  const key=adults.length===2?'2AdultsFemaleMale':'1Female';
  let total=0;
  for(let y=0;y<term;y++){
@@ -507,7 +508,7 @@ function calculate(){
   const details=[];if(rows[0].earlyDiscount>0)details.push('Fresh Policy: 5% Early Entry Discount on eligible first-year premium (approx. '+currency(rows[0].earlyDiscount)+').');
   if(deductible)details.push('Optional deductible discount: '+(rows[0].deductibleRate*100)+'% per policy year.');
   $('discountInfo').textContent=details.join(' ');
-  $('resultNote').textContent=currentPolicy===POLICIES.comprehensive?'Indicative Comprehensive annual chart rates; year 2 discounted 10%, year 3 discounted 12.5% for upfront long-term payment. Verify final rates and eligibility with insurer. Comprehensive zone selection is manual; PIN mapping is not verified. No GST added.':currentPolicy===POLICIES.womencare?'Indicative Women Care chart premiums. Year 2 uses 10% discount; year 3 uses 12.5% discount. Adult ages advance annually. No promotional discount applied. Confirm term discounts, eligibility and insurer quote before use. GST not added.':'Indicative calculation from annual premium chart. GST is exempt (nil) for eligible individual health insurance policies; no GST is added. Age progresses each year; 10% long-term discount on years 2 and 3. Fresh early entry discount applies only in year 1. Combined discounts and insurer rounding require verification with Star Mitra / Atom Pro. Renewal and portability may have insurer-specific rules not modeled here.';
+  $('resultNote').textContent=currentPolicy===POLICIES.comprehensive?'Indicative Comprehensive annual chart rates; year 2 discounted 10%, year 3 discounted 12.5% for upfront long-term payment. Verify final rates and eligibility with insurer. Comprehensive zone selection is manual; PIN mapping is not verified. No GST added.':currentPolicy===POLICIES.womencare?'Women Care (V03): 10% discount on second-year premium and 12.5% on third-year premium. Adult ages advance annually. At least one adult female is required for floater, and Individual cover is for females only. Please verify insurer-issued premium and eligibility. GST not added.':'Indicative calculation from annual premium chart. GST is exempt (nil) for eligible individual health insurance policies; no GST is added. Age progresses each year; 10% long-term discount on years 2 and 3. Fresh early entry discount applies only in year 1. Combined discounts and insurer rounding require verification with Star Mitra / Atom Pro. Renewal and portability may have insurer-specific rules not modeled here.';
   setupBnpl(rows);
   $('generateQuotation').classList.remove('hidden');
    quotationSnapshot={policy:currentPolicy.label,type,status,members:members.map(m=>({...m})),sumInsured,zone,deductible,rows:rows.map(r=>({...r})),family:familySizeText(),pin:zoneMode()==='pin'?$('pin').value.trim():''};$('resultPanel').classList.remove('hidden')
@@ -778,7 +779,7 @@ function womenCareQuoteHtml(){
  const q=quotationSnapshot,si=q.sumInsured,esc=quoteEsc,money=n=>esc(currency(n));
  const date=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'});
  const status=({fresh:'Fresh',renewal:'Renewal',portability:'Portability'})[q.status]||q.status;
- const cover=q.type==='floater'?'Family Floater':'Individual (Female)';
+ const cover=q.type==='floater'?'Family Floater (at least one adult female required)':'Individual (Female only)';
  const room=si===500000?'Up to 1% of Sum Insured per day':si<=2500000?'Any Room (except suite or above)':'Any Room';
  const delivery=si===500000?25000:si<=2000000?50000:si<=5000000?75000:100000;
  const antenatal=si<=1500000?2500:5000;
@@ -844,7 +845,7 @@ function womenCareQuoteHtml(){
  const members=q.members.map(m=>[m.member,m.age+' years']);
  const salutation=quoteCustomer||'Customer';
  const letter=quoteLanguage==='bn'?'প্রিয় '+salutation+',\n\nআপনার পরিবারের স্বাস্থ্য সুরক্ষার জন্য Star Women Care Insurance Policy-এর একটি ব্যক্তিগত quotation প্রস্তুত করা হয়েছে। নিচে নির্বাচিত কভারেজ, প্রিমিয়াম এবং গুরুত্বপূর্ণ সুবিধার বিবরণ দেওয়া হলো। সম্পূর্ণ শর্ত জানতে আপনার Health Insurance Advisor-এর সঙ্গে যোগাযোগ করুন।':quoteLanguage==='hi'?'प्रिय '+salutation+',\n\nआपके परिवार की स्वास्थ्य सुरक्षा के लिए Star Women Care Insurance Policy का व्यक्तिगत quotation प्रस्तुत है। नीचे चुनी गई coverage, premium और प्रमुख benefits दिए गए हैं। पूरी शर्तों के लिए अपने Health Insurance Advisor से संपर्क करें।':'Dear '+salutation+',\n\nPlease find your personalised Star Women Care Insurance Policy quotation, including the proposed coverage, premium options and key policy benefits. Your Health Insurance Advisor can explain the full terms and eligibility.';
- const note='<p class="qnote">All benefits are subject to the policy schedule, eligibility, sublimits, waiting periods, exclusions, underwriting and admissibility. The annual premium chart used for calculation predates this UIN; final premiums and long-term discounts must be verified with the insurer. No optional cancer cover included.</p>';
+ const note='<p class="qnote">All benefits are subject to the policy schedule, eligibility, sublimits, waiting periods, exclusions, underwriting and admissibility. The supplied premium chart has been confirmed by the advisor for this V03 policy; insurer-issued premium remains authoritative. Optional Cancer Cover is not included.</p>';
  const p1=page('<div class="qhero"><span>PROPOSED SUM INSURED</span><strong>'+money(si)+'</strong><small>'+esc(status)+' · '+esc(cover)+'</small></div><div class="qletter">'+esc(letter.replace(/\\n/g,'\n'))+'</div>'+sec('Quotation Details')+table(details)+sec('Premium Options')+'<div class="qpremiums">'+premium+'</div>'+quoteDiscount.earlyHtml+quoteDiscount.noteHtml+note,1,4);
  const p2=page(sec('Covered Members')+table(members)+sec('Benefits & Coverage Amount')+table(benefits.slice(0,17))+note,2,4);
  const p3=page(sec('Additional Benefits & Coverage Amount')+table(benefits.slice(17))+sec('Important Waiting Periods')+table(waits)+note,3,4);
