@@ -752,10 +752,10 @@ function redCarpetQuoteHtml(){
   2000000:[[35000,60000],[450000,750000],[325000,550000]],
   2500000:[[40000,70000],[500000,850000],[350000,600000]]
  };
- const limitLabels=['Cataract','Cerebrovascular / Cardiovascular diseases, Cancer (including chemotherapy / radiotherapy), Renal diseases (including dialysis), Long-bone fractures','Other Major Surgeries'];
+ const limitLabels=[['Cataract',0],['Cerebrovascular Accident / Stroke',1],['Cardiovascular Diseases',1],['Cancer (including Chemotherapy / Radiotherapy)',1],['Renal Diseases (including Dialysis)',1],['Long-bone Fractures',1],['Other Major Surgeries',2]];
  const diseaseRows=q.type==='floater'
-  ?limitLabels.map((name,i)=>[name,currency(floaterLimits[si][i][0])+' per person; '+currency(floaterLimits[si][i][1])+' per policy period'])
-  :limitLabels.map((name,i)=>[name,currency(individualLimits[si][i])+' per person, per policy period']);
+  ?limitLabels.map(([name,i])=>[name,currency(floaterLimits[si][i][0])+' per person; '+currency(floaterLimits[si][i][1])+' per policy period'])
+  :limitLabels.map(([name,i])=>[name,currency(individualLimits[si][i])+' per person, per policy period']);
  const exclusions=sec('Disease-specific Sublimits')+table(diseaseRows)+sec('Important Conditions')+table([
   ['Room Rent Proportionate Deduction','Eligible room rent: '+room+'. If a higher room category is chosen, proportionate deduction may apply to associated medical expenses as well as the room-rent difference; pharmacy/consumables, implants/medical devices and diagnostics are excluded from associated expenses.'],
   ['Initial Waiting Period','30 days from first policy commencement for illness; covered accidents excepted. Continuity and enhanced SI conditions apply.'],
