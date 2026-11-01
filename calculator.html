@@ -740,7 +740,30 @@ function redCarpetQuoteHtml(){
  const memberText=q.members.map(m=>m.member+' ('+m.age+' years)').join(', ');
  const overview=sec('Policy Details')+table([['Policy Type',cover],['Policy Status',status],['Insured Members',memberText],['Sum Insured',currency(si)],['Co-payment','30% of admissible claims'],['Policy Period','1 / 2 / 3 years']])+sec('Premium Options')+'<div class="qpremiums">'+premium+'</div>'+'<p class="qnote">2- and 3-year premiums already include applicable long-term discounts. No medical-report discount has been applied. Final underwriting and premium are subject to insurer confirmation.</p>';
  const benefits=sec('Key Policy Benefits')+table([['In-Patient Hospitalisation','Up to Sum Insured, subject to policy sublimits and admissibility'],['Room Rent',room],['ICU Charges',icu],['Surgeon / Consultant Fees','Up to 25% of SI per hospitalization'],['Operation Theatre and related expenses','Up to 50% of SI per hospitalization'],['Day Care Procedures','All day care procedures, subject to policy terms'],['Pre-Hospitalisation','Up to 30 days'],['Post-Hospitalisation','7% of specified hospitalization expenses; '+post],['Emergency Ambulance',ambulance],['AYUSH Treatment','Up to Sum Insured, subject to policy terms'],['Home Care Treatment','Up to 10% of SI, maximum ₹50,000 per policy year, for specified conditions'],['Out-Patient Consultation',opd+'; ₹200 per consultation'],['Preventive Health Check-up',checkup],['Tele-Consultation','Unlimited, subject to policy terms'],['Co-payment','30% of admissible claims']]);
- const exclusions=sec('Important Conditions')+table([['Disease-specific sublimits','Cataract, cardiovascular/cerebrovascular diseases, cancer, renal diseases, long-bone fractures and major surgeries have SI-specific sublimits. Refer to policy wordings.'],['Room Rent Proportionate Deduction','May apply where hospital room charges exceed eligible limits'],['Waiting Periods','Subject to official policy wording and applicable continuity credits'],['Renewal above age 75','Subject to policy renewal terms; new entry permitted only age 60–75'],['Claim Settlement','Subject to exclusions, admissibility, 30% co-payment and insurer assessment']])+'<p class="qnote">Coverage amounts are benefit limits, not guaranteed claim payments. Refer to the official Senior Citizens Red Carpet policy wordings and schedule for all sublimits, waiting periods and exclusions.</p>';
+ const individualLimits={
+  100000:[15000,75000,60000],200000:[15000,150000,120000],300000:[18000,200000,150000],
+  400000:[20000,225000,200000],500000:[21500,275000,225000],750000:[23000,300000,250000],
+  1000000:[25000,350000,275000],1500000:[30000,400000,300000],
+  2000000:[35000,450000,325000],2500000:[40000,500000,350000]
+ };
+ const floaterLimits={
+  1000000:[[25000,45000],[350000,600000],[275000,450000]],
+  1500000:[[30000,50000],[400000,700000],[300000,500000]],
+  2000000:[[35000,60000],[450000,750000],[325000,550000]],
+  2500000:[[40000,70000],[500000,850000],[350000,600000]]
+ };
+ const limitLabels=['Cataract','Cerebrovascular / Cardiovascular diseases, Cancer (including chemotherapy / radiotherapy), Renal diseases (including dialysis), Long-bone fractures','Other Major Surgeries'];
+ const diseaseRows=q.type==='floater'
+  ?limitLabels.map((name,i)=>[name,currency(floaterLimits[si][i][0])+' per person; '+currency(floaterLimits[si][i][1])+' per policy period'])
+  :limitLabels.map((name,i)=>[name,currency(individualLimits[si][i])+' per person, per policy period']);
+ const exclusions=sec('Disease-specific Sublimits')+table(diseaseRows)+sec('Important Conditions')+table([
+  ['Room Rent Proportionate Deduction','Eligible room rent: '+room+'. If a higher room category is chosen, proportionate deduction may apply to associated medical expenses as well as the room-rent difference; pharmacy/consumables, implants/medical devices and diagnostics are excluded from associated expenses.'],
+  ['Initial Waiting Period','30 days from first policy commencement for illness; covered accidents excepted. Continuity and enhanced SI conditions apply.'],
+  ['Pre-Existing Diseases (PED)','12 months of continuous coverage; disease must be declared and accepted. Portability credits and enhanced SI rules apply.'],
+  ['Specified Diseases / Procedures','24 months of continuous coverage (accident claims excepted). Includes cataract/ENT/thyroid, joint and spinal conditions, hernia, calculi, prostate, piles, varicose veins, transplants and other conditions listed in Excl 02.'],
+  ['Renewal above age 75','New entry: ages 60–75 only. Renewal permitted beyond age 75 with lifelong renewal provision, subject to policy renewal terms; normally 30-day renewal grace period.'],
+  ['Claim Settlement','Subject to listed disease sublimits, admissibility, exclusions, 30% co-payment and insurer assessment']
+ ])+'<p class="qnote">Disease limits apply to each specified condition and are subject to the overall Sum Insured. Waiting periods may be adjusted by applicable continuity or portability credits. Consult official policy wordings and schedule for full details.</p>';
  return page(overview,1,3)+page(benefits,2,3)+page(exclusions,3,3);
 }
 function comprehensiveQuoteHtml(){
