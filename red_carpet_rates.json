@@ -1,0 +1,98 @@
+{
+  "policy": "Senior Citizens Red Carpet Health Insurance Policy",
+  "uin": "SHAHLIP26041V082526",
+  "source": "User-provided premium chart (excluding tax)",
+  "age_eligibility": {
+    "fresh_min": 60,
+    "fresh_max": 75,
+    "renewal": "Subject to insurer terms"
+  },
+  "terms_years": [
+    1,
+    2,
+    3
+  ],
+  "premium_inr": {
+    "individual_1A": {
+      "100000": {
+        "1": 6710,
+        "2": 12749,
+        "3": 18620
+      },
+      "200000": {
+        "1": 11770,
+        "2": 22363,
+        "3": 32662
+      },
+      "300000": {
+        "1": 16775,
+        "2": 31873,
+        "3": 46551
+      },
+      "400000": {
+        "1": 20130,
+        "2": 38247,
+        "3": 55861
+      },
+      "500000": {
+        "1": 22347,
+        "2": 42459,
+        "3": 62013
+      },
+      "750000": {
+        "1": 25031,
+        "2": 47559,
+        "3": 69461
+      },
+      "1000000": {
+        "1": 27533,
+        "2": 52313,
+        "3": 76404
+      },
+      "1500000": {
+        "1": 32214,
+        "2": 61207,
+        "3": 89394
+      },
+      "2000000": {
+        "1": 36080,
+        "2": 68552,
+        "3": 100122
+      },
+      "2500000": {
+        "1": 39688,
+        "2": 75407,
+        "3": 110134
+      }
+    },
+    "floater_2A": {
+      "1000000": {
+        "1": 44055,
+        "2": 83705,
+        "3": 122253
+      },
+      "1500000": {
+        "1": 51541,
+        "2": 97928,
+        "3": 143026
+      },
+      "2000000": {
+        "1": 57728,
+        "2": 109683,
+        "3": 160195
+      },
+      "2500000": {
+        "1": 63503,
+        "2": 120656,
+        "3": 176221
+      }
+    }
+  },
+  "notes": [
+    "2-year and 3-year amounts already include applicable long-term discounts.",
+    "Floater is restricted to two adults (husband and wife) for this calculator.",
+    "No zone differentiation in supplied chart.",
+    "10% medical report discount is not applied in these base rates.",
+    "Verify insurer premium before customer quotation."
+  ]
+}
