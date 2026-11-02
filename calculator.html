@@ -840,12 +840,12 @@ function superSurplusQuoteHtml(){
   ['Post-hospitalisation','Up to 90 days','Up to 60 days'],
   ['Pre-existing disease waiting','12 months','36 months'],
   ['Specified disease / procedure waiting','12 months','24 months'],
-  ['Emergency ambulance','Up to ₹3,000 per policy period','As per policy terms'],
-  ['Air ambulance','Up to 10% of Sum Insured, subject to policy terms; applicable from ₹7 lakh SI','Refer to applicable policy wording'],
-  ['Delivery expenses','Up to ₹50,000 per policy period; maximum two deliveries in lifetime; Self and Spouse both covered; 12-month waiting period','Refer to applicable policy wording'],
-  ['Recharge benefit','One recharge as specified in policy wording; modern treatments excluded from recharge','As specified in policy wording']
+  ['Emergency ambulance','Up to ₹3,000 per policy period','Not available under Silver Plan'],
+  ['Air ambulance','Up to 10% of Sum Insured, subject to policy terms; applicable from ₹7 lakh SI','Not available under Silver Plan'],
+  ['Delivery expenses','Up to ₹50,000 per policy period; maximum two deliveries in lifetime; Self and Spouse both covered; 12-month waiting period','Not available under Silver Plan'],
+  ['Recharge benefit','One recharge as specified in policy wording; modern treatments excluded from recharge','Not available under Silver Plan']
  ];
- const comparison=sec('Gold vs Silver Plan Comparison')+'<table class="qtable"><thead><tr><th>Benefit</th><th>Gold Plan</th><th>Silver Plan</th></tr></thead><tbody>'+comparisonRows.map(([a,b,c])=>'<tr><th>'+esc(a)+'</th><td>'+esc(b)+'</td><td>'+esc(c)+'</td></tr>').join('')+'</tbody></table><p class="qnote">This is a concise comparison of selected features. “Refer to applicable policy wording” means the benefit should be checked against the relevant plan wording and schedule; it does not mean the benefit is automatically excluded. All limits, eligibility, exclusions and claim admissibility conditions apply.</p>';
+ const comparison=sec('Gold vs Silver Plan Comparison')+'<table class="qtable"><thead><tr><th>Benefit</th><th>Gold Plan</th><th>Silver Plan</th></tr></thead><tbody>'+comparisonRows.map(([a,b,c])=>'<tr><th>'+esc(a)+'</th><td>'+esc(b)+'</td><td>'+esc(c)+'</td></tr>').join('')+'</tbody></table><p class="qnote">“Not available under Silver Plan” indicates that the listed benefit is not included in the Silver Plan. All Gold Plan limits, eligibility conditions, exclusions and claim admissibility requirements apply as stated in the policy wording.</p>';
  const p1=page('<div class="qhero"><span>PROPOSED SUM INSURED</span><strong>'+money(q.sumInsured)+'</strong><small>'+esc(cover)+' · '+esc(plan)+' Plan</small></div>'+sec('Quotation Details')+table(details)+sec('Premium Options')+'<div class="qpremiums">'+premiums+'</div>'+note,1,6);
  const p2=page(sec('Selected Plan: Key Benefits')+table(benefitRows)+sec('Important Waiting Periods & Conditions')+table(waits)+waitNote,2,6);
  const p3=page(comparison,3,6);
