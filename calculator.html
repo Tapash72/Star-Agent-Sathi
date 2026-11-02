@@ -607,12 +607,34 @@ function quoteDiscountDetails(q){
 }
 function youngStarQuoteHtml(){
  const q=quotationSnapshot,esc=quoteEsc,money=n=>esc(currency(n));
- const date=new Date().toLocaleDateString('en-IN');
- const rows=[['Plan',q.youngPlan],['Policy Type',q.status],['Cover',q.type==='floater'?'Family Floater':'Individual'],['Family Composition',q.family],['Members',q.members.map(m=>m.member+' ('+m.age+')').join(', ')],['Sum Insured',currency(q.sumInsured)],['Zone / PIN',q.zone+(q.pin?' / '+q.pin:'')],['Room Category','Single Private A/C Room'],['Pre-Hospitalisation','60 days'],['Post-Hospitalisation','90 days'],['Restoration','100% Sum Insured, once, subject to policy terms'],['Cumulative Bonus','20% of SI per claim-free year, maximum 100%, subject to terms'],['Road Traffic Accident Additional SI','25% of SI, maximum ₹10 lakh, subject to terms'],['PED Waiting Period','12 months, subject to policy wording'],['Specific Disease Waiting Period','12 months, subject to policy wording']];
- if(q.youngPlan==='Gold'){rows.push(['Maternity / Delivery','Up to ₹30,000 per delivery, maximum 2 deliveries, 36-month waiting period, subject to terms']);rows.push(['Hospital Cash','₹1,000/day, maximum 7 days per hospitalisation and 14 days per policy period; one-day deductible, subject to terms'])}
- const tr=rows.map(([a,b])=>'<tr><th>'+esc(String(a))+'</th><td>'+esc(String(b))+'</td></tr>').join('');
+ const date=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'});
+ const head='<div class="qhead"><div class="qeyebrow">PERSONALISED HEALTH INSURANCE QUOTATION</div><div class="qtitle">Star Young Star Insurance Policy</div><div class="qsub">'+esc(q.youngPlan)+' Plan · UIN SHAHLIP26043V062526 · '+esc(date)+'</div></div>';
+ const page=(content,i,n)=>'<section class="qpage">'+head+content+'<div class="qfooter"><span>Indicative advisor quotation · Official policy wording and schedule prevail</span><span>Page '+i+' of '+n+'</span></div></section>';
+ const section=t=>'<h2 class="qsection">'+esc(t)+'</h2>';
+ const table=rows=>'<table class="qtable"><tbody>'+rows.map(([a,b])=>'<tr><th>'+esc(String(a))+'</th><td>'+esc(String(b))+'</td></tr>').join('')+'</tbody></table>';
+ const rows=[['Plan',q.youngPlan],['Policy Type',q.status],['Cover',q.type==='floater'?'Family Floater':'Individual'],['Family Composition',q.family],['Members',q.members.map(m=>m.member+' ('+m.age+')').join(', ')],['Sum Insured',currency(q.sumInsured)],['Zone / PIN',q.zone+(q.pin?' / '+q.pin:'')],['Room Category','Single Private A/C Room'],['Pre-Hospitalisation','60 days'],['Post-Hospitalisation','90 days'],['Restoration','100% Sum Insured, once, subject to policy terms'],['Cumulative Bonus','20% of SI per claim-free year, maximum 100%, subject to terms'],['Road Traffic Accident Additional SI','25% of SI, maximum ₹10 lakh, subject to terms']];
+ if(q.youngPlan==='Gold'){rows.push(['Maternity / Delivery','Up to ₹30,000 per delivery, maximum 2 deliveries, subject to Gold Plan eligibility and waiting periods']);rows.push(['Hospital Cash','₹1,000/day, maximum 7 days per hospitalisation and 14 days per policy period; one-day deductible, subject to terms'])}
  const premiums=q.rows.map(r=>'<div class="qpremium"><span>'+r.term+' '+(r.term===1?'Year':'Years')+'</span><strong>'+money(r.amount)+'</strong>'+(r.savings?.total?'<small class="qsave">Save '+money(r.savings.total)+'</small>':'')+'</div>').join('');
- return '<div class="qpage"><div class="qhead"><div class="qeyebrow">HEALTH INSURANCE QUOTATION</div><div class="qtitle">Star Young Star Insurance Policy</div><div class="qsub">'+esc(q.youngPlan)+' Plan | '+esc(date)+'</div></div><div class="qhero"><span>SUM INSURED</span><strong>'+money(q.sumInsured)+'</strong><small>'+esc(q.family)+' | Zone '+esc(q.zone)+'</small></div><div class="qsection">Premium Options</div><div class="qpremiums">'+premiums+'</div><div class="qsection">Policy Details & Key Benefits</div><table class="qtable">'+tr+'</table><p class="qnote">Modern treatment and other procedure-specific limits vary by Sum Insured and policy terms. Consult the official prospectus for exact sublimits. Premiums are indicative; confirm rates, underwriting and eligibility with insurer before issuing. No GST added.</p><div class="qfooter"><span>Independent advisor quotation • Not an insurer-issued document</span><span>'+esc(date)+'</span></div></div>';
+ const first=page('<div class="qhero"><span>SUM INSURED</span><strong>'+money(q.sumInsured)+'</strong><small>'+esc(q.family)+' | Zone '+esc(q.zone)+'</small></div>'+section('Premium Options')+'<div class="qpremiums">'+premiums+'</div>'+section('Policy Details & Key Benefits')+table(rows)+'<p class="qnote">Modern-treatment sublimits and other procedure-specific limits depend on Sum Insured. Confirm from official prospectus. Premiums and underwriting require insurer confirmation. No GST added.</p>',1,4);
+ const exclusions=[
+  ['Diseases of ENT and Thyroid','12 months'],
+  ['Hydrocele, Hernia, Varicocele, Piles, Fistula and Fissure in Ano','12 months'],
+  ['Diseases of Female Reproductive System','12 months'],
+  ['Calculus diseases of Gall Bladder, Kidney and Urinary Tract','12 months']
+ ];
+ const second=page(section('Waiting Periods & Exclusions')+table([
+  ['Initial Waiting Period (Excl 03)','30 days for illness; covered accident claims excepted, subject to continuity and policy terms'],
+  ['Pre-Existing Diseases (Excl 01)','12 months continuous coverage, subject to disclosure, acceptance and applicable continuity credits'],
+  ['Specified Diseases / Procedures (Excl 02)','12 months continuous coverage, not 24 months. See the four categories below. Covered accident claims excepted.'],
+  ['Enhanced Sum Insured','Waiting periods may apply afresh to the increased portion of Sum Insured'],
+  ['Portability / Continuous Coverage','Eligible prior coverage may reduce waiting periods, as provided in policy wording'],
+  ['Gold Plan Delivery','Separate eligibility, waiting periods and repeat-claim conditions apply; see official wording']
+ ])+section('12-Month Specified Disease / Procedure List (Excl 02)')+table(exclusions)+'<p class="qnote">Source: Young Star Insurance Policy, UIN SHAHLIP26043V062526, Standard Exclusions, Excl 01–03. This is a condensed summary. Where a listed condition is pre-existing, the longer applicable waiting period prevails.</p>',2,4);
+ const annexureNote='<p class="qnote">Reference list of 68 non-medical items used in existing Agent Sathi quotations. Inclusion here does NOT establish Young Star coverage or reimbursement. Check the Young Star policy schedule, applicable endorsements and insurer admissibility before describing any item as covered.</p>';
+ const items=sharedNonMedicalList.map((name,i)=>[String(i+1),name]);
+ const third=page(section('Annexure: Non-Medical Items · Reference List (1–34)')+table(items.slice(0,34))+annexureNote,3,4);
+ const fourth=page(section('Annexure: Non-Medical Items · Reference List (35–68)')+table(items.slice(34))+annexureNote,4,4);
+ return first+second+third+fourth;
 }
 function quoteHtml(){
  const quoteDiscount=quoteDiscountDetails(quotationSnapshot);
