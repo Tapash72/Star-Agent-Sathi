@@ -5,6 +5,7 @@
 <meta name="theme-color" content="#09539d"><title>Premium Calculator | Star Agent Sathi</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:#18314a;background:#f3f7fc}*{box-sizing:border-box}body{margin:0}header{background:linear-gradient(120deg,#09539d,#0876b9);color:#fff;padding:20px 16px}header .wrap{max-width:760px;margin:auto}header a{color:#fff;text-decoration:none;font-size:14px}h1{margin:10px 0 4px;font-size:25px}header p{margin:0;opacity:.9;font-size:14px}main{max-width:760px;margin:18px auto;padding:0 12px 32px}.panel{background:#fff;border:1px solid #e2eaf2;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 3px 14px #164d7d0b}h2{font-size:17px;margin:0 0 14px;color:#124e86}.step{display:inline-flex;align-items:center;justify-content:center;background:#e7f3ff;color:#1266a5;border-radius:50%;width:27px;height:27px;margin-right:8px}label{font-weight:650;display:block;font-size:14px;margin:10px 0 6px}select,input{width:100%;padding:12px;border:1px solid #cbd9e6;border-radius:9px;font:inherit;background:#fff;color:#18314a}input:focus,select:focus{outline:2px solid #91c8fa;outline-offset:1px}.choices{display:flex;gap:12px;flex-wrap:wrap;margin:9px 0}.choices label{font-weight:500;margin:0;display:flex;gap:6px;align-items:center}.choices input{width:auto}.member{display:grid;grid-template-columns:minmax(100px,1fr) minmax(0,1.3fr);gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #edf1f6}.member:last-child{border:0}.member-select{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #edf1f6;font-weight:650}.member-select input{width:19px;height:19px;accent-color:#0875bb}.member-group{padding:8px 0 12px 28px}.member-group select{max-width:210px}.member-group .member{padding:8px 0}.member-group .member label{font-weight:500}.member label{margin:0}.hint{font-size:12px;color:#60768a;line-height:1.5;margin:8px 0 0}.notice{border-radius:10px;background:#fff7e6;color:#76520e;padding:12px;font-size:13px;line-height:1.55;margin:10px 0}.hidden{display:none!important}button{background:#0875bb;color:#fff;border:0;border-radius:10px;padding:14px 18px;width:100%;font-size:16px;font-weight:700;cursor:pointer}.result-row{display:flex;justify-content:space-between;align-items:center;border:1px solid #dce8f4;border-radius:10px;padding:14px;margin:9px 0}.result-row strong{font-size:19px}.error{color:#b42318;font-size:13px;margin:10px 0;white-space:pre-line}.summary{background:#f3f8ff;padding:12px;border-radius:10px;font-size:14px;line-height:1.7}.family-size{background:#eaf4ff;border:1px solid #c7e1fb;border-radius:9px;padding:12px;font-weight:650;margin-top:12px}.child-notice{margin:8px 0 2px}.discount-info{color:#246341;font-size:13px;margin-top:10px}@media(max-width:370px){.panel{padding:14px}.member{grid-template-columns:95px 1fr}}
+.ss-note{background:#eef6ff;border-left:3px solid #0875bb;padding:10px 12px;border-radius:8px;font-size:12px;line-height:1.5;color:#315775;margin:10px 0}
 
 .quote-actions{margin-top:15px}.quote-modal{position:fixed;inset:0;background:#09233bb8;z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px}.quote-dialog{background:white;border-radius:16px;max-width:480px;width:100%;padding:22px;box-shadow:0 18px 60px #001d3850}.quote-dialog h2{margin:0 0 10px}.quote-buttons{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.quote-buttons button{font-size:14px;padding:12px}.quote-secondary{background:#eaf2fb;color:#145383}.quote-language{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.quote-language button{font-size:13px;padding:10px 5px}.quote-small{font-size:12px;color:#64768b;line-height:1.5}.quote-preview{position:fixed;left:-12000px;top:0;z-index:2001;pointer-events:none;width:794px;background:white;color:#18314a;font-family:'Nirmala UI','Noto Sans Bengali','Noto Sans Devanagari',Arial,sans-serif}.quote-page{width:794px;min-height:1123px;padding:54px 58px;box-sizing:border-box;background:white;position:relative;page-break-after:always}.quote-page:last-child{page-break-after:auto}.quote-head{font-size:26px;color:#10518a;font-weight:bold;border-bottom:3px solid #f3a33e;padding-bottom:14px}.quote-sub{font-size:13px;color:#5a7387;margin:9px 0 30px}.quote-letter{font-size:15px;line-height:1.9;white-space:pre-line;margin:22px 0 30px}.quote-section{color:#0f528a;background:#edf5fd;padding:11px 14px;margin:24px 0 12px;font-size:16px;font-weight:bold}.quote-table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}.quote-table th,.quote-table td{border-bottom:1px solid #e1e9f1;padding:12px 10px;text-align:left;vertical-align:top}.quote-table th{background:#f4f8fc;color:#194f7b}.quote-price{font-size:19px;font-weight:bold;color:#bd650e}.quote-footer{position:absolute;bottom:30px;left:58px;right:58px;font-size:10px;color:#657789;border-top:1px solid #dce6ee;padding-top:10px}.quote-note{font-size:12px;line-height:1.7;color:#526779}.quote-tag{display:inline-block;padding:6px 10px;background:#fff3df;border-radius:6px;color:#9b5b12;font-weight:bold;font-size:12px}
 
@@ -92,6 +93,8 @@
 <section class="panel hidden" id="quotationEntryNote"><div class="notice"><strong>Quotation:</strong> First select a policy and calculate the premium. Then click <strong>Generate Quotation</strong> in the results to prepare a PDF.</div></section>
 <section class="panel"><h2><span class="step">1</span>Select Policy</h2><label for="policy">Health Insurance Policy</label><select id="policy"><option value="">Choose a policy</option></select><p class="hint">Choose a policy to configure your quotation.</p></section>
 <section class="panel hidden" id="youngPlanPanel"><h2>Young Star Plan</h2><label for="youngPlan">Select Plan</label><select id="youngPlan"><option value="Gold">Gold</option><option value="Silver">Silver</option></select></section>
+<section class="panel hidden" id="superSurplusPlanPanel"><h2>Super Surplus Plan</h2><label for="superSurplusPlan">Select Plan</label><select id="superSurplusPlan"><option value="GOLD">Gold</option><option value="SILVER">Silver</option></select><p class="hint">One Super Surplus policy module with Individual / Family Floater cover.</p></section>
+<section class="panel hidden" id="superSurplusLimitPanel"><h2>Deductible / Defined Limit</h2><label for="superSurplusLimit" id="superSurplusLimitLabel">Select limit</label><select id="superSurplusLimit"><option value="">Choose limit</option></select><p class="hint" id="superSurplusLimitHint">Gold uses a Defined Limit; Silver uses a per-hospitalisation Deductible.</p><div class="ss-note">Super Surplus does not require PIN or Premium Zone. The initial rate matrix contains selected reference combinations only; missing combinations are not guessed.</div></section>
 <section class="panel hidden" id="statusPanel"><h2><span class="step">2</span>Policy Type</h2><label for="policyStatus">Select Policy Type</label><select id="policyStatus"><option value="fresh">Fresh</option><option value="renewal">Renewal</option><option value="portability">Portability</option></select><p class="hint">This is a premium calculator. No previous policy details are required.</p></section>
 <section class="panel hidden" id="typePanel"><h2><span class="step">3</span>Cover Type</h2><label for="policyType">Select Cover Type</label><select id="policyType"><option value="">Choose cover type</option></select></section>
 <section class="panel hidden" id="memberPanel"><h2><span class="step">4</span>Insured Members &amp; Age</h2><div class="choices"><label><input type="radio" name="ageMode" value="age" checked> Manual Age</label><label><input type="radio" name="ageMode" value="dob"> Date of Birth</label></div><p class="hint">For Family Floater, tick members to include. Choose the number of children and parents to display their age/DOB fields.</p><div id="members"></div><div class="family-size" id="familySize">Family Size: Not selected</div></section>
@@ -118,14 +121,14 @@
   <p class="hint">*Estimated total = down payment + all EMIs + indicative processing fee. Actual processing fee, payment timing, EMI and eligibility must be confirmed on BimaPay before offering to a customer. This is an estimate, not a loan approval.</p>
 </div>
 <div class="discount-info" id="discountInfo"></div><p class="hint" id="resultNote"></p><div class="quote-actions"><button id="generateQuotation" type="button">Generate Quotation</button></div></section>
-<section class="panel"><div class="notice"><strong>Rate status:</strong> Comprehensive premiums and policy-specific quotation are indicative; Comprehensive PIN mapping is connected using a provisional district/state-based database. Assure uses the uploaded annual premium chart for indicative 1, 2 and 3-year premiums. Fresh-policy early entry and optional deductible discounts are applied based on prospectus rules. Super Star rates are not connected. PIN mapping is provisional and not fully insurer-verified. Verify insurer quotation, eligibility and discount combination before use.</div><p class="hint">Independent agent toolkit. Not an official Star Health application.</p></section>
+<section class="panel"><div class="notice"><strong>Rate status:</strong> Assure, Women Care, Comprehensive, Red Carpet and Young Star use their connected rate files. Super Surplus uses the V9 chart rate matrix with selected Atom Pro sample calibration; Floater Gold currently includes 2A+1C chart rows only. Super Star rates are not connected. Verify insurer quotation, eligibility and discounts before use.</div><p class="hint">Independent agent toolkit. Not an official Star Health application.</p></section>
 </main>
 <div class="quote-modal hidden" id="quoteModal" role="dialog" aria-modal="true" aria-labelledby="quoteModalTitle"><div class="quote-dialog"><h2 id="quoteModalTitle">Generate Quotation</h2><div id="quoteStageName"><label for="quoteCustomerName">Customer Name (Optional)</label><input id="quoteCustomerName" maxlength="100" autocomplete="off" placeholder="Enter Customer Name"><div class="quote-buttons"><button class="quote-secondary" id="quoteSkip" type="button">Skip</button><button id="quoteContinue" type="button">Continue</button></div></div><div id="quoteStageActions" class="hidden"><p class="quote-small">Select quotation language, then Download or Share. Official insurance feature names and medical terms remain in English.</p><div class="quote-language"><button type="button" data-quote-language="bn">Bengali</button><button type="button" data-quote-language="hi">Hindi</button><button type="button" data-quote-language="en">English</button></div><p class="quote-small" id="quoteLanguageInfo">Choose a language.</p><div class="quote-buttons"><button id="quoteDownload" type="button">Download PDF</button><button id="quoteShare" type="button">Share PDF</button></div></div><div id="quoteStageShare" class="hidden"><div class="quote-buttons"><button id="quoteWhatsapp" type="button">WhatsApp</button><button id="quoteEmail" type="button">Email</button></div><div id="quoteContactArea" class="hidden"><label id="quoteContactLabel" for="quoteContact">Customer contact</label><input id="quoteContact" autocomplete="off"><p class="quote-small" id="quoteShareHelp"></p><button id="quoteShareContinue" type="button">Continue</button></div></div><p class="error" id="quoteError" role="alert"></p><button class="quote-secondary" style="margin-top:12px" id="quoteClose" type="button">Close</button></div></div>
 
 
 <script>
 'use strict';
-const POLICIES={assure:{label:'Star Health Assure',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,7500000,10000000,20000000],terms:[1,2,3],ratesVerified:true},superstar:{label:'Star Health Super Star',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,10000000,'Unlimited'],terms:[1,2,3,4,5],ratesVerified:false},womencare:{label:'Star Women Care',sumInsured:[500000,1000000,1500000,2000000,2500000,5000000,10000000],terms:[1,2,3],ratesVerified:true},redcarpet:{label:'Star Senior Citizens Red Carpet Health Insurance Policy',sumInsured:[100000,200000,300000,400000,500000,750000,1000000,1500000,2000000,2500000],terms:[1,2,3],ratesVerified:true},youngstar:{label:'Star Young Star Insurance Policy',sumInsured:[300000,500000,750000,1000000,1500000,2000000,2500000,5000000,7500000,10000000],terms:[1,2,3],ratesVerified:true},comprehensive:{label:'Star Comprehensive Insurance Policy',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,7500000,10000000],terms:[1,2,3],ratesVerified:true}};
+const POLICIES={assure:{label:'Star Health Assure',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,7500000,10000000,20000000],terms:[1,2,3],ratesVerified:true},superstar:{label:'Star Health Super Star',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,10000000,'Unlimited'],terms:[1,2,3,4,5],ratesVerified:false},womencare:{label:'Star Women Care',sumInsured:[500000,1000000,1500000,2000000,2500000,5000000,10000000],terms:[1,2,3],ratesVerified:true},redcarpet:{label:'Star Senior Citizens Red Carpet Health Insurance Policy',sumInsured:[100000,200000,300000,400000,500000,750000,1000000,1500000,2000000,2500000],terms:[1,2,3],ratesVerified:true},youngstar:{label:'Star Young Star Insurance Policy',sumInsured:[300000,500000,750000,1000000,1500000,2000000,2500000,5000000,7500000,10000000],terms:[1,2,3],ratesVerified:true},comprehensive:{label:'Star Comprehensive Insurance Policy',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,7500000,10000000],terms:[1,2,3],ratesVerified:true},supersurplus:{label:'Star Super Surplus',sumInsured:[500000,700000,1000000,1500000,2000000,2500000,5000000,7500000,10000000],terms:[1,2],ratesVerified:true}};
 const PIN_DATABASES={
  assure:{mapping:Object.create(null),loaded:false,error:''},
  comprehensive:{mapping:Object.create(null),loaded:false,error:''},
@@ -162,6 +165,8 @@ fetch('young_star_rates.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error(
  const index=new Map();for(const r of d.rates){const key=[r.plan,r.zone,r.sum_insured,r.age_band,r.family_composition].join('|');if(index.has(key)||!Number.isFinite(r.premium))throw Error('Invalid Young Star rate entry');index.set(key,r.premium)}
  youngStarIndex=index;youngStarData=d;
 }).catch(e=>{console.error('Young Star:',e);youngStarData=null});
+let superSurplusData=null;
+fetch('super_surplus_rates.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Super Surplus rate file missing');return r.json()}).then(d=>{if(d.policy!=='Star Super Surplus'||!d.individual?.gold||!d.individual?.silver||!d.floater?.gold||!d.floater?.silver)throw Error('Invalid Super Surplus rate file');superSurplusData=d;console.log('Super Surplus V9 rate matrix loaded');if(currentPolicy===POLICIES.supersurplus)updateSuperSurplusOptions()}).catch(e=>{console.error('Super Surplus:',e);superSurplusData=null});
 function youngStarAgeBand(age){return age<=30?'18-30':age<=35?'31-35':age<=40?'36-40':age<=45?'41-45':age<=50?'46-50':age<=55?'51-55':age<=60?'56-60':age<=65?'61-65':'Above 65'}
 function youngStarPremium(members,si,zone,term,type,status){
  if(!youngStarData)throw Error('Young Star rates not loaded. Check young_star_rates.json and refresh.');
@@ -213,6 +218,106 @@ function comprehensivePremium(members,si,zone,term,type,status){
  // Long-term discount is for upfront payment, based on annual premium at entry age.
  const factor=term===1?1:term===2?1.9:2.775;
  return {amount:Math.round(annual*factor),earlyDiscount:0,deductibleRate:0};
+}
+function superSurplusAgeBand(age){
+ if(age<18)throw Error('Super Surplus adult must be at least 18 years old.');
+ if(age<=35)return '91days-35';if(age<=45)return '36-45';if(age<=50)return '46-50';
+ if(age<=55)return '51-55';if(age<=60)return '56-60';if(age<=65)return '61-65';
+ if(age<=70)return '66-70';if(age<=75)return '71-75';if(age<=80)return '76-80';return 'Above 80';
+}
+function superSurplusComposition(members,type){
+ if(type==='individual')return members.length===1?'1A':'';
+ const adults=members.filter(m=>m.member==='Self'||m.member==='Spouse').length;
+ const children=members.filter(m=>m.member.startsWith('Child')).length;
+ if((adults!==1&&adults!==2)||children>3||members.length!==adults+children)return '';
+ if(adults===1&&children===0)return '';
+ return adults+'A'+(children?'+'+children+'C':'');
+}
+function superSurplusLimitLabel(){return $('superSurplusPlan').value==='GOLD'?'Defined Limit':'Deductible'}
+function updateSuperSurplusOptions(){
+ if(currentPolicy!==POLICIES.supersurplus)return;
+ const cover=$('policyType').value||'individual',plan=$('superSurplusPlan').value;
+ const limit=$('superSurplusLimit'),sum=$('sumInsured');
+ const limitLabel=$('superSurplusLimitLabel'),limitHint=$('superSurplusLimitHint');
+ limitLabel.textContent=plan==='GOLD'?'Select Defined Limit':'Select Deductible';
+ limitHint.textContent=plan==='GOLD'?'Gold: Defined Limit is an aggregate threshold for eligible hospitalisation expenses during the policy period.':'Silver: Deductible applies to each eligible hospitalisation.';
+ let limitValues,siValues;
+ if(plan==='GOLD'){
+  limitValues=Object.keys((cover==='floater'?superSurplusData?.floater?.gold:superSurplusData?.individual?.gold)||{'300000':{},'500000':{},'1000000':{},'1500000':{},'2000000':{},'2500000':{}}).map(Number);
+ }else if(cover==='individual'){
+  limitValues=[300000];
+ }else{
+  limitValues=Object.keys(superSurplusData?.floater?.silver||{'300000':{},'500000':{}}).map(Number);
+ }
+ const oldLimit=Number(limit.value);
+ limit.replaceChildren(new Option('Choose '+(plan==='GOLD'?'defined limit':'deductible'),''));
+ limitValues.forEach(v=>limit.add(new Option(currency(v),String(v))));
+ limit.value=limitValues.includes(oldLimit)?String(oldLimit):String(limitValues[0]||'');
+ const selectedLimit=Number(limit.value);
+ if(plan==='GOLD'&&cover==='individual'){
+  const src=superSurplusData?.individual?.gold?.[String(selectedLimit)];
+  siValues=src?Object.keys(src).map(Number):(selectedLimit===300000?[500000,700000,1000000,1500000,2000000,2500000,5000000,7500000,10000000]:[500000,1000000,1500000,2000000,2500000,5000000,7500000,10000000]);
+ }else if(plan==='GOLD'&&cover==='floater'){
+  const comp=superSurplusComposition(selectedMemberNames().map(member=>({member})), 'floater');
+  const rates=superSurplusData?.floater?.gold?.[String(selectedLimit)]?.[comp];
+  siValues=rates?Object.keys(rates).map(Number):[500000,1000000,1500000,2000000,2500000,5000000,7500000,10000000];
+ }else if(cover==='individual'){
+  siValues=Object.keys(superSurplusData?.individual?.silver||{'700000':{},'1000000':{}}).map(Number);
+ }else{
+  siValues=[1000000];
+ }
+ const previousSI=Number(sum.value);
+ sum.replaceChildren(new Option('Choose sum insured',''));
+ siValues.forEach(v=>sum.add(new Option(currency(v),String(v))));
+ sum.value=siValues.includes(previousSI)?String(previousSI):String(siValues.includes(1000000)?1000000:(siValues[0]||''));
+}
+function superSurplusPremium(members,si,term,type){
+ if(!superSurplusData)throw Error('Super Surplus rate file not loaded. Check super_surplus_rates.json and refresh.');
+ const plan=$('superSurplusPlan').value,limit=Number($('superSurplusLimit').value),composition=superSurplusComposition(members,type);
+ if(!composition)throw Error('Select a valid Super Surplus family composition. Floater requires 2A or 1A/2A with at least one dependent child.');
+ const adults=type==='individual'?members:members.filter(m=>m.member==='Self'||m.member==='Spouse');
+ const children=type==='floater'?members.filter(m=>m.member.startsWith('Child')):[];
+ if(adults.length<1||adults.length>2||adults.some(m=>m.age<18||m.age>65))throw Error('Super Surplus adult entry age must be 18–65 years.');
+ if(children.some(m=>m.age<0||m.age>25))throw Error('Super Surplus dependent child age must be from 91 days to 25 years.');
+ if(type==='individual'&&members.length!==1)throw Error('Super Surplus Individual requires one insured person.');
+ if(!limit)throw Error('Select the '+(plan==='GOLD'?'Defined Limit':'Deductible')+'.');
+ const age=Math.max(...adults.map(m=>m.age));
+ const ageBand=superSurplusAgeBand(age),nextAgeBand=superSurplusAgeBand(age+1);
+ const siKey=String(si),limitKey=String(limit);
+ let rateTable;
+ if(type==='individual'&&plan==='GOLD')rateTable=superSurplusData.individual.gold?.[limitKey]?.[siKey];
+ else if(type==='individual'&&plan==='SILVER'){
+  if(limit!==300000)throw Error('Individual Silver uses the ₹3 lakh deductible chart.');
+  rateTable=superSurplusData.individual.silver?.[siKey];
+ }
+ else if(type==='floater'&&plan==='GOLD')rateTable=superSurplusData.floater.gold?.[limitKey]?.[composition]?.[siKey];
+ else if(type==='floater'&&plan==='SILVER'){
+  if(si!==1000000)throw Error('Floater Silver is available on the ₹10 lakh Sum Insured chart.');
+  rateTable=superSurplusData.floater.silver?.[limitKey];
+ }
+ if(!rateTable)throw Error('Super Surplus rate table is not available for '+type.toUpperCase()+'/'+plan+'/'+composition+'/SI '+currency(si)+'/'+currency(limit)+'.');
+ const base1=rateTable[ageBand];
+ if(!Number.isFinite(base1))throw Error('Super Surplus rate unavailable for age '+age+' (band '+ageBand+').');
+ const familyKey=composition;
+ const sample=(superSurplusData.atomProSampleOverrides||[]).find(r=>r.coverType===type&&r.plan===plan&&r.familyComposition===familyKey&&r.age===age&&r.sumInsured===si&&r.limit===limit);
+ if(term===1){
+  return {amount:sample?.premium1Y??base1,earlyDiscount:0,deductibleRate:0,longTermDiscount:0,rateSource:sample?'Atom Pro sample':'Star Health V9 prospectus'};
+ }
+ if(term!==2)throw Error('Super Surplus supports 1-year and 2-year policy terms only.');
+ const base2=rateTable[nextAgeBand];
+ if(!Number.isFinite(base2))throw Error('Second-year Super Surplus rate is unavailable for the attained age band '+nextAgeBand+'.');
+ const gross=base1+base2;
+ const calculated=Math.round(gross*0.95);
+ const calculatedSaving=Math.round(gross*0.05);
+ return {
+  amount:sample?.premium2Y??calculated,
+  earlyDiscount:0,
+  deductibleRate:0,
+  longTermDiscount:sample?.savings2Y??calculatedSaving,
+  rateSource:sample?'Atom Pro sample (age progression + long-term discount)':'Star Health V9 prospectus (age progression + 5% long-term discount)',
+  year1Base:base1,
+  year2Base:base2
+ };
 }
 function ageMode(){return document.querySelector('input[name="ageMode"]:checked').value}
 function zoneMode(){return document.querySelector('input[name="zoneMode"]:checked').value}
@@ -270,7 +375,7 @@ function renderMembers(){
  const type=$('policyType').value;
  if(type==='floater'){
   makeFloaterChoice(holder,'Self',['Self']);makeFloaterChoice(holder,'Spouse',['Spouse']);
-  if(currentPolicy!==POLICIES.redcarpet)makeFloaterChoice(holder,'Children',(currentPolicy===POLICIES.assure||currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.comprehensive||currentPolicy===POLICIES.youngstar)?['Child 1','Child 2','Child 3']:['Child 1','Child 2','Child 3','Child 4']);
+  if(currentPolicy!==POLICIES.redcarpet)makeFloaterChoice(holder,'Children',(currentPolicy===POLICIES.assure||currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.comprehensive||currentPolicy===POLICIES.youngstar||currentPolicy===POLICIES.supersurplus)?['Child 1','Child 2','Child 3']:['Child 1','Child 2','Child 3','Child 4']);
   if(currentPolicy===POLICIES.assure)makeFloaterChoice(holder,'Parents',['Parent 1','Parent 2','Parent 3','Parent 4'])
  }else if(type==='individual')makeAgeField('Insured Person',holder);
  else if(type==='multi')for(let i=1;i<=8;i++)makeAgeField('Person '+i,holder);
@@ -278,13 +383,28 @@ function renderMembers(){
 }
 function changePolicy(){
  currentPolicy=POLICIES[policyEl.value]||null;
- ['statusPanel','typePanel','sumPanel','zonePanel','deductiblePanel','actionPanel','youngPlanPanel'].forEach(id=>$(id).classList.toggle('hidden',!currentPolicy));
- $('memberPanel').classList.add('hidden');$('youngPlanPanel').classList.toggle('hidden',currentPolicy!==POLICIES.youngstar);clearResult();
+ const isSS=currentPolicy===POLICIES.supersurplus;
+ ['statusPanel','typePanel','sumPanel','zonePanel','deductiblePanel','actionPanel','youngPlanPanel','superSurplusPlanPanel','superSurplusLimitPanel'].forEach(id=>$(id).classList.toggle('hidden',!currentPolicy));
+ $('memberPanel').classList.add('hidden');
+ $('youngPlanPanel').classList.toggle('hidden',currentPolicy!==POLICIES.youngstar);
+ $('superSurplusPlanPanel').classList.toggle('hidden',!isSS);
+ $('superSurplusLimitPanel').classList.toggle('hidden',!isSS);
+ $('statusPanel').classList.toggle('hidden',!currentPolicy||isSS);
+ clearResult();
  const typeSelect=$('policyType');typeSelect.replaceChildren(new Option('Choose cover type',''));
  if(currentPolicy){typeSelect.add(new Option(currentPolicy===POLICIES.womencare?'Individual (Female)':'Individual','individual'));typeSelect.add(new Option('Family Floater','floater'));if(currentPolicy===POLICIES.superstar)typeSelect.add(new Option('Multi-Individual','multi'))}
- renderMembers();const sum=$('sumInsured');sum.replaceChildren(new Option('Choose sum insured',''));
- if(currentPolicy)currentPolicy.sumInsured.filter(n=>(currentPolicy!==POLICIES.redcarpet||$('policyType').value!=='floater'||n>=1000000)&&(currentPolicy!==POLICIES.youngstar||n!==300000||($('policyType').value==='individual'&&policyStatus()==='renewal'))).forEach(n=>sum.add(new Option(n==='Unlimited'?'Unlimited':currency(n),String(n))));
- $('zonePanel').classList.toggle('hidden',!currentPolicy||currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.redcarpet);$('deductiblePanel').classList.toggle('hidden',!currentPolicy||currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.comprehensive||currentPolicy===POLICIES.redcarpet||currentPolicy===POLICIES.youngstar);$('zone').replaceChildren(new Option('Choose Zone',''));((currentPolicy===POLICIES.comprehensive||currentPolicy===POLICIES.youngstar)?['A','B','C','D','E']:['A','B','C','D']).forEach(z=>$('zone').add(new Option(z,z)));document.querySelector('input[name="zoneMode"][value="manual"]').checked=true;$('manualZone').classList.remove('hidden');$('pinZone').classList.add('hidden');document.querySelector('input[name="zoneMode"][value="pin"]').disabled=false;$('zone').value='';$('pin').value='';$('deductible').value='0';$('policyStatus').value='fresh';updateDeductibleHint()
+ $('policyStatus').value='fresh';
+ $('youngPlanPanel').classList.toggle('hidden',currentPolicy!==POLICIES.youngstar);
+ $('zonePanel').classList.toggle('hidden',!currentPolicy||currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.redcarpet||isSS);
+ $('deductiblePanel').classList.toggle('hidden',!currentPolicy||currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.comprehensive||currentPolicy===POLICIES.redcarpet||currentPolicy===POLICIES.youngstar||isSS);
+ $('zone').replaceChildren(new Option('Choose Zone',''));
+ ((currentPolicy===POLICIES.comprehensive||currentPolicy===POLICIES.youngstar)?['A','B','C','D','E']:['A','B','C','D']).forEach(z=>$('zone').add(new Option(z,z)));
+ document.querySelector('input[name="zoneMode"][value="manual"]').checked=true;$('manualZone').classList.remove('hidden');$('pinZone').classList.add('hidden');
+ document.querySelector('input[name="zoneMode"][value="pin"]').disabled=false;$('zone').value='';$('pin').value='';$('deductible').value='0';
+ const sum=$('sumInsured');sum.replaceChildren(new Option('Choose sum insured',''));
+ if(currentPolicy&&!isSS)currentPolicy.sumInsured.filter(n=>(currentPolicy!==POLICIES.redcarpet||$('policyType').value!=='floater'||n>=1000000)&&(currentPolicy!==POLICIES.youngstar||n!==300000||($('policyType').value==='individual'&&policyStatus()==='renewal'))).forEach(n=>sum.add(new Option(n==='Unlimited'?'Unlimited':currency(n),String(n))));
+ if(isSS)updateSuperSurplusOptions();
+ renderMembers();updateDeductibleHint();
 }
 function ageFromDOB(value){
  const parts=value.split('-').map(Number);if(parts.length!==3)return null;
@@ -299,7 +419,7 @@ function getMembers(){
   const value=input.value.trim();if(!value)throw Error('Enter age or DOB for '+input.dataset.member+'.');
   const age=ageMode()==='dob'?ageFromDOB(value):/^\d+$/.test(value)?Number(value):null;
   if(age===null||!Number.isInteger(age)||age<0||age>120)throw Error('Enter a valid age or DOB for '+input.dataset.member+'.');
-  result.push({member:input.dataset.member,age})
+  result.push({member:input.dataset.member,age,...(ageMode()==='dob'?{dob:value}:{})})
  }
  if(policyStatus()==='fresh'&&result.some(m=>m.member.startsWith('Child')&&m.age>25))throw Error('Child age must be within 25 years for fresh policy.');
  return result
@@ -476,6 +596,10 @@ function discountBreakdownForTerm(policy,members,si,zone,term,type,status,deduct
    }else if(policy===POLICIES.comprehensive){
    const annual=comprehensivePremium(members,si,zone,1,type,status).amount;
    longTerm=annual*(term===2?0.10:0.225);
+  }else if(policy===POLICIES.supersurplus){
+   longTerm=Number(calculatedRow.longTermDiscount)||0;
+  }else if(policy===POLICIES.supersurplus){
+   longTerm=Math.max(0,Number(calculatedRow.longTermDiscount)||0);
   }
  }
  return {early:Math.round(early),longTerm:Math.round(longTerm),total:Math.round(early+longTerm)};
@@ -484,7 +608,7 @@ function showPremiumBreakup(breakdown,term,amount){
  const current=quotationSnapshot||{};
  const si=current.sumInsured ?? $('sumInsured').value;
  const policy=current.policy||'';
- const policyName=policy===POLICIES.youngstar.label?'Star Young Star Insurance Policy ('+($('youngPlan').value)+')':policy===POLICIES.assure?'Star Health Assure Insurance Policy':policy===POLICIES.womencare?'Star Health Women Care Insurance Policy':policy===POLICIES.comprehensive?'Star Health Comprehensive Insurance Policy':String(policy||'Health Insurance Policy');
+ const policyName=policy===POLICIES.youngstar.label?'Star Young Star Insurance Policy ('+($('youngPlan').value)+')':policy===POLICIES.assure?'Star Health Assure Insurance Policy':policy===POLICIES.womencare?'Star Health Women Care Insurance Policy':policy===POLICIES.comprehensive?'Star Health Comprehensive Insurance Policy':policy===POLICIES.supersurplus.label?'Star Super Surplus Insurance Policy':String(policy||'Health Insurance Policy');
  const discounts=[['Early Entry Discount',breakdown.early],['Long Term Discount',breakdown.longTerm]].filter(x=>x[1]>0);
  // The calculator does not separately expose floater or health discounts; do not invent them.
  const totalDiscount=discounts.reduce((sum,x)=>sum+x[1],0);
@@ -498,7 +622,7 @@ function showPremiumBreakup(breakdown,term,amount){
  const panel=document.createElement('div');panel.className='pb-policy';
  const name=document.createElement('div');name.className='pb-policy-name';name.textContent=policyName;panel.appendChild(name);
  const facts=document.createElement('div');facts.className='pb-facts';
- for(const [label,value] of [['Sum Insured',si ? currency(si) : 'Not selected'],['Policy Period',term+' '+(term===1?'Year':'Years')]]){
+ const factsList=[['Sum Insured',si ? currency(si) : 'Not selected'],['Policy Period',term+' '+(term===1?'Year':'Years')]];if(current.superSurplusPlan)factsList.push(['Plan',current.superSurplusPlan], [current.superSurplusLimitType||'Limit',currency(current.superSurplusLimit)]);for(const [label,value] of factsList){
   const fact=document.createElement('div');fact.className='pb-fact';const cap=document.createElement('span');cap.textContent=label;const strong=document.createElement('strong');strong.textContent=value;fact.append(cap,strong);facts.appendChild(fact);
  }panel.appendChild(facts);
  const addRow=(parent,label,value,cls='')=>{const row=document.createElement('div');row.className='pb-row '+cls;const l=document.createElement('span');l.textContent=label;const v=document.createElement('span');v.textContent=value;row.append(l,v);parent.appendChild(row)};
@@ -518,7 +642,7 @@ function renderSavingsBreakup(target,breakdown,term,amount){
  button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();showPremiumBreakup(breakdown,term,amount)});
  target.appendChild(button);
 }
-function setupBnpl(rows){
+function setupBnpl(rows,allowBnpl=true){
   bnplEligibleRows=rows.filter(r=>r.amount>=10000&&BNPL_CONFIG[r.term]);
   bnplSelectedTerm=null;
   $('bnplPanel').classList.add('hidden');
@@ -529,7 +653,7 @@ function setupBnpl(rows){
     const price=document.createElement('strong');price.className='term-price';price.textContent=currency(amount)+'/-';
     card.append(label,price);
     if(savings?.total>0)renderSavingsBreakup(card,savings,term,amount);
-    if(amount>=10000&&BNPL_CONFIG[term]){
+    if(allowBnpl&&amount>=10000&&BNPL_CONFIG[term]){
       const btn=document.createElement('button');btn.type='button';btn.textContent='BNPL Details';btn.className='bnpl-details-link';btn.setAttribute('aria-expanded','false');
       btn.addEventListener('click',()=>{
         const alreadyOpen=bnplSelectedTerm===term&&!$('bnplPanel').classList.contains('hidden');
@@ -555,29 +679,31 @@ function calculate(){
   const type=$('policyType').value;if(!type)throw Error('Select a cover type.');
   const members=getMembers();if(type==='individual'&&members.length!==1)throw Error('Individual requires one insured person.');
   const sumValue=$('sumInsured').value;if(!sumValue)throw Error('Select a sum insured.');
-  const sumInsured=sumValue==='Unlimited'?'Unlimited':Number(sumValue),zone=(currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.redcarpet)?'':getZone(),status=policyStatus(),deductible=(currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.comprehensive||currentPolicy===POLICIES.redcarpet||currentPolicy===POLICIES.youngstar)?0:Number($('deductible').value);
+  const sumInsured=sumValue==='Unlimited'?'Unlimited':Number(sumValue),zone=(currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.redcarpet||currentPolicy===POLICIES.supersurplus)?'':getZone(),status=policyStatus(),deductible=(currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.comprehensive||currentPolicy===POLICIES.redcarpet||currentPolicy===POLICIES.youngstar)?0:Number($('deductible').value);
   if(!currentPolicy.ratesVerified)throw Error('Verified premium rates are not yet connected for '+currentPolicy.label+'.');
-  const rows=currentPolicy.terms.map(term=>({term,...(currentPolicy===POLICIES.womencare?womenCarePremium(members,sumInsured,term,type):currentPolicy===POLICIES.redcarpet?redCarpetPremium(members,sumInsured,term,type,status):currentPolicy===POLICIES.comprehensive?comprehensivePremium(members,sumInsured,zone,term,type,status):currentPolicy===POLICIES.youngstar?youngStarPremium(members,sumInsured,zone,term,type,status):lookupVerifiedPremium(currentPolicy,members,sumInsured,zone,term,type,status,deductible))}));
+  const rows=currentPolicy.terms.map(term=>({term,...(currentPolicy===POLICIES.womencare?womenCarePremium(members,sumInsured,term,type):currentPolicy===POLICIES.redcarpet?redCarpetPremium(members,sumInsured,term,type,status):currentPolicy===POLICIES.comprehensive?comprehensivePremium(members,sumInsured,zone,term,type,status):currentPolicy===POLICIES.youngstar?youngStarPremium(members,sumInsured,zone,term,type,status):currentPolicy===POLICIES.supersurplus?superSurplusPremium(members,sumInsured,term,type):lookupVerifiedPremium(currentPolicy,members,sumInsured,zone,term,type,status,deductible))}));
   if(!rows.length)throw Error('No quotation is available.');
   rows.forEach(r=>{r.savings=discountBreakdownForTerm(currentPolicy,members,sumInsured,zone,r.term,type,status,deductible,r)});
   const statusLabel={fresh:'Fresh',renewal:'Renewal',portability:'Portability'}[status];
-  $('summary').textContent=currentPolicy.label+(currentPolicy===POLICIES.youngstar?' ('+$('youngPlan').value+')':'')+' | '+statusLabel+' | Family Size: '+familySizeText()+' | '+members.map(m=>m.member+' ('+m.age+')').join(', ')+' | '+currency(sumInsured)+((currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.redcarpet)?' | No Zone / Deductible':' | Zone '+zone+' | '+(deductible?'Deductible '+currency(deductible):'No Deductible'));
+  $('summary').textContent=currentPolicy.label+(currentPolicy===POLICIES.youngstar?' ('+$('youngPlan').value+')':'')+(currentPolicy===POLICIES.supersurplus?' | '+$('superSurplusPlan').value+' | '+(type==='floater'?'Family Floater':'Individual')+' | '+(superSurplusLimitLabel()+' '+currency(Number($('superSurplusLimit').value))):'')+' | '+statusLabel+' | Family Size: '+familySizeText()+' | '+members.map(m=>m.member+' ('+m.age+')').join(', ')+' | '+currency(sumInsured)+((currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.redcarpet||currentPolicy===POLICIES.supersurplus)?' | No Zone':' | Zone '+zone+' | '+(deductible?'Deductible '+currency(deductible):'No Deductible'));
   $('premiumRows').replaceChildren();
 
   const details=[];if(rows[0].earlyDiscount>0)details.push('Fresh Policy: 5% Early Entry Discount on eligible first-year premium (approx. '+currency(rows[0].earlyDiscount)+').');
   if(deductible)details.push('Optional deductible discount: '+(rows[0].deductibleRate*100)+'% per policy year.');
   $('discountInfo').textContent=details.join(' ');
-  $('resultNote').textContent=currentPolicy===POLICIES.youngstar?'Young Star ('+$('youngPlan').value+'): chart premium with long-term discounts of 10% for year 2 and 12.5% for year 3. PIN mapping is provisional. Confirm final premium, eligibility and benefits with insurer. No GST added.':currentPolicy===POLICIES.redcarpet?'Red Carpet: premiums are taken directly from the uploaded chart, including 2- and 3-year long-term discounts. No medical-report discount applied. Claims are subject to 30% co-payment and policy sublimits. Confirm insurer premium and eligibility before issuing.':currentPolicy===POLICIES.comprehensive?'Indicative Comprehensive annual chart rates; year 2 discounted 10%, year 3 discounted 12.5% for upfront long-term payment. Verify final rates and eligibility with insurer. Comprehensive PIN mapping is provisional and not insurer-verified; use manual zone if PIN is missing or disputed. No GST added.':currentPolicy===POLICIES.womencare?'Women Care (V03): 10% discount on second-year premium and 12.5% on third-year premium. Adult ages advance annually. At least one adult female is required for floater, and Individual cover is for females only. Please verify insurer-issued premium and eligibility. GST not added.':'Indicative calculation from annual premium chart. GST is exempt (nil) for eligible individual health insurance policies; no GST is added. Age progresses each year; 10% long-term discount on years 2 and 3. Fresh early entry discount applies only in year 1. Combined discounts and insurer rounding require verification with Star Mitra / Atom Pro. Renewal and portability may have insurer-specific rules not modeled here.';
-  setupBnpl(rows);
+  $('resultNote').textContent=currentPolicy===POLICIES.supersurplus?'Super Surplus: V9 prospectus rate matrix with Atom Pro sample overrides. Two-year premium uses the next policy-year age band and 5% upfront long-term discount. Floater Gold currently has imported rates for 2A+1C only; other compositions will show rate unavailable until their chart is added. Floater Silver 5L deductible has an Atom Pro sample override that differs from the V9 chart and must be checked in the final audit. PIN / Zone not required.':currentPolicy===POLICIES.youngstar?'Young Star ('+$('youngPlan').value+'): chart premium with long-term discounts of 10% for year 2 and 12.5% for year 3. PIN mapping is provisional. Confirm final premium, eligibility and benefits with insurer. No GST added.':currentPolicy===POLICIES.redcarpet?'Red Carpet: premiums are taken directly from the uploaded chart, including 2- and 3-year long-term discounts. No medical-report discount applied. Claims are subject to 30% co-payment and policy sublimits. Confirm insurer premium and eligibility before issuing.':currentPolicy===POLICIES.comprehensive?'Indicative Comprehensive annual chart rates; year 2 discounted 10%, year 3 discounted 12.5% for upfront long-term payment. Verify final rates and eligibility with insurer. Comprehensive PIN mapping is provisional and not insurer-verified; use manual zone if PIN is missing or disputed. No GST added.':currentPolicy===POLICIES.womencare?'Women Care (V03): 10% discount on second-year premium and 12.5% on third-year premium. Adult ages advance annually. At least one adult female is required for floater, and Individual cover is for females only. Please verify insurer-issued premium and eligibility. GST not added.':'Indicative calculation from annual premium chart. GST is exempt (nil) for eligible individual health insurance policies; no GST is added. Age progresses each year; 10% long-term discount on years 2 and 3. Fresh early entry discount applies only in year 1. Combined discounts and insurer rounding require verification with Star Mitra / Atom Pro. Renewal and portability may have insurer-specific rules not modeled here.';
+  setupBnpl(rows,currentPolicy!==POLICIES.supersurplus);
   $('generateQuotation').classList.remove('hidden');
-   quotationSnapshot={policy:currentPolicy.label,youngPlan:currentPolicy===POLICIES.youngstar?$('youngPlan').value:null,type,status,members:members.map(m=>({...m})),sumInsured,zone,deductible,rows:rows.map(r=>({...r})),family:familySizeText(),pin:(currentPolicy===POLICIES.redcarpet||currentPolicy===POLICIES.womencare)?'':zoneMode()==='pin'?$('pin').value.trim():''};$('resultPanel').classList.remove('hidden')
+   quotationSnapshot={policy:currentPolicy.label,youngPlan:currentPolicy===POLICIES.youngstar?$('youngPlan').value:null,superSurplusPlan:currentPolicy===POLICIES.supersurplus?$('superSurplusPlan').value:null,superSurplusLimit:currentPolicy===POLICIES.supersurplus?Number($('superSurplusLimit').value):null,superSurplusLimitType:currentPolicy===POLICIES.supersurplus?superSurplusLimitLabel():null,type,status,members:members.map(m=>({...m})),sumInsured,zone,deductible,rows:rows.map(r=>({...r})),family:familySizeText(),pin:(currentPolicy===POLICIES.redcarpet||currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.supersurplus)?'':zoneMode()==='pin'?$('pin').value.trim():''};$('resultPanel').classList.remove('hidden')
  }catch(err){$('error').textContent=err.message}
 }
 Object.entries(POLICIES).forEach(([id,config])=>policyEl.add(new Option(config.label,id)));
 policyEl.addEventListener('change',changePolicy);
 $('youngPlan').addEventListener('change',clearResult);
+$('superSurplusPlan').addEventListener('change',()=>{updateSuperSurplusOptions();clearResult()});
+$('superSurplusLimit').addEventListener('change',()=>{updateSuperSurplusOptions();clearResult()});
 $('policyStatus').addEventListener('change',()=>{if(currentPolicy===POLICIES.youngstar){const sum=$('sumInsured'),previous=sum.value;sum.replaceChildren(new Option('Choose sum insured',''));currentPolicy.sumInsured.filter(n=>n!==300000||($('policyType').value==='individual'&&policyStatus()==='renewal')).forEach(n=>sum.add(new Option(currency(n),String(n))));if([...sum.options].some(o=>o.value===previous))sum.value=previous;}clearResult()});
-$('policyType').addEventListener('change',()=>{if(currentPolicy===POLICIES.redcarpet||currentPolicy===POLICIES.youngstar){const sum=$('sumInsured');sum.replaceChildren(new Option('Choose sum insured',''));currentPolicy.sumInsured.filter(n=>currentPolicy===POLICIES.youngstar?(n!==300000||($('policyType').value==='individual'&&policyStatus()==='renewal')):($('policyType').value!=='floater'||n>=1000000)).forEach(n=>sum.add(new Option(currency(n),String(n))))}$('memberPanel').classList.toggle('hidden',!$('policyType').value);renderMembers();clearResult()});
+$('policyType').addEventListener('change',()=>{if(currentPolicy===POLICIES.supersurplus){updateSuperSurplusOptions()}else if(currentPolicy===POLICIES.redcarpet||currentPolicy===POLICIES.youngstar){const sum=$('sumInsured');sum.replaceChildren(new Option('Choose sum insured',''));currentPolicy.sumInsured.filter(n=>currentPolicy===POLICIES.youngstar?(n!==300000||($('policyType').value==='individual'&&policyStatus()==='renewal')):($('policyType').value!=='floater'||n>=1000000)).forEach(n=>sum.add(new Option(currency(n),String(n))))}$('memberPanel').classList.toggle('hidden',!$('policyType').value);renderMembers();clearResult()});
 $('policyStatus').addEventListener('change',()=>{const note=$('childAgeNotice');if(note)note.textContent=policyStatus()==='fresh'?'Child age must be within 25 years for fresh policy.':policyStatus()==='renewal'?'Renewal: No child age restriction is enforced by this calculator.':'Portability: Child eligibility must be verified with the insurer.';clearResult()});
 document.querySelectorAll('input[name="ageMode"]').forEach(el=>el.addEventListener('change',()=>{renderMembers();clearResult()}));
 document.querySelectorAll('input[name="zoneMode"]').forEach(el=>el.addEventListener('change',()=>{$('manualZone').classList.toggle('hidden',zoneMode()!=='manual');$('pinZone').classList.toggle('hidden',zoneMode()!=='pin');clearResult()}));
@@ -645,8 +771,35 @@ function youngStarQuoteHtml(){
  const fourth=page(section('Annexure: Non-Medical Items · Reference List (35–68)')+table(items.slice(34))+annexureNote,4,4);
  return first+second+third+fourth;
 }
+function superSurplusQuoteHtml(){
+ const q=quotationSnapshot;if(!q)throw Error('Calculate premium first.');
+ const esc=quoteEsc,money=n=>esc(currency(n));
+ const date=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'});
+ const plan=q.superSurplusPlan,cover=q.type==='floater'?'Family Floater':'Individual';
+ const uin=q.type==='floater'?'SHAHLIP22034V062122':'SHAHLIP22035V062122';
+ const limitName=q.superSurplusLimitType|| (plan==='GOLD'?'Defined Limit':'Deductible');
+ const table=rows=>'<table class="qtable"><tbody>'+rows.map(([a,b])=>'<tr><th>'+esc(a)+'</th><td>'+esc(String(b))+'</td></tr>').join('')+'</tbody></table>';
+ const sec=t=>'<h2 class="qsection">'+esc(t)+'</h2>';
+ const head='<div class="qhead"><div class="qeyebrow">PERSONALISED HEALTH INSURANCE QUOTATION</div><div class="qtitle">Star Super Surplus Insurance Policy</div><div class="qsub">'+uin+' · '+esc(plan)+' Plan · Prepared '+esc(date)+'</div></div>';
+ const foot=(i,n)=>'<div class="qfooter"><span>Indicative advisor quotation. Official insurer quote, schedule and policy wording prevail.</span><span>Page '+i+' of '+n+'</span></div>';
+ const page=(content,i,n)=>'<section class="qpage">'+head+content+foot(i,n)+'</section>';
+ const premiums=q.rows.map(r=>'<div class="qpremium"><span>'+r.term+' '+(r.term===1?'YEAR':'YEARS')+'</span><strong>'+money(r.amount)+'</strong>'+(r.savings?.total?'<small class="qsave">Save '+money(r.savings.total)+'</small>':'')+'<small>Indicative premium excluding any separately confirmed charges</small></div>').join('');
+ const members=q.members.map(m=>[m.member,m.age+' years']).concat([]);
+ const details=[['Cover Type',cover],['Selected Plan',plan],['Policy Status','Fresh'],['Insured Members',q.members.map(m=>m.member+' ('+m.age+')').join(', ')],['Family Composition',q.family],['Sum Insured',currency(q.sumInsured)],[limitName,currency(q.superSurplusLimit)],['Policy Period','1 Year / 2 Years'],['PIN / Premium Zone','Not applicable']];
+ const benefitRows=plan==='GOLD' ? [
+  ['Room Category','Single Private A/C Room'],['Pre-Hospitalisation','Up to 60 days'],['Post-Hospitalisation','Up to 90 days'],['Defined Limit','Aggregate admissible hospitalisation expenses during the policy period must exceed the selected Defined Limit before liability begins'],['Emergency Ambulance','Up to ₹3,000 per policy period'],['Air Ambulance','Up to 10% of Sum Insured, subject to policy terms; applicable from ₹7 lakh SI'],['Delivery Expenses','Up to ₹50,000 per policy period, maximum two deliveries in lifetime; available only when Self and Spouse are both covered; 12-month waiting period'],['Recharge Benefit','One recharge as specified in the policy wording; modern treatments excluded from recharge']
+ ] : [
+  ['Room Rent','Up to ₹4,000 per day'],['Pre-Hospitalisation','Up to 30 days'],['Post-Hospitalisation','Up to 60 days'],['Deductible','Selected amount applies to each hospitalisation as per policy wording'],['Emergency Ambulance','As per the selected policy terms'],['Recharge Benefit','As specified in the Silver Plan policy wording']
+ ];
+ const waits=[['Initial Waiting Period','30 days for illness; accidents excepted'],['Pre-Existing Diseases (PED)',plan==='GOLD'?'12 months of continuous coverage':'36 months of continuous coverage'],['Specified Diseases / Procedures',plan==='GOLD'?'12 months of continuous coverage':'24 months of continuous coverage'],['Policy Term','1 year or 2 years'],['Long-Term Discount','5% on the two-year premium when paid upfront; not available on instalment payment']];
+ const note='<p class="qnote">This is an indicative advisor-prepared quotation using the Star Health V9 prospectus rate matrix and Atom Pro sample calibration. Floater Gold chart data currently includes 2A+1C; unsupported family compositions are not estimated. The Floater Silver ₹5 lakh deductible age-35 sample follows the Atom Pro result supplied by the advisor and differs from the published chart, so it requires final audit. Confirm final premium, eligibility, benefits and payment options in Atom Pro before issuance.</p>';
+ const p1=page('<div class="qhero"><span>PROPOSED SUM INSURED</span><strong>'+money(q.sumInsured)+'</strong><small>'+esc(cover)+' · '+esc(plan)+' Plan</small></div>'+sec('Quotation Details')+table(details)+sec('Premium Options')+'<div class="qpremiums">'+premiums+'</div>'+note,1,2);
+ const p2=page(sec('Selected Plan: Key Benefits')+table(benefitRows)+sec('Important Waiting Periods & Conditions')+table(waits)+'<p class="qnote">Gold Plan liability begins after eligible aggregate hospitalisation expenses exceed the selected Defined Limit. Silver Plan liability begins after the selected Deductible is met for each admissible hospitalisation. See the official policy wording for exclusions, sublimits and other conditions.</p>',2,2);
+ return p1+p2;
+}
 function quoteHtml(){
  const quoteDiscount=quoteDiscountDetails(quotationSnapshot);
+ if(quotationSnapshot?.policy===POLICIES.supersurplus.label)return superSurplusQuoteHtml();
  if(quotationSnapshot?.policy===POLICIES.youngstar.label)return youngStarQuoteHtml();
  if(quotationSnapshot?.policy===POLICIES.redcarpet.label)return redCarpetQuoteHtml();
  if(quotationSnapshot?.policy===POLICIES.womencare.label)return womenCareQuoteHtml();
