@@ -91,6 +91,7 @@
 <main>
 <section class="panel hidden" id="quotationEntryNote"><div class="notice"><strong>Quotation:</strong> First select a policy and calculate the premium. Then click <strong>Generate Quotation</strong> in the results to prepare a PDF.</div></section>
 <section class="panel"><h2><span class="step">1</span>Select Policy</h2><label for="policy">Health Insurance Policy</label><select id="policy"><option value="">Choose a policy</option></select><p class="hint">Choose a policy to configure your quotation.</p></section>
+<section class="panel hidden" id="youngPlanPanel"><h2>Young Star Plan</h2><label for="youngPlan">Select Plan</label><select id="youngPlan"><option value="Gold">Gold</option><option value="Silver">Silver</option></select></section>
 <section class="panel hidden" id="statusPanel"><h2><span class="step">2</span>Policy Type</h2><label for="policyStatus">Select Policy Type</label><select id="policyStatus"><option value="fresh">Fresh</option><option value="renewal">Renewal</option><option value="portability">Portability</option></select><p class="hint">This is a premium calculator. No previous policy details are required.</p></section>
 <section class="panel hidden" id="typePanel"><h2><span class="step">3</span>Cover Type</h2><label for="policyType">Select Cover Type</label><select id="policyType"><option value="">Choose cover type</option></select></section>
 <section class="panel hidden" id="memberPanel"><h2><span class="step">4</span>Insured Members &amp; Age</h2><div class="choices"><label><input type="radio" name="ageMode" value="age" checked> Manual Age</label><label><input type="radio" name="ageMode" value="dob"> Date of Birth</label></div><p class="hint">For Family Floater, tick members to include. Choose the number of children and parents to display their age/DOB fields.</p><div id="members"></div><div class="family-size" id="familySize">Family Size: Not selected</div></section>
@@ -124,10 +125,11 @@
 
 <script>
 'use strict';
-const POLICIES={assure:{label:'Star Health Assure',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,7500000,10000000,20000000],terms:[1,2,3],ratesVerified:true},superstar:{label:'Star Health Super Star',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,10000000,'Unlimited'],terms:[1,2,3,4,5],ratesVerified:false},womencare:{label:'Star Women Care',sumInsured:[500000,1000000,1500000,2000000,2500000,5000000,10000000],terms:[1,2,3],ratesVerified:true},redcarpet:{label:'Star Senior Citizens Red Carpet Health Insurance Policy',sumInsured:[100000,200000,300000,400000,500000,750000,1000000,1500000,2000000,2500000],terms:[1,2,3],ratesVerified:true},comprehensive:{label:'Star Comprehensive Insurance Policy',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,7500000,10000000],terms:[1,2,3],ratesVerified:true}};
+const POLICIES={assure:{label:'Star Health Assure',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,7500000,10000000,20000000],terms:[1,2,3],ratesVerified:true},superstar:{label:'Star Health Super Star',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,10000000,'Unlimited'],terms:[1,2,3,4,5],ratesVerified:false},womencare:{label:'Star Women Care',sumInsured:[500000,1000000,1500000,2000000,2500000,5000000,10000000],terms:[1,2,3],ratesVerified:true},redcarpet:{label:'Star Senior Citizens Red Carpet Health Insurance Policy',sumInsured:[100000,200000,300000,400000,500000,750000,1000000,1500000,2000000,2500000],terms:[1,2,3],ratesVerified:true},youngstar:{label:'Star Young Star Insurance Policy',sumInsured:[300000,500000,750000,1000000,1500000,2000000,2500000,5000000,7500000,10000000],terms:[1,2,3],ratesVerified:true},comprehensive:{label:'Star Comprehensive Insurance Policy',sumInsured:[500000,750000,1000000,1500000,2000000,2500000,5000000,7500000,10000000],terms:[1,2,3],ratesVerified:true}};
 const PIN_DATABASES={
  assure:{mapping:Object.create(null),loaded:false,error:''},
- comprehensive:{mapping:Object.create(null),loaded:false,error:''}
+ comprehensive:{mapping:Object.create(null),loaded:false,error:''},
+  youngstar:{mapping:Object.create(null),loaded:false,error:''}
 };
 function loadPinDatabase(policyKey,filename,allowedZones){
  const db=PIN_DATABASES[policyKey];
@@ -146,6 +148,7 @@ function loadPinDatabase(policyKey,filename,allowedZones){
 }
 loadPinDatabase('assure','assure_pin_zone_mapping.json',['A','B','C','D']);
 loadPinDatabase('comprehensive','comprehensive_pin_zone_mapping.json',['A','B','C','D','E']);
+loadPinDatabase('youngstar','young_star_pin_zone_mapping.json',['A','B','C','D','E']);
 const $=id=>document.getElementById(id),policyEl=$('policy');
 const currency=n=>'₹'+Number(n).toLocaleString('en-IN',{maximumFractionDigits:2});
 let currentPolicy=null,assureData=null,womenCareData=null,comprehensiveData=null,redCarpetData=null;let quotationSnapshot=null;
@@ -153,6 +156,33 @@ fetch('women_care_rates.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error(
 fetch('assure_rates.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Premium rate file not found');return r.json()}).then(d=>{if(!d.zones||!d.zones.D||!d.sumInsured)throw Error('Invalid rate file');assureData=d}).catch(e=>{console.error(e);assureData=null});
 fetch('comprehensive_rates.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Comprehensive rate file missing');return r.json()}).then(d=>{if(!d.rates||!['A','B','C','D','E'].every(z=>d.rates[z]))throw Error('Invalid Comprehensive rate file');comprehensiveData=d}).catch(e=>{console.error(e);comprehensiveData=null});
 fetch('red_carpet_rates.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Red Carpet rate file missing');return r.json()}).then(d=>{if(!d.premium_inr?.individual_1A||!d.premium_inr?.floater_2A)throw Error('Invalid Red Carpet rate file');redCarpetData=d}).catch(e=>{console.error(e);redCarpetData=null});
+let youngStarData=null,youngStarIndex=new Map();
+fetch('young_star_rates.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Young Star rate file missing');return r.json()}).then(d=>{
+ if(!Array.isArray(d.rates)||d.rates.length!==6570)throw Error('Young Star rate file incomplete');
+ const index=new Map();for(const r of d.rates){const key=[r.plan,r.zone,r.sum_insured,r.age_band,r.family_composition].join('|');if(index.has(key)||!Number.isFinite(r.premium))throw Error('Invalid Young Star rate entry');index.set(key,r.premium)}
+ youngStarIndex=index;youngStarData=d;
+}).catch(e=>{console.error('Young Star:',e);youngStarData=null});
+function youngStarAgeBand(age){return age<=30?'18-30':age<=35?'31-35':age<=40?'36-40':age<=45?'41-45':age<=50?'46-50':age<=55?'51-55':age<=60?'56-60':age<=65?'61-65':'Above 65'}
+function youngStarPremium(members,si,zone,term,type,status){
+ if(!youngStarData)throw Error('Young Star rates not loaded. Check young_star_rates.json and refresh.');
+ const plan=$('youngPlan').value;
+ const adults=type==='individual'?members:members.filter(m=>['Self','Spouse'].includes(m.member));
+ const children=type==='individual'?[]:members.filter(m=>m.member.startsWith('Child'));
+ if(!['individual','floater'].includes(type)||adults.length<1||adults.length>2||children.length>3||adults.length+children.length!==members.length)throw Error('Young Star supports 1–2 adults and up to 3 children.');
+ if(adults.some(m=>m.age<18))throw Error('Young Star adult must be at least 18.');
+ if(status==='fresh'&&adults.some(m=>m.age>40))throw Error('Young Star fresh entry adult age must be 18–40.');
+ if(children.some(m=>m.age>25))throw Error('Young Star dependent child must be age 25 or below; verify renewal exceptions with insurer.');
+ if(si===300000&&(status!=='renewal'||type!=='individual'))throw Error('₹3 lakh is only available for individual renewal.');
+ if(type==='floater'&&adults.length===1&&children.length===0)throw Error('Choose Individual for 1A cover.');
+ const composition=adults.length+'A'+(children.length?'+'+children.length+'C':'');
+ const age=Math.max(...adults.map(m=>m.age));
+ const key=[plan,zone,si,youngStarAgeBand(age),composition].join('|');
+ const annual=youngStarIndex.get(key);
+ if(!Number.isFinite(annual))throw Error('Young Star rate unavailable: '+key);
+ // Annual age-band chart, long-term discounts applied to the same entry-age base.
+ const factor=term===1?1:term===2?1.9:2.775;
+ return {amount:Math.round(annual*factor),earlyDiscount:0,deductibleRate:0};
+}
 function redCarpetPremium(members,si,term,type,status){
  if(!redCarpetData)throw Error('Red Carpet rates not loaded. Check red_carpet_rates.json and refresh.');
  if(type!=='individual'&&type!=='floater')throw Error('Select Individual or Family Floater.');
@@ -240,7 +270,7 @@ function renderMembers(){
  const type=$('policyType').value;
  if(type==='floater'){
   makeFloaterChoice(holder,'Self',['Self']);makeFloaterChoice(holder,'Spouse',['Spouse']);
-  if(currentPolicy!==POLICIES.redcarpet)makeFloaterChoice(holder,'Children',(currentPolicy===POLICIES.assure||currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.comprehensive)?['Child 1','Child 2','Child 3']:['Child 1','Child 2','Child 3','Child 4']);
+  if(currentPolicy!==POLICIES.redcarpet)makeFloaterChoice(holder,'Children',(currentPolicy===POLICIES.assure||currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.comprehensive||currentPolicy===POLICIES.youngstar)?['Child 1','Child 2','Child 3']:['Child 1','Child 2','Child 3','Child 4']);
   if(currentPolicy===POLICIES.assure)makeFloaterChoice(holder,'Parents',['Parent 1','Parent 2','Parent 3','Parent 4'])
  }else if(type==='individual')makeAgeField('Insured Person',holder);
  else if(type==='multi')for(let i=1;i<=8;i++)makeAgeField('Person '+i,holder);
@@ -248,13 +278,13 @@ function renderMembers(){
 }
 function changePolicy(){
  currentPolicy=POLICIES[policyEl.value]||null;
- ['statusPanel','typePanel','sumPanel','zonePanel','deductiblePanel','actionPanel'].forEach(id=>$(id).classList.toggle('hidden',!currentPolicy));
- $('memberPanel').classList.add('hidden');clearResult();
+ ['statusPanel','typePanel','sumPanel','zonePanel','deductiblePanel','actionPanel','youngPlanPanel'].forEach(id=>$(id).classList.toggle('hidden',!currentPolicy));
+ $('memberPanel').classList.add('hidden');$('youngPlanPanel').classList.toggle('hidden',currentPolicy!==POLICIES.youngstar);clearResult();
  const typeSelect=$('policyType');typeSelect.replaceChildren(new Option('Choose cover type',''));
  if(currentPolicy){typeSelect.add(new Option(currentPolicy===POLICIES.womencare?'Individual (Female)':'Individual','individual'));typeSelect.add(new Option('Family Floater','floater'));if(currentPolicy===POLICIES.superstar)typeSelect.add(new Option('Multi-Individual','multi'))}
  renderMembers();const sum=$('sumInsured');sum.replaceChildren(new Option('Choose sum insured',''));
- if(currentPolicy)currentPolicy.sumInsured.filter(n=>currentPolicy!==POLICIES.redcarpet||$('policyType').value!=='floater'||n>=1000000).forEach(n=>sum.add(new Option(n==='Unlimited'?'Unlimited':currency(n),String(n))));
- $('zonePanel').classList.toggle('hidden',!currentPolicy||currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.redcarpet);$('deductiblePanel').classList.toggle('hidden',!currentPolicy||currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.comprehensive||currentPolicy===POLICIES.redcarpet);$('zone').replaceChildren(new Option('Choose Zone',''));(currentPolicy===POLICIES.comprehensive?['A','B','C','D','E']:['A','B','C','D']).forEach(z=>$('zone').add(new Option(z,z)));document.querySelector('input[name="zoneMode"][value="manual"]').checked=true;$('manualZone').classList.remove('hidden');$('pinZone').classList.add('hidden');document.querySelector('input[name="zoneMode"][value="pin"]').disabled=false;$('zone').value='';$('pin').value='';$('deductible').value='0';$('policyStatus').value='fresh';updateDeductibleHint()
+ if(currentPolicy)currentPolicy.sumInsured.filter(n=>(currentPolicy!==POLICIES.redcarpet||$('policyType').value!=='floater'||n>=1000000)&&(currentPolicy!==POLICIES.youngstar||n!==300000||($('policyType').value==='individual'&&policyStatus()==='renewal'))).forEach(n=>sum.add(new Option(n==='Unlimited'?'Unlimited':currency(n),String(n))));
+ $('zonePanel').classList.toggle('hidden',!currentPolicy||currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.redcarpet);$('deductiblePanel').classList.toggle('hidden',!currentPolicy||currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.comprehensive||currentPolicy===POLICIES.redcarpet||currentPolicy===POLICIES.youngstar);$('zone').replaceChildren(new Option('Choose Zone',''));((currentPolicy===POLICIES.comprehensive||currentPolicy===POLICIES.youngstar)?['A','B','C','D','E']:['A','B','C','D']).forEach(z=>$('zone').add(new Option(z,z)));document.querySelector('input[name="zoneMode"][value="manual"]').checked=true;$('manualZone').classList.remove('hidden');$('pinZone').classList.add('hidden');document.querySelector('input[name="zoneMode"][value="pin"]').disabled=false;$('zone').value='';$('pin').value='';$('deductible').value='0';$('policyStatus').value='fresh';updateDeductibleHint()
 }
 function ageFromDOB(value){
  const parts=value.split('-').map(Number);if(parts.length!==3)return null;
@@ -281,7 +311,7 @@ function getZone(){
  }
  const pin=$('pin').value.trim();
  if(!/^\d{6}$/.test(pin))throw Error('Enter a valid 6-digit PIN code.');
- const key=currentPolicy===POLICIES.comprehensive?'comprehensive':'assure';
+ const key=currentPolicy===POLICIES.youngstar?'youngstar':currentPolicy===POLICIES.comprehensive?'comprehensive':'assure';
  const db=PIN_DATABASES[key];
  if(!db.loaded)throw Error(db.error?'PIN mapping unavailable: '+db.error+'. Please select Manual Zone.':'PIN mapping is still loading. Please try again.');
  if(!Object.prototype.hasOwnProperty.call(db.mapping,pin))throw Error('PIN Code '+pin+' is not in the '+key+' mapping database. Please select Manual Zone.');
@@ -440,7 +470,10 @@ function discountBreakdownForTerm(policy,members,si,zone,term,type,status,deduct
     children.forEach((m,i)=>{annual+=womenCareData.childRates[['First Child','Second Child','Third Child'][i]][String(si)]});
     longTerm+=annual*(year===1?0.10:0.125);
    }
-  }else if(policy===POLICIES.comprehensive){
+  }else if(policy===POLICIES.youngstar){
+    const annual=youngStarPremium(members,si,zone,1,type,status).amount;
+    longTerm=annual*(term===2?0.10:0.225);
+   }else if(policy===POLICIES.comprehensive){
    const annual=comprehensivePremium(members,si,zone,1,type,status).amount;
    longTerm=annual*(term===2?0.10:0.225);
   }
@@ -451,7 +484,7 @@ function showPremiumBreakup(breakdown,term,amount){
  const current=quotationSnapshot||{};
  const si=current.sumInsured ?? $('sumInsured').value;
  const policy=current.policy||'';
- const policyName=policy===POLICIES.assure?'Star Health Assure Insurance Policy':policy===POLICIES.womencare?'Star Health Women Care Insurance Policy':policy===POLICIES.comprehensive?'Star Health Comprehensive Insurance Policy':String(policy||'Health Insurance Policy');
+ const policyName=policy===POLICIES.youngstar.label?'Star Young Star Insurance Policy ('+($('youngPlan').value)+')':policy===POLICIES.assure?'Star Health Assure Insurance Policy':policy===POLICIES.womencare?'Star Health Women Care Insurance Policy':policy===POLICIES.comprehensive?'Star Health Comprehensive Insurance Policy':String(policy||'Health Insurance Policy');
  const discounts=[['Early Entry Discount',breakdown.early],['Long Term Discount',breakdown.longTerm]].filter(x=>x[1]>0);
  // The calculator does not separately expose floater or health discounts; do not invent them.
  const totalDiscount=discounts.reduce((sum,x)=>sum+x[1],0);
@@ -522,27 +555,29 @@ function calculate(){
   const type=$('policyType').value;if(!type)throw Error('Select a cover type.');
   const members=getMembers();if(type==='individual'&&members.length!==1)throw Error('Individual requires one insured person.');
   const sumValue=$('sumInsured').value;if(!sumValue)throw Error('Select a sum insured.');
-  const sumInsured=sumValue==='Unlimited'?'Unlimited':Number(sumValue),zone=(currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.redcarpet)?'':getZone(),status=policyStatus(),deductible=(currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.comprehensive||currentPolicy===POLICIES.redcarpet)?0:Number($('deductible').value);
+  const sumInsured=sumValue==='Unlimited'?'Unlimited':Number(sumValue),zone=(currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.redcarpet)?'':getZone(),status=policyStatus(),deductible=(currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.comprehensive||currentPolicy===POLICIES.redcarpet||currentPolicy===POLICIES.youngstar)?0:Number($('deductible').value);
   if(!currentPolicy.ratesVerified)throw Error('Verified premium rates are not yet connected for '+currentPolicy.label+'.');
-  const rows=currentPolicy.terms.map(term=>({term,...(currentPolicy===POLICIES.womencare?womenCarePremium(members,sumInsured,term,type):currentPolicy===POLICIES.redcarpet?redCarpetPremium(members,sumInsured,term,type,status):currentPolicy===POLICIES.comprehensive?comprehensivePremium(members,sumInsured,zone,term,type,status):lookupVerifiedPremium(currentPolicy,members,sumInsured,zone,term,type,status,deductible))}));
+  const rows=currentPolicy.terms.map(term=>({term,...(currentPolicy===POLICIES.womencare?womenCarePremium(members,sumInsured,term,type):currentPolicy===POLICIES.redcarpet?redCarpetPremium(members,sumInsured,term,type,status):currentPolicy===POLICIES.comprehensive?comprehensivePremium(members,sumInsured,zone,term,type,status):currentPolicy===POLICIES.youngstar?youngStarPremium(members,sumInsured,zone,term,type,status):lookupVerifiedPremium(currentPolicy,members,sumInsured,zone,term,type,status,deductible))}));
   if(!rows.length)throw Error('No quotation is available.');
   rows.forEach(r=>{r.savings=discountBreakdownForTerm(currentPolicy,members,sumInsured,zone,r.term,type,status,deductible,r)});
   const statusLabel={fresh:'Fresh',renewal:'Renewal',portability:'Portability'}[status];
-  $('summary').textContent=currentPolicy.label+' | '+statusLabel+' | Family Size: '+familySizeText()+' | '+members.map(m=>m.member+' ('+m.age+')').join(', ')+' | '+currency(sumInsured)+((currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.redcarpet)?' | No Zone / Deductible':' | Zone '+zone+' | '+(deductible?'Deductible '+currency(deductible):'No Deductible'));
+  $('summary').textContent=currentPolicy.label+(currentPolicy===POLICIES.youngstar?' ('+$('youngPlan').value+')':'')+' | '+statusLabel+' | Family Size: '+familySizeText()+' | '+members.map(m=>m.member+' ('+m.age+')').join(', ')+' | '+currency(sumInsured)+((currentPolicy===POLICIES.womencare||currentPolicy===POLICIES.redcarpet)?' | No Zone / Deductible':' | Zone '+zone+' | '+(deductible?'Deductible '+currency(deductible):'No Deductible'));
   $('premiumRows').replaceChildren();
 
   const details=[];if(rows[0].earlyDiscount>0)details.push('Fresh Policy: 5% Early Entry Discount on eligible first-year premium (approx. '+currency(rows[0].earlyDiscount)+').');
   if(deductible)details.push('Optional deductible discount: '+(rows[0].deductibleRate*100)+'% per policy year.');
   $('discountInfo').textContent=details.join(' ');
-  $('resultNote').textContent=currentPolicy===POLICIES.redcarpet?'Red Carpet: premiums are taken directly from the uploaded chart, including 2- and 3-year long-term discounts. No medical-report discount applied. Claims are subject to 30% co-payment and policy sublimits. Confirm insurer premium and eligibility before issuing.':currentPolicy===POLICIES.comprehensive?'Indicative Comprehensive annual chart rates; year 2 discounted 10%, year 3 discounted 12.5% for upfront long-term payment. Verify final rates and eligibility with insurer. Comprehensive PIN mapping is provisional and not insurer-verified; use manual zone if PIN is missing or disputed. No GST added.':currentPolicy===POLICIES.womencare?'Women Care (V03): 10% discount on second-year premium and 12.5% on third-year premium. Adult ages advance annually. At least one adult female is required for floater, and Individual cover is for females only. Please verify insurer-issued premium and eligibility. GST not added.':'Indicative calculation from annual premium chart. GST is exempt (nil) for eligible individual health insurance policies; no GST is added. Age progresses each year; 10% long-term discount on years 2 and 3. Fresh early entry discount applies only in year 1. Combined discounts and insurer rounding require verification with Star Mitra / Atom Pro. Renewal and portability may have insurer-specific rules not modeled here.';
+  $('resultNote').textContent=currentPolicy===POLICIES.youngstar?'Young Star ('+$('youngPlan').value+'): chart premium with long-term discounts of 10% for year 2 and 12.5% for year 3. PIN mapping is provisional. Confirm final premium, eligibility and benefits with insurer. No GST added.':currentPolicy===POLICIES.redcarpet?'Red Carpet: premiums are taken directly from the uploaded chart, including 2- and 3-year long-term discounts. No medical-report discount applied. Claims are subject to 30% co-payment and policy sublimits. Confirm insurer premium and eligibility before issuing.':currentPolicy===POLICIES.comprehensive?'Indicative Comprehensive annual chart rates; year 2 discounted 10%, year 3 discounted 12.5% for upfront long-term payment. Verify final rates and eligibility with insurer. Comprehensive PIN mapping is provisional and not insurer-verified; use manual zone if PIN is missing or disputed. No GST added.':currentPolicy===POLICIES.womencare?'Women Care (V03): 10% discount on second-year premium and 12.5% on third-year premium. Adult ages advance annually. At least one adult female is required for floater, and Individual cover is for females only. Please verify insurer-issued premium and eligibility. GST not added.':'Indicative calculation from annual premium chart. GST is exempt (nil) for eligible individual health insurance policies; no GST is added. Age progresses each year; 10% long-term discount on years 2 and 3. Fresh early entry discount applies only in year 1. Combined discounts and insurer rounding require verification with Star Mitra / Atom Pro. Renewal and portability may have insurer-specific rules not modeled here.';
   setupBnpl(rows);
   $('generateQuotation').classList.remove('hidden');
-   quotationSnapshot={policy:currentPolicy.label,type,status,members:members.map(m=>({...m})),sumInsured,zone,deductible,rows:rows.map(r=>({...r})),family:familySizeText(),pin:(currentPolicy===POLICIES.redcarpet||currentPolicy===POLICIES.womencare)?'':zoneMode()==='pin'?$('pin').value.trim():''};$('resultPanel').classList.remove('hidden')
+   quotationSnapshot={policy:currentPolicy.label,youngPlan:currentPolicy===POLICIES.youngstar?$('youngPlan').value:null,type,status,members:members.map(m=>({...m})),sumInsured,zone,deductible,rows:rows.map(r=>({...r})),family:familySizeText(),pin:(currentPolicy===POLICIES.redcarpet||currentPolicy===POLICIES.womencare)?'':zoneMode()==='pin'?$('pin').value.trim():''};$('resultPanel').classList.remove('hidden')
  }catch(err){$('error').textContent=err.message}
 }
 Object.entries(POLICIES).forEach(([id,config])=>policyEl.add(new Option(config.label,id)));
 policyEl.addEventListener('change',changePolicy);
-$('policyType').addEventListener('change',()=>{if(currentPolicy===POLICIES.redcarpet){const sum=$('sumInsured');sum.replaceChildren(new Option('Choose sum insured',''));currentPolicy.sumInsured.filter(n=>$('policyType').value!=='floater'||n>=1000000).forEach(n=>sum.add(new Option(currency(n),String(n))))}$('memberPanel').classList.toggle('hidden',!$('policyType').value);renderMembers();clearResult()});
+$('youngPlan').addEventListener('change',clearResult);
+$('policyStatus').addEventListener('change',()=>{if(currentPolicy===POLICIES.youngstar){const sum=$('sumInsured'),previous=sum.value;sum.replaceChildren(new Option('Choose sum insured',''));currentPolicy.sumInsured.filter(n=>n!==300000||($('policyType').value==='individual'&&policyStatus()==='renewal')).forEach(n=>sum.add(new Option(currency(n),String(n))));if([...sum.options].some(o=>o.value===previous))sum.value=previous;}clearResult()});
+$('policyType').addEventListener('change',()=>{if(currentPolicy===POLICIES.redcarpet||currentPolicy===POLICIES.youngstar){const sum=$('sumInsured');sum.replaceChildren(new Option('Choose sum insured',''));currentPolicy.sumInsured.filter(n=>currentPolicy===POLICIES.youngstar?(n!==300000||($('policyType').value==='individual'&&policyStatus()==='renewal')):($('policyType').value!=='floater'||n>=1000000)).forEach(n=>sum.add(new Option(currency(n),String(n))))}$('memberPanel').classList.toggle('hidden',!$('policyType').value);renderMembers();clearResult()});
 $('policyStatus').addEventListener('change',()=>{const note=$('childAgeNotice');if(note)note.textContent=policyStatus()==='fresh'?'Child age must be within 25 years for fresh policy.':policyStatus()==='renewal'?'Renewal: No child age restriction is enforced by this calculator.':'Portability: Child eligibility must be verified with the insurer.';clearResult()});
 document.querySelectorAll('input[name="ageMode"]').forEach(el=>el.addEventListener('change',()=>{renderMembers();clearResult()}));
 document.querySelectorAll('input[name="zoneMode"]').forEach(el=>el.addEventListener('change',()=>{$('manualZone').classList.toggle('hidden',zoneMode()!=='manual');$('pinZone').classList.toggle('hidden',zoneMode()!=='pin');clearResult()}));
@@ -570,8 +605,18 @@ function quoteDiscountDetails(q){
  const savingsHtml=r=>r.savings?.total>0?'<small class="qsave">'+saveLabel+' '+quoteEsc(currency(r.savings.total))+'</small>':'';
  return {savingsHtml,earlyHtml:'',noteHtml:''};
 }
+function youngStarQuoteHtml(){
+ const q=quotationSnapshot,esc=quoteEsc,money=n=>esc(currency(n));
+ const date=new Date().toLocaleDateString('en-IN');
+ const rows=[['Plan',q.youngPlan],['Policy Type',q.status],['Cover',q.type==='floater'?'Family Floater':'Individual'],['Family Composition',q.family],['Members',q.members.map(m=>m.member+' ('+m.age+')').join(', ')],['Sum Insured',currency(q.sumInsured)],['Zone / PIN',q.zone+(q.pin?' / '+q.pin:'')],['Room Category','Single Private A/C Room'],['Pre-Hospitalisation','60 days'],['Post-Hospitalisation','90 days'],['Restoration','100% Sum Insured, once, subject to policy terms'],['Cumulative Bonus','20% of SI per claim-free year, maximum 100%, subject to terms'],['Road Traffic Accident Additional SI','25% of SI, maximum ₹10 lakh, subject to terms'],['PED Waiting Period','12 months, subject to policy wording'],['Specific Disease Waiting Period','12 months, subject to policy wording']];
+ if(q.youngPlan==='Gold'){rows.push(['Maternity / Delivery','Up to ₹30,000 per delivery, maximum 2 deliveries, 36-month waiting period, subject to terms']);rows.push(['Hospital Cash','₹1,000/day, maximum 7 days per hospitalisation and 14 days per policy period; one-day deductible, subject to terms'])}
+ const tr=rows.map(([a,b])=>'<tr><th>'+esc(String(a))+'</th><td>'+esc(String(b))+'</td></tr>').join('');
+ const premiums=q.rows.map(r=>'<div class="qpremium"><span>'+r.term+' '+(r.term===1?'Year':'Years')+'</span><strong>'+money(r.amount)+'</strong>'+(r.savings?.total?'<small class="qsave">Save '+money(r.savings.total)+'</small>':'')+'</div>').join('');
+ return '<div class="qpage"><div class="qhead"><div class="qeyebrow">HEALTH INSURANCE QUOTATION</div><div class="qtitle">Star Young Star Insurance Policy</div><div class="qsub">'+esc(q.youngPlan)+' Plan | '+esc(date)+'</div></div><div class="qhero"><span>SUM INSURED</span><strong>'+money(q.sumInsured)+'</strong><small>'+esc(q.family)+' | Zone '+esc(q.zone)+'</small></div><div class="qsection">Premium Options</div><div class="qpremiums">'+premiums+'</div><div class="qsection">Policy Details & Key Benefits</div><table class="qtable">'+tr+'</table><p class="qnote">Modern treatment and other procedure-specific limits vary by Sum Insured and policy terms. Consult the official prospectus for exact sublimits. Premiums are indicative; confirm rates, underwriting and eligibility with insurer before issuing. No GST added.</p><div class="qfooter"><span>Independent advisor quotation • Not an insurer-issued document</span><span>'+esc(date)+'</span></div></div>';
+}
 function quoteHtml(){
  const quoteDiscount=quoteDiscountDetails(quotationSnapshot);
+ if(quotationSnapshot?.policy===POLICIES.youngstar.label)return youngStarQuoteHtml();
  if(quotationSnapshot?.policy===POLICIES.redcarpet.label)return redCarpetQuoteHtml();
  if(quotationSnapshot?.policy===POLICIES.womencare.label)return womenCareQuoteHtml();
  if(quotationSnapshot?.policy===POLICIES.comprehensive.label)return comprehensiveQuoteHtml();
