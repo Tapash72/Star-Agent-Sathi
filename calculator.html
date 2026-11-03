@@ -95,7 +95,7 @@
 <section class="panel hidden" id="youngPlanPanel"><h2>Young Star Plan</h2><label for="youngPlan">Select Plan</label><select id="youngPlan"><option value="Gold">Gold</option><option value="Silver">Silver</option></select></section>
 <section class="panel hidden" id="superSurplusPlanPanel"><h2>Super Surplus Plan</h2><label for="superSurplusPlan">Select Plan</label><select id="superSurplusPlan"><option value="GOLD">Gold</option><option value="SILVER">Silver</option></select><p class="hint">One Super Surplus policy module with Individual / Family Floater cover.</p></section>
 <section class="panel hidden" id="superSurplusLimitPanel"><h2>Deductible / Defined Limit</h2><label for="superSurplusLimit" id="superSurplusLimitLabel">Select limit</label><select id="superSurplusLimit"><option value="">Choose limit</option></select><p class="hint" id="superSurplusLimitHint">Gold uses a Defined Limit; Silver uses a per-hospitalisation Deductible.</p><div class="ss-note">The initial rate matrix contains selected reference combinations only; missing combinations are not guessed.</div></section>
-<section class="panel hidden" id="superStarDiscountPanel"><h2>Super Star Preferred – Discounts</h2><p class="hint">Preferred bundle pricing uses Atom Pro as the primary reference. Star Mitra is used only as a secondary third-party cross-check.</p><div class="choices"><label><input type="checkbox" id="superStarHealthDiscount"> Health Questionnaire Discount (5%)</label><label><input type="checkbox" id="superStarLifestyleDiscount"> Lifestyle Questionnaire Discount (5%)</label></div><div class="notice">The two 5% questionnaire discounts are calculated separately on the Preferred Bundle Premium. The current Diwali / Festive offer is already reflected in the supplied Bundle Premium and is NOT deducted again. Optional-cover prices are not included in this sample module.</div></section>
+<section class="panel hidden" id="superStarDiscountPanel"><h2>Super Star Preferred – Covers &amp; Discounts</h2><p class="hint">Atom Pro is the primary pricing reference. Select the covers included in the customer quote and the questionnaire discounts that apply.</p><h3 style="font-size:14px;color:#124e86;margin:14px 0 7px">Additional Covers &amp; Add-ons</h3><div class="choices"><label><input type="checkbox" id="superStarHealthCheckup"> Preventive Health Check-up – Package A</label><label><input type="checkbox" id="superStarConsumable"> Consumable Cover</label></div><p class="hint" id="superStarCoverHint">The two additional covers are preselected for the ₹7.5 lakh Atom Pro test case. Untick either cover if it is not required.</p><h3 style="font-size:14px;color:#124e86;margin:14px 0 7px">Questionnaire Discounts</h3><div class="choices"><label><input type="checkbox" id="superStarHealthDiscount" checked> Health Questionnaire Discount (5%)</label><label><input type="checkbox" id="superStarLifestyleDiscount" checked> Lifestyle Questionnaire Discount (5%)</label></div><h3 style="font-size:14px;color:#124e86;margin:14px 0 7px">Diwali Offer / Additional Discount</h3><div class="choices"><label><input type="checkbox" id="superStarAdditionalDiscount"> Apply a separate additional discount</label></div><div id="superStarAdditionalDiscountFields" class="hidden"><label for="superStarAdditionalDiscountAmount">Additional Discount Amount (₹)</label><input id="superStarAdditionalDiscountAmount" type="number" min="1" step="1" inputmode="numeric" placeholder="Enter approved additional discount amount"></div><div class="notice">The supplied Atom Pro bundle premiums already include the current festive offer. No extra Diwali percentage is assumed or deducted automatically. Enter an amount here only when a separate additional discount has been specifically approved.</div></section>
 <section class="panel hidden" id="ssPinPanel"><h2>PIN Code (Optional)</h2><label for="superSurplusPin">6-digit PIN Code</label><input id="superSurplusPin" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="6" pattern="[0-9]{6}" placeholder="e.g. 711101"><p class="hint">PIN is recorded in the quotation for reference only. It is not used for Zone mapping or premium calculation.</p></section>
 <section class="panel hidden" id="statusPanel"><h2><span class="step">2</span>Policy Type</h2><label for="policyStatus">Select Policy Type</label><select id="policyStatus"><option value="fresh">Fresh</option><option value="renewal">Renewal</option><option value="portability">Portability</option></select><p class="hint">This is a premium calculator. No previous policy details are required.</p></section>
 <section class="panel hidden" id="typePanel"><h2><span class="step">3</span>Cover Type</h2><label for="policyType">Select Cover Type</label><select id="policyType"><option value="">Choose cover type</option></select></section>
@@ -236,37 +236,46 @@ function superSurplusAgeBand(age){
 function superStarPreferredPremium(members,si,zone,term,type,status){
  if(!superStarCalibration)throw Error('Super Star Preferred sample data is not loaded. Keep super_star_preferred_calibration.json beside calculator.html.');
  if(status!=='fresh')throw Error('Super Star Preferred pricing is currently calibrated for Fresh policy only.');
- if(type!=='individual'||members.length!==1)throw Error('Super Star Preferred pricing is not yet calibrated for Floater or Multi-Individual. This sample module supports Individual only.');
+ if(type!=='individual'||members.length!==1)throw Error('Super Star Preferred pricing is currently calibrated for Individual only. Floater and Multi-Individual are not yet supported.');
  const age=members[0].age;
  const sample=superStarCalibration.samples.find(x=>x.age===age&&x.zone===zone&&x.policyType===type&&Number(x.sumInsured)===Number(si)&&Number(x.term)===Number(term));
- if(!sample)throw Error('No verified Super Star Preferred bundle sample for Age '+age+', Zone '+zone+', SI '+currency(si)+', '+term+' year(s). Currently supported: Age 25, Zone C, Individual, Fresh, SI ₹7.5 lakh (1–3 years), ₹10 lakh (1 year), and ₹15 lakh (1 year).');
+ if(!sample)throw Error('No verified Super Star Preferred bundle sample for Age '+age+', Zone '+zone+', SI '+currency(si)+', '+term+' year(s). Supported samples: Age 25, Zone C, Individual, Fresh, SI ₹7.5 lakh (1–3 years), ₹10 lakh (1 year), and ₹15 lakh (1 year).');
  const healthOn=$('superStarHealthDiscount').checked;
  const lifestyleOn=$('superStarLifestyleDiscount').checked;
+ const checkupOn=$('superStarHealthCheckup').checked;
+ const consumableOn=$('superStarConsumable').checked;
+ if(checkupOn!==consumableOn)throw Error('Atom Pro pricing is verified for both additional covers together or neither. Please select both covers or untick both.');
+ const additionalOn=$('superStarAdditionalDiscount').checked;
+ const additionalDiscount=additionalOn?Number($('superStarAdditionalDiscountAmount').value):0;
+ if(additionalOn&&(!Number.isFinite(additionalDiscount)||additionalDiscount<=0))throw Error('Enter the approved Additional Discount amount in rupees, or untick the additional discount option.');
+ const hasAddonSample=Number(si)===750000&&age===25&&zone==='C'&&type==='individual'&&status==='fresh'&&Number.isFinite(sample.bundlePremiumWithDefaultCovers);
+ if((checkupOn||consumableOn)&&!hasAddonSample)throw Error('Additional-cover pricing is only verified for Age 25, Zone C, Individual, Fresh, ₹7.5 lakh, with 1–3 year terms. Untick the additional covers for this sample.');
+ const addonAmounts=sample.additionalCovers||{};
+ const checkup=checkupOn?Number(addonAmounts.preventiveHealthCheckup)||0:0;
+ const consumable=consumableOn?Number(addonAmounts.consumableCover)||0:0;
+ if(checkupOn&&!checkup)throw Error('Preventive Health Check-up pricing is not available for this sample.');
+ if(consumableOn&&!consumable)throw Error('Consumable Cover pricing is not available for this sample.');
+ const addonTotal=checkup+consumable;
+ const withDefaultCovers=checkupOn&&consumableOn;
+ const bundlePremium=withDefaultCovers?Number(sample.bundlePremiumWithDefaultCovers):Number(sample.bundlePremium);
  const healthRate=Number(superStarCalibration.discountRules.healthQuestionnaire)||0;
  const lifestyleRate=Number(superStarCalibration.discountRules.lifestyleQuestionnaire)||0;
- const health=healthOn?sample.bundlePremium*healthRate:0;
- const lifestyle=lifestyleOn?sample.bundlePremium*lifestyleRate:0;
- const longTerm=Number(sample.longTermDiscountDisplayed)||0;
- let calculated=sample.bundlePremium-health-lifestyle-longTerm;
- let amount=Math.round(calculated);
+ const discountBase=bundlePremium+addonTotal;
+ const health=healthOn?(withDefaultCovers?Number(sample.healthDiscountWithDefaultCovers):Number(sample.healthDiscountDisplayed))||Math.round(discountBase*healthRate):0;
+ const lifestyle=lifestyleOn?(withDefaultCovers?Number(sample.lifestyleDiscountWithDefaultCovers):Number(sample.lifestyleDiscountDisplayed))||Math.round(discountBase*lifestyleRate):0;
+ const longTerm=withDefaultCovers?Number(sample.longTermDiscountWithDefaultCovers)||0:Number(sample.longTermDiscountDisplayed)||0;
+ let amount=Math.round(discountBase-health-lifestyle-longTerm);
  let atomProReferenceUsed=false;
- if(healthOn&&lifestyleOn&&Number.isFinite(sample.atomProFinalWithBothQuestionnaireDiscounts)){
-  amount=Number(sample.atomProFinalWithBothQuestionnaireDiscounts);
-  atomProReferenceUsed=true;
+ if(healthOn&&lifestyleOn&&!additionalOn){
+  const exact=withDefaultCovers?sample.atomProFinalWithDefaultCovers:sample.atomProFinalWithBothQuestionnaireDiscounts;
+  if(Number.isFinite(exact)){amount=Number(exact);atomProReferenceUsed=true;}
  }
+ if(additionalOn)amount=Math.max(0,amount-additionalDiscount);
  return {
-  amount,
-  earlyDiscount:0,
-  deductibleRate:0,
-  bundlePremium:sample.bundlePremium,
-  prospectusBasePremium:sample.prospectusBasePremium,
-  healthDiscount:health,
-  lifestyleDiscount:lifestyle,
-  longTermDiscount:longTerm,
-  atomProReferenceUsed,
-  festiveOfferIncluded:true,
-  rateSource:'User-supplied Atom Pro Preferred sample (primary benchmark)',
-  preferred:true
+  amount,earlyDiscount:0,deductibleRate:0,bundlePremium,prospectusBasePremium:sample.prospectusBasePremium,
+  additionalCoverTotal:addonTotal,preventiveHealthCheckup:checkup,consumableCover:consumable,
+  healthDiscount:health,lifestyleDiscount:lifestyle,longTermDiscount:longTerm,additionalDiscount,
+  atomProReferenceUsed,festiveOfferIncluded:true,rateSource:'User-supplied Atom Pro Preferred sample (primary benchmark)',preferred:true
  };
 }
 
@@ -435,7 +444,7 @@ function changePolicy(){
  $('superSurplusPlanPanel').classList.toggle('hidden',!isSS);
  $('superSurplusLimitPanel').classList.toggle('hidden',!isSS);
  $('superStarDiscountPanel').classList.toggle('hidden',currentPolicy!==POLICIES.superstar);
- $('superStarHealthDiscount').checked=false;$('superStarLifestyleDiscount').checked=false;
+ $('superStarHealthDiscount').checked=true;$('superStarLifestyleDiscount').checked=true;$('superStarHealthCheckup').checked=true;$('superStarConsumable').checked=true;$('superStarAdditionalDiscount').checked=false;$('superStarAdditionalDiscountAmount').value='';$('superStarAdditionalDiscountFields').classList.add('hidden');
  $('ssPinPanel').classList.toggle('hidden',!isSS);
  $('statusPanel').classList.toggle('hidden',!currentPolicy||isSS);
  clearResult();
@@ -653,10 +662,8 @@ function discountBreakdownForTerm(policy,members,si,zone,term,type,status,deduct
   }
  }
  if(policy===POLICIES.superstar){
-  const health=Math.round(Number(calculatedRow.healthDiscount)||0),lifestyle=Math.round(Number(calculatedRow.lifestyleDiscount)||0),long=Math.round(Number(calculatedRow.longTermDiscount)||0);
-  const bundle=Number(calculatedRow.bundlePremium)||0;
-  const final=Number(calculatedRow.amount)||0;
-  return {early:0,health,lifestyle,longTerm:long,total:long};
+  const health=Math.round(Number(calculatedRow.healthDiscount)||0),lifestyle=Math.round(Number(calculatedRow.lifestyleDiscount)||0),long=Math.round(Number(calculatedRow.longTermDiscount)||0),additional=Math.round(Number(calculatedRow.additionalDiscount)||0);
+  return {early:0,health,lifestyle,longTerm:long,additional,additionalCoverTotal:Number(calculatedRow.additionalCoverTotal)||0,preventiveHealthCheckup:Number(calculatedRow.preventiveHealthCheckup)||0,consumableCover:Number(calculatedRow.consumableCover)||0,bundlePremium:Number(calculatedRow.bundlePremium)||0,total:long,discountTotal:health+lifestyle+long+additional};
  }
  return {early:Math.round(early),longTerm:Math.round(longTerm),total:Math.round(early+longTerm)};
 }
@@ -664,38 +671,39 @@ function showPremiumBreakup(breakdown,term,amount){
  const current=quotationSnapshot||{};
  const si=current.sumInsured ?? $('sumInsured').value;
  const policy=current.policy||'';
- const policyName=policy===POLICIES.superstar.label?'Star Health Super Star Insurance Policy – Preferred':policy===POLICIES.youngstar.label?'Star Young Star Insurance Policy ('+($('youngPlan').value)+')':policy===POLICIES.assure?'Star Health Assure Insurance Policy':policy===POLICIES.womencare?'Star Health Women Care Insurance Policy':policy===POLICIES.comprehensive?'Star Health Comprehensive Insurance Policy':policy===POLICIES.supersurplus.label?'Star Super Surplus Insurance Policy':String(policy||'Health Insurance Policy');
- let discounts=[['Early Entry Discount',breakdown.early],['Long Term Discount',breakdown.longTerm]].filter(x=>x[1]>0);
- if(policy===POLICIES.superstar.label)discounts=[['Health Questionnaire Discount',breakdown.health],['Lifestyle Questionnaire Discount',breakdown.lifestyle],['Long Term Discount',breakdown.longTerm]].filter(x=>x[1]>0);
+ const isSuperStar=policy===POLICIES.superstar.label;
+ const policyName=isSuperStar?'Star Health Super Star Insurance Policy – Preferred':policy===POLICIES.youngstar.label?'Star Young Star Insurance Policy ('+($('youngPlan').value)+')':policy===POLICIES.assure?'Star Health Assure Insurance Policy':policy===POLICIES.womencare?'Star Health Women Care Insurance Policy':policy===POLICIES.comprehensive?'Star Health Comprehensive Insurance Policy':policy===POLICIES.supersurplus.label?'Star Super Surplus Insurance Policy':String(policy||'Health Insurance Policy');
  const currentRow=(current.rows||[]).find(r=>Number(r.term)===Number(term));
- const base=policy===POLICIES.superstar.label&&currentRow?.bundlePremium?currentRow.bundlePremium:amount+discounts.reduce((sum,x)=>sum+x[1],0);
- const totalDiscount=policy===POLICIES.superstar.label?Math.max(0,Math.round(base-amount)):discounts.reduce((sum,x)=>sum+x[1],0);
+ let discounts=[['Early Entry Discount',breakdown.early],['Long Term Discount',breakdown.longTerm]].filter(x=>x[1]>0);
+ if(isSuperStar)discounts=[['Health Questionnaire Discount',breakdown.health],['Lifestyle Questionnaire Discount',breakdown.lifestyle],['Long Term Discount',breakdown.longTerm],['Diwali Offer / Additional Discount',breakdown.additional]].filter(x=>x[1]>0);
+ const base=isSuperStar?Number(currentRow?.bundlePremium||0)+Number(currentRow?.additionalCoverTotal||0):amount+discounts.reduce((sum,x)=>sum+x[1],0);
+ const totalDiscount=isSuperStar?discounts.reduce((sum,x)=>sum+x[1],0):discounts.reduce((sum,x)=>sum+x[1],0);
  document.querySelector('.premium-breakup-overlay')?.remove();
  const overlay=document.createElement('div');overlay.className='premium-breakup-overlay';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','Total Premium');
  const sheet=document.createElement('div');sheet.className='premium-breakup-sheet';
- const head=document.createElement('div');head.className='pb-head';head.textContent='Total Premium';
+ const head=document.createElement('div');head.className='pb-head';head.textContent='Premium Breakup';
  const close=document.createElement('button');close.className='pb-close';close.type='button';close.textContent='×';close.setAttribute('aria-label','Close premium breakup');head.appendChild(close);
  const body=document.createElement('div');body.className='pb-body';
  const panel=document.createElement('div');panel.className='pb-policy';
  const name=document.createElement('div');name.className='pb-policy-name';name.textContent=policyName;panel.appendChild(name);
  const facts=document.createElement('div');facts.className='pb-facts';
- const factsList=[['Sum Insured',si ? currency(si) : 'Not selected'],['Policy Period',term+' '+(term===1?'Year':'Years')]];if(current.superSurplusPlan)factsList.push(['Plan',current.superSurplusPlan], [current.superSurplusLimitType||'Limit',currency(current.superSurplusLimit)]);for(const [label,value] of factsList){
-  const fact=document.createElement('div');fact.className='pb-fact';const cap=document.createElement('span');cap.textContent=label;const strong=document.createElement('strong');strong.textContent=value;fact.append(cap,strong);facts.appendChild(fact);
- }panel.appendChild(facts);
+ const factsList=[['Sum Insured',si ? currency(si) : 'Not selected'],['Policy Period',term+' '+(term===1?'Year':'Years')]];if(current.superSurplusPlan)factsList.push(['Plan',current.superSurplusPlan], [current.superSurplusLimitType||'Limit',currency(current.superSurplusLimit)]);for(const [label,value] of factsList){const fact=document.createElement('div');fact.className='pb-fact';const cap=document.createElement('span');cap.textContent=label;const strong=document.createElement('strong');strong.textContent=value;fact.append(cap,strong);facts.appendChild(fact);}panel.appendChild(facts);
  const addRow=(parent,label,value,cls='')=>{const row=document.createElement('div');row.className='pb-row '+cls;const l=document.createElement('span');l.textContent=label;const v=document.createElement('span');v.textContent=value;row.append(l,v);parent.appendChild(row)};
- addRow(panel,'Base Premium',currency(base));
- addRow(panel,'Discount(s)','−'+currency(totalDiscount));
+ if(isSuperStar){
+  addRow(panel,'Bundle Premium',currency(currentRow?.bundlePremium||0));
+  if((breakdown.additionalCoverTotal||0)>0){addRow(panel,'Additional Cover & Add-on',currency(breakdown.additionalCoverTotal));const coverItems=document.createElement('div');coverItems.className='pb-discount-items';if(breakdown.preventiveHealthCheckup>0)addRow(coverItems,'Preventive Health Check-up – Package A',currency(breakdown.preventiveHealthCheckup));if(breakdown.consumableCover>0)addRow(coverItems,'Consumable Cover',currency(breakdown.consumableCover));panel.appendChild(coverItems);}
+  addRow(panel,'Discount','−'+currency(totalDiscount));
+ }else{addRow(panel,'Base Premium',currency(base));addRow(panel,'Discount(s)','−'+currency(totalDiscount));}
  const items=document.createElement('div');items.className='pb-discount-items';for(const [label,value] of discounts)addRow(items,label,'−'+currency(value));panel.appendChild(items);
  addRow(panel,'Total Premium',currency(amount),'pb-total');body.appendChild(panel);
  const overall=document.createElement('div');overall.className='pb-overall';const ot=document.createElement('span');ot.textContent='Overall Premium';const ov=document.createElement('span');ov.textContent=currency(amount);overall.append(ot,ov);body.appendChild(overall);
- const note=document.createElement('p');note.className='pb-note';note.textContent=policy===POLICIES.superstar.label?'Preferred Bundle Premium is taken from the supplied current Atom Pro sample (primary benchmark) and already reflects the Diwali / Festive offer, as confirmed by the user. Star Mitra is only a secondary third-party cross-check. Health, Lifestyle and Long Term discounts are shown separately. Each component is rounded for display; the final total follows the source quotation internal precision. This is a limited sample calculation, not an insurer-issued quote.':'Base Premium shown here is the amount before the separately calculated Early Entry and Long Term discounts. Other pricing adjustments already included in the calculator rates are not broken out. Insurer confirmation required.';body.appendChild(note);
+ const note=document.createElement('p');note.className='pb-note';note.textContent=isSuperStar?'Figures are calibrated to the user-supplied Atom Pro examples. The bundle already includes the current festive offer. Any separate additional discount is deducted only when manually entered and should be applied only if approved. Atom Pro may round individual lines independently; its displayed final premium is retained for the exact supplied test cases. Limited sample pricing only; confirm insurer-issued premium and eligibility.':'Base Premium shown here is the amount before the separately calculated Early Entry and Long Term discounts. Other pricing adjustments already included in the calculator rates are not broken out. Insurer confirmation required.';body.appendChild(note);
  sheet.append(head,body);overlay.appendChild(sheet);document.body.appendChild(overlay);
- const dismiss=()=>{overlay.remove();document.removeEventListener('keydown',escHandler)};
- const escHandler=e=>{if(e.key==='Escape')dismiss()};
- close.addEventListener('click',dismiss);overlay.addEventListener('click',e=>{if(e.target===overlay)dismiss()});document.addEventListener('keydown',escHandler);close.focus();
+ const dismiss=()=>{overlay.remove();document.removeEventListener('keydown',escHandler)};const escHandler=e=>{if(e.key==='Escape')dismiss()};close.addEventListener('click',dismiss);overlay.addEventListener('click',e=>{if(e.target===overlay)dismiss()});document.addEventListener('keydown',escHandler);close.focus();
 }
+
 function renderSavingsBreakup(target,breakdown,term,amount){
- const button=document.createElement('button');button.type='button';button.className='save-toggle';button.textContent='Save '+currency(breakdown.total)+' ▾';
+ const button=document.createElement('button');button.type='button';button.className='save-toggle';button.textContent=currentPolicy===POLICIES.superstar?(breakdown.total>0?'Save '+currency(breakdown.total)+' ▾':'Premium Breakup ▾'):'Save '+currency(breakdown.total)+' ▾';
  button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();showPremiumBreakup(breakdown,term,amount)});
  target.appendChild(button);
 }
@@ -709,7 +717,7 @@ function setupBnpl(rows,allowBnpl=true){
     const label=document.createElement('span');label.className='term-label';label.textContent=term+' '+(term===1?'Year':'Years');
     const price=document.createElement('strong');price.className='term-price';price.textContent=currency(amount)+'/-';
     card.append(label,price);
-    if(savings?.total>0)renderSavingsBreakup(card,savings,term,amount);
+    if(savings?.total>0||currentPolicy===POLICIES.superstar)renderSavingsBreakup(card,savings,term,amount);
     if(allowBnpl&&amount>=10000&&BNPL_CONFIG[term]){
       const btn=document.createElement('button');btn.type='button';btn.textContent='BNPL Details';btn.className='bnpl-details-link';btn.setAttribute('aria-expanded','false');
       btn.addEventListener('click',()=>{
@@ -751,12 +759,12 @@ function calculate(){
 
   const details=[];if(rows[0].earlyDiscount>0)details.push('Fresh Policy: 5% Early Entry Discount on eligible first-year premium (approx. '+currency(rows[0].earlyDiscount)+').');
   if(deductible)details.push('Optional deductible discount: '+(rows[0].deductibleRate*100)+'% per policy year.');
-  if(currentPolicy===POLICIES.superstar){if($('superStarHealthDiscount').checked)details.push('Health Questionnaire Discount: 5% of Preferred Bundle Premium.');if($('superStarLifestyleDiscount').checked)details.push('Lifestyle Questionnaire Discount: 5% of Preferred Bundle Premium.');details.push('Long-term discount is included in the displayed 2-year / 3-year sample premium.');details.push('Official prospectus base rate (reference only): '+currency(rows[0].prospectusBasePremium)+'. The Preferred Bundle Premium is used for this calculation.');details.push('Current Diwali / Festive offer is already included in the supplied Bundle Premium; no extra 10% is deducted.');}
+  if(currentPolicy===POLICIES.superstar){if($('superStarHealthDiscount').checked)details.push('Health Questionnaire Discount: 5%.');if($('superStarLifestyleDiscount').checked)details.push('Lifestyle Questionnaire Discount: 5%.');if(rows[0].additionalCoverTotal>0)details.push('Additional Covers: '+currency(rows[0].additionalCoverTotal)+'.');if(rows[0].additionalDiscount>0)details.push('Separate Additional Discount: '+currency(rows[0].additionalDiscount)+'.');details.push('The current festive offer is already included in the supplied Bundle Premium; no extra Diwali percentage is assumed.');}
   $('discountInfo').textContent=details.join(' ');
-  $('resultNote').textContent=currentPolicy===POLICIES.superstar?'Super Star Preferred limited-sample mode: Atom Pro is the primary pricing benchmark; Star Mitra is only a secondary third-party cross-check. Available Atom Pro samples cover Age 25, Zone C, Individual, Fresh, SI ₹7.5 lakh (1–3 years), ₹10 lakh (1 year) and ₹15 lakh (1 year) only. Supplied Bundle Premium samples already include the current Diwali / Festive offer (no additional 10% is deducted). Health and Lifestyle Questionnaire discounts are 5% each; long-term discount uses the supplied Atom Pro quote amounts. Published prospectus base rates are shown only as reference and are not substituted for Preferred bundle prices. Exact Atom Pro final-premium samples are available where both 5% questionnaire discounts are selected; other discount combinations are calculated from the supplied bundle and observed discount rules, but have not been separately confirmed by an Atom Pro quote. Star Mitra is not used to set premiums. Optional-cover prices are excluded. Floater, Multi-Individual, other ages / zones / SI, 4–5 years, renewal / portability and optional covers are unsupported; no insurer-issued quote is generated from this limited sample module.':currentPolicy===POLICIES.supersurplus?'Super Surplus: V9 prospectus rate matrix with Atom Pro sample overrides. Two-year premium uses the next policy-year age band and 5% upfront long-term discount. Floater Gold currently has imported rates for 2A+1C only; other compositions will show rate unavailable until their chart is added. Floater Silver 5L deductible has an Atom Pro sample override that differs from the V9 chart and must be checked in the final audit. PIN, when entered, is shown on the quotation only and does not affect premium or Zone.':currentPolicy===POLICIES.youngstar?'Young Star ('+$('youngPlan').value+'): chart premium with long-term discounts of 10% for year 2 and 12.5% for year 3. PIN mapping is provisional. Confirm final premium, eligibility and benefits with insurer. No GST added.':currentPolicy===POLICIES.redcarpet?'Red Carpet: premiums are taken directly from the uploaded chart, including 2- and 3-year long-term discounts. No medical-report discount applied. Claims are subject to 30% co-payment and policy sublimits. Confirm insurer premium and eligibility before issuing.':currentPolicy===POLICIES.comprehensive?'Indicative Comprehensive annual chart rates; year 2 discounted 10%, year 3 discounted 12.5% for upfront long-term payment. Verify final rates and eligibility with insurer. Comprehensive PIN mapping is provisional and not insurer-verified; use manual zone if PIN is missing or disputed. No GST added.':currentPolicy===POLICIES.womencare?'Women Care (V03): 10% discount on second-year premium and 12.5% on third-year premium. Adult ages advance annually. At least one adult female is required for floater, and Individual cover is for females only. Please verify insurer-issued premium and eligibility. GST not added.':'Indicative calculation from annual premium chart. GST is exempt (nil) for eligible individual health insurance policies; no GST is added. Age progresses each year; 10% long-term discount on years 2 and 3. Fresh early entry discount applies only in year 1. Combined discounts and insurer rounding require verification with Star Mitra / Atom Pro. Renewal and portability may have insurer-specific rules not modeled here.';
+  $('resultNote').textContent=currentPolicy===POLICIES.superstar?'Super Star Preferred uses limited Atom Pro sample pricing: Age 25, Zone C, Individual, Fresh, ₹7.5 lakh (1–3 years), ₹10 lakh (1 year) and ₹15 lakh (1 year). Preventive Health Check-up Package A and Consumable Cover are priced only for the ₹7.5 lakh sample. The current festive offer is already reflected in Bundle Premium. Health and Lifestyle discounts and Long Term Discount are shown separately. A manually entered additional discount is not assumed to be an insurer offer; use only when separately approved. Floater, Multi-Individual, other ages / zones / SI, 4–5 years, renewal / portability and uncalibrated optional-cover combinations are unsupported.':currentPolicy===POLICIES.supersurplus?'Super Surplus: V9 prospectus rate matrix with Atom Pro sample overrides. Two-year premium uses the next policy-year age band and 5% upfront long-term discount. Floater Gold currently has imported rates for 2A+1C only; other compositions will show rate unavailable until their chart is added. Floater Silver 5L deductible has an Atom Pro sample override that differs from the V9 chart and must be checked in the final audit. PIN, when entered, is shown on the quotation only and does not affect premium or Zone.':currentPolicy===POLICIES.youngstar?'Young Star ('+$('youngPlan').value+'): chart premium with long-term discounts of 10% for year 2 and 12.5% for year 3. PIN mapping is provisional. Confirm final premium, eligibility and benefits with insurer. No GST added.':currentPolicy===POLICIES.redcarpet?'Red Carpet: premiums are taken directly from the uploaded chart, including 2- and 3-year long-term discounts. No medical-report discount applied. Claims are subject to 30% co-payment and policy sublimits. Confirm insurer premium and eligibility before issuing.':currentPolicy===POLICIES.comprehensive?'Indicative Comprehensive annual chart rates; year 2 discounted 10%, year 3 discounted 12.5% for upfront long-term payment. Verify final rates and eligibility with insurer. Comprehensive PIN mapping is provisional and not insurer-verified; use manual zone if PIN is missing or disputed. No GST added.':currentPolicy===POLICIES.womencare?'Women Care (V03): 10% discount on second-year premium and 12.5% on third-year premium. Adult ages advance annually. At least one adult female is required for floater, and Individual cover is for females only. Please verify insurer-issued premium and eligibility. GST not added.':'Indicative calculation from annual premium chart. GST is exempt (nil) for eligible individual health insurance policies; no GST is added. Age progresses each year; 10% long-term discount on years 2 and 3. Fresh early entry discount applies only in year 1. Combined discounts and insurer rounding require verification with Star Mitra / Atom Pro. Renewal and portability may have insurer-specific rules not modeled here.';
   setupBnpl(rows,currentPolicy!==POLICIES.supersurplus);
   $('generateQuotation').classList.toggle('hidden',currentPolicy===POLICIES.superstar);
-   quotationSnapshot={policy:currentPolicy.label,superStarVariant:currentPolicy===POLICIES.superstar?'Preferred':null,superStarHealthDiscount:currentPolicy===POLICIES.superstar&&$('superStarHealthDiscount').checked,superStarLifestyleDiscount:currentPolicy===POLICIES.superstar&&$('superStarLifestyleDiscount').checked,youngPlan:currentPolicy===POLICIES.youngstar?$('youngPlan').value:null,superSurplusPlan:currentPolicy===POLICIES.supersurplus?$('superSurplusPlan').value:null,superSurplusLimit:currentPolicy===POLICIES.supersurplus?Number($('superSurplusLimit').value):null,superSurplusLimitType:currentPolicy===POLICIES.supersurplus?superSurplusLimitLabel():null,type,status,members:members.map(m=>({...m})),sumInsured,zone,deductible,rows:rows.map(r=>({...r})),family:familySizeText(),pin:currentPolicy===POLICIES.supersurplus?ssPin:(currentPolicy===POLICIES.redcarpet||currentPolicy===POLICIES.womencare)?'':zoneMode()==='pin'?$('pin').value.trim():''};$('resultPanel').classList.remove('hidden')
+   quotationSnapshot={policy:currentPolicy.label,superStarVariant:currentPolicy===POLICIES.superstar?'Preferred':null,superStarHealthDiscount:currentPolicy===POLICIES.superstar&&$('superStarHealthDiscount').checked,superStarLifestyleDiscount:currentPolicy===POLICIES.superstar&&$('superStarLifestyleDiscount').checked,superStarHealthCheckup:currentPolicy===POLICIES.superstar&&$('superStarHealthCheckup').checked,superStarConsumable:currentPolicy===POLICIES.superstar&&$('superStarConsumable').checked,youngPlan:currentPolicy===POLICIES.youngstar?$('youngPlan').value:null,superSurplusPlan:currentPolicy===POLICIES.supersurplus?$('superSurplusPlan').value:null,superSurplusLimit:currentPolicy===POLICIES.supersurplus?Number($('superSurplusLimit').value):null,superSurplusLimitType:currentPolicy===POLICIES.supersurplus?superSurplusLimitLabel():null,type,status,members:members.map(m=>({...m})),sumInsured,zone,deductible,rows:rows.map(r=>({...r})),family:familySizeText(),pin:currentPolicy===POLICIES.supersurplus?ssPin:(currentPolicy===POLICIES.redcarpet||currentPolicy===POLICIES.womencare)?'':zoneMode()==='pin'?$('pin').value.trim():''};$('resultPanel').classList.remove('hidden')
  }catch(err){$('error').textContent=err.message}
 }
 Object.entries(POLICIES).forEach(([id,config])=>policyEl.add(new Option(config.label,id)));
@@ -764,13 +772,13 @@ policyEl.addEventListener('change',changePolicy);
 $('youngPlan').addEventListener('change',clearResult);
 $('superSurplusPlan').addEventListener('change',()=>{updateSuperSurplusOptions();clearResult()});
 $('superSurplusLimit').addEventListener('change',()=>{updateSuperSurplusOptions();clearResult()});
-$('superStarHealthDiscount').addEventListener('change',clearResult);$('superStarLifestyleDiscount').addEventListener('change',clearResult);
+$('superStarHealthDiscount').addEventListener('change',clearResult);$('superStarLifestyleDiscount').addEventListener('change',clearResult);['superStarHealthCheckup','superStarConsumable'].forEach(id=>$(id).addEventListener('change',clearResult));$('superStarAdditionalDiscount').addEventListener('change',()=>{$('superStarAdditionalDiscountFields').classList.toggle('hidden',!$('superStarAdditionalDiscount').checked);clearResult()});$('superStarAdditionalDiscountAmount').addEventListener('input',clearResult);
 $('policyStatus').addEventListener('change',()=>{if(currentPolicy===POLICIES.youngstar){const sum=$('sumInsured'),previous=sum.value;sum.replaceChildren(new Option('Choose sum insured',''));currentPolicy.sumInsured.filter(n=>n!==300000||($('policyType').value==='individual'&&policyStatus()==='renewal')).forEach(n=>sum.add(new Option(currency(n),String(n))));if([...sum.options].some(o=>o.value===previous))sum.value=previous;}clearResult()});
 $('policyType').addEventListener('change',()=>{if(currentPolicy===POLICIES.supersurplus){updateSuperSurplusOptions()}else if(currentPolicy===POLICIES.redcarpet||currentPolicy===POLICIES.youngstar){const sum=$('sumInsured');sum.replaceChildren(new Option('Choose sum insured',''));currentPolicy.sumInsured.filter(n=>currentPolicy===POLICIES.youngstar?(n!==300000||($('policyType').value==='individual'&&policyStatus()==='renewal')):($('policyType').value!=='floater'||n>=1000000)).forEach(n=>sum.add(new Option(currency(n),String(n))))}$('memberPanel').classList.toggle('hidden',!$('policyType').value);renderMembers();clearResult()});
 $('policyStatus').addEventListener('change',()=>{const note=$('childAgeNotice');if(note)note.textContent=policyStatus()==='fresh'?'Child age must be within 25 years for fresh policy.':policyStatus()==='renewal'?'Renewal: No child age restriction is enforced by this calculator.':'Portability: Child eligibility must be verified with the insurer.';clearResult()});
 document.querySelectorAll('input[name="ageMode"]').forEach(el=>el.addEventListener('change',()=>{renderMembers();clearResult()}));
 document.querySelectorAll('input[name="zoneMode"]').forEach(el=>el.addEventListener('change',()=>{$('manualZone').classList.toggle('hidden',zoneMode()!=='manual');$('pinZone').classList.toggle('hidden',zoneMode()!=='pin');clearResult()}));
-['sumInsured','deductible'].forEach(id=>$(id).addEventListener('change',()=>{updateDeductibleHint();clearResult()}));
+$('sumInsured').addEventListener('change',()=>{if(currentPolicy===POLICIES.superstar){const supported=Number($('sumInsured').value)===750000;['superStarHealthCheckup','superStarConsumable'].forEach(id=>{$(id).disabled=!supported;$(id).checked=supported});$('superStarCoverHint').textContent=supported?'Both additional covers are preselected for the ₹7.5 lakh Atom Pro test case. Untick either cover if it is not required.':'Additional-cover prices are not verified for this Sum Insured; the add-ons are disabled.';}updateDeductibleHint();clearResult()});$('deductible').addEventListener('change',()=>{updateDeductibleHint();clearResult()});
 ['zone','pin','superSurplusPin'].forEach(id=>$(id).addEventListener('input',clearResult));
 $('calculate').addEventListener('click',calculate);
 
