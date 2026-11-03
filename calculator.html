@@ -656,7 +656,7 @@ function discountBreakdownForTerm(policy,members,si,zone,term,type,status,deduct
   const health=Math.round(Number(calculatedRow.healthDiscount)||0),lifestyle=Math.round(Number(calculatedRow.lifestyleDiscount)||0),long=Math.round(Number(calculatedRow.longTermDiscount)||0);
   const bundle=Number(calculatedRow.bundlePremium)||0;
   const final=Number(calculatedRow.amount)||0;
-  return {early:0,health,lifestyle,longTerm:long,total:Math.max(0,Math.round(bundle-final))};
+  return {early:0,health,lifestyle,longTerm:long,total:long};
  }
  return {early:Math.round(early),longTerm:Math.round(longTerm),total:Math.round(early+longTerm)};
 }
