@@ -1,0 +1,136 @@
+{
+  "policy": "Star Health Super Star - Preferred",
+  "uin": "SHAHLIP27049V022627",
+  "brochure": "BRO/SS/V.3/2026",
+  "prospectus": "PROS/SS/V.3/2026",
+  "policyWording": "POL/SS/V.5/2026",
+  "productCode": "BPRD-038",
+  "subProductCode": "PREFERRED",
+  "currency": "INR",
+  "sourceNote": "Atom Pro is the primary pricing benchmark. Star Mitra figures supplied by the user are retained only as a secondary third-party cross-check. This is not a complete Preferred tariff.",
+  "validatedScope": {
+    "age": 25,
+    "zone": "C",
+    "policyType": "individual",
+    "status": "fresh",
+    "optionalCovers": "none"
+  },
+  "festiveOffer": {
+    "includedInProvidedBundlePremium": true,
+    "separatelyDeducted": false,
+    "note": "The user confirmed that current Star Mitra and Atom Pro prices are being given with the Diwali/Festive offer already applied. Therefore, the bundle premiums below are treated as festive-offer-inclusive and no additional 10% is deducted."
+  },
+  "discountRules": {
+    "healthQuestionnaire": 0.05,
+    "lifestyleQuestionnaire": 0.05,
+    "healthAndLifestyleAreAdditive": true,
+    "longTermDiscount": {
+      "2": {
+        "displayedAmount": 674,
+        "prospectusRate": 0.1,
+        "basis": "final/2nd policy-year premium"
+      },
+      "3": {
+        "displayedAmount": 1532,
+        "prospectusRate": 0.125,
+        "basis": "final/3rd policy-year premium"
+      }
+    },
+    "rounding": "Keep internal amounts unrounded; round the final displayed premium. The itemised discount amounts in Atom Pro are rounded separately, so their displayed sum can differ slightly from the final total.",
+    "festiveDiscount": "Already reflected in the supplied current Bundle Premium; do not deduct again."
+  },
+  "samples": [
+    {
+      "age": 25,
+      "zone": "C",
+      "policyType": "individual",
+      "sumInsured": 750000,
+      "term": 1,
+      "prospectusBasePremium": 5210,
+      "bundlePremium": 7337,
+      "healthDiscountDisplayed": 367,
+      "lifestyleDiscountDisplayed": 367,
+      "longTermDiscountDisplayed": 0,
+      "starMitraWithoutQuestionnaireDiscounts": 7337,
+      "starMitraWithBothQuestionnaireDiscounts": 6603,
+      "atomProFinalWithBothQuestionnaireDiscounts": 6604
+    },
+    {
+      "age": 25,
+      "zone": "C",
+      "policyType": "individual",
+      "sumInsured": 750000,
+      "term": 2,
+      "prospectusBasePremium": 5210,
+      "bundlePremium": 15100,
+      "healthDiscountDisplayed": 755,
+      "lifestyleDiscountDisplayed": 755,
+      "longTermDiscountDisplayed": 674,
+      "atomProFinalWithBothQuestionnaireDiscounts": 12916,
+      "starMitraWithoutQuestionnaireDiscounts": 14389,
+      "starMitraWithBothQuestionnaireDiscounts": 12950
+    },
+    {
+      "age": 25,
+      "zone": "C",
+      "policyType": "individual",
+      "sumInsured": 750000,
+      "term": 3,
+      "prospectusBasePremium": 5210,
+      "bundlePremium": 22823,
+      "healthDiscountDisplayed": 1141,
+      "lifestyleDiscountDisplayed": 1141,
+      "longTermDiscountDisplayed": 1532,
+      "atomProFinalWithBothQuestionnaireDiscounts": 19007,
+      "starMitraWithoutQuestionnaireDiscounts": 21191,
+      "starMitraWithBothQuestionnaireDiscounts": 19072
+    },
+    {
+      "age": 25,
+      "zone": "C",
+      "policyType": "individual",
+      "sumInsured": 1000000,
+      "term": 1,
+      "prospectusBasePremium": 5545,
+      "bundlePremium": 7781,
+      "healthDiscountDisplayed": 389,
+      "lifestyleDiscountDisplayed": 389,
+      "longTermDiscountDisplayed": 0,
+      "atomProFinalWithBothQuestionnaireDiscounts": 7003
+    },
+    {
+      "age": 25,
+      "zone": "C",
+      "policyType": "individual",
+      "sumInsured": 1500000,
+      "term": 1,
+      "prospectusBasePremium": 6637,
+      "bundlePremium": 9059,
+      "healthDiscountDisplayed": 453,
+      "lifestyleDiscountDisplayed": 453,
+      "longTermDiscountDisplayed": 0,
+      "atomProFinalWithBothQuestionnaireDiscounts": 8153
+    }
+  ],
+  "unsupported": [
+    "Other ages and zones",
+    "Other Sum Insured / policy-term combinations",
+    "Floater and Multi-Individual Preferred package pricing",
+    "Optional-cover premiums",
+    "4-year and 5-year package pricing",
+    "Renewal and portability package pricing",
+    "Individual questionnaire discount eligibility answer mapping",
+    "Any additional offer or discount not itemised in the supplied quotation samples"
+  ],
+  "sourceHierarchy": {
+    "primary": "Atom Pro quote output",
+    "secondary": "Star Mitra (third-party app), used only as a cross-check",
+    "decisionRule": "Where Atom Pro and Star Mitra differ, use Atom Pro as the calibration target."
+  },
+  "validationStatus": {
+    "exactAtomProFinalSamples": "Both Health 5% and Lifestyle 5% selected for all five listed combinations (7.5L 1/2/3Y, 10L 1Y, 15L 1Y).",
+    "otherDiscountSelections": "Calculated from the recorded Atom Pro Bundle Premium and displayed discount rules; no separate Atom Pro final quote has been provided for every possible checkbox combination.",
+    "noQuestionnaireDiscountMultiYear": "Not independently verified by a separate Atom Pro quote. Calculated as Bundle Premium less the supplied Long-Term Discount amount.",
+    "starMitra": "Secondary cross-check only; never used as the primary premium source."
+  }
+}
