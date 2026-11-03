@@ -53,7 +53,16 @@
       "longTermDiscountDisplayed": 0,
       "starMitraWithoutQuestionnaireDiscounts": 7337,
       "starMitraWithBothQuestionnaireDiscounts": 6603,
-      "atomProFinalWithBothQuestionnaireDiscounts": 6604
+      "atomProFinalWithBothQuestionnaireDiscounts": 6604,
+      "bundlePremiumWithDefaultCovers": 7405,
+      "additionalCovers": {
+        "preventiveHealthCheckup": 205,
+        "consumableCover": 391
+      },
+      "healthDiscountWithDefaultCovers": 400,
+      "lifestyleDiscountWithDefaultCovers": 400,
+      "longTermDiscountWithDefaultCovers": 0,
+      "atomProFinalWithDefaultCovers": 7201
     },
     {
       "age": 25,
@@ -68,7 +77,16 @@
       "longTermDiscountDisplayed": 674,
       "atomProFinalWithBothQuestionnaireDiscounts": 12916,
       "starMitraWithoutQuestionnaireDiscounts": 14389,
-      "starMitraWithBothQuestionnaireDiscounts": 12950
+      "starMitraWithBothQuestionnaireDiscounts": 12950,
+      "bundlePremiumWithDefaultCovers": 15267,
+      "additionalCovers": {
+        "preventiveHealthCheckup": 410,
+        "consumableCover": 782
+      },
+      "healthDiscountWithDefaultCovers": 823,
+      "lifestyleDiscountWithDefaultCovers": 823,
+      "longTermDiscountWithDefaultCovers": 735,
+      "atomProFinalWithDefaultCovers": 14078
     },
     {
       "age": 25,
@@ -83,7 +101,16 @@
       "longTermDiscountDisplayed": 1532,
       "atomProFinalWithBothQuestionnaireDiscounts": 19007,
       "starMitraWithoutQuestionnaireDiscounts": 21191,
-      "starMitraWithBothQuestionnaireDiscounts": 19072
+      "starMitraWithBothQuestionnaireDiscounts": 19072,
+      "bundlePremiumWithDefaultCovers": 23086,
+      "additionalCovers": {
+        "preventiveHealthCheckup": 615,
+        "consumableCover": 1173
+      },
+      "healthDiscountWithDefaultCovers": 1243,
+      "lifestyleDiscountWithDefaultCovers": 1243,
+      "longTermDiscountWithDefaultCovers": 1670,
+      "atomProFinalWithDefaultCovers": 20715
     },
     {
       "age": 25,
@@ -132,5 +159,13 @@
     "otherDiscountSelections": "Calculated from the recorded Atom Pro Bundle Premium and displayed discount rules; no separate Atom Pro final quote has been provided for every possible checkbox combination.",
     "noQuestionnaireDiscountMultiYear": "Not independently verified by a separate Atom Pro quote. Calculated as Bundle Premium less the supplied Long-Term Discount amount.",
     "starMitra": "Secondary cross-check only; never used as the primary premium source."
+  },
+  "additionalCoverCalibration": {
+    "scope": "Age 25, Zone C, Individual, Fresh, Sum Insured INR 750000, terms 1-3 years only",
+    "covers": {
+      "preventiveHealthCheckup": "Package A",
+      "consumableCover": "Added"
+    },
+    "note": "Atom Pro figures supplied by the user. Additional cover premiums are added to the Bundle Premium. Health and Lifestyle discounts and Long Term Discount are itemised separately. The exact Atom Pro final premiums are retained as overrides when both questionnaire discounts are selected."
   }
 }
